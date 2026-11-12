@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Keep TanStack Start file routes and the existing Vite bootstrap; platform hosting requires this instead of React Router or a static GitHub Pages build.
+- Keep registration writes in the generated browser Cloud client with insert-only anonymous access; member reads use checked-in JSON rather than private registration rows.
+- Keep shared member validation and passport generation in one browser-safe domain module so the form and mural use identical data rules.
+- Keep thematic presentation tokens and responsive styles in the global stylesheet so the onboarding and tutorial share one visual language.
