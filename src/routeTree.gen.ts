@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DesafioPrRouteImport } from './routes/desafio-pr'
+import { Route as MuralRouteImport } from './routes/mural'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesafioPrRoute = DesafioPrRouteImport.update({
+  id: '/desafio-pr',
+  path: '/desafio-pr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MuralRoute = MuralRouteImport.update({
+  id: '/mural',
+  path: '/mural',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/desafio-pr': typeof DesafioPrRoute
+  '/mural': typeof MuralRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/desafio-pr': typeof DesafioPrRoute
+  '/mural': typeof MuralRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/desafio-pr': typeof DesafioPrRoute
+  '/mural': typeof MuralRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/desafio-pr' | '/mural'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/desafio-pr' | '/mural'
+  id: '__root__' | '/' | '/desafio-pr' | '/mural'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesafioPrRoute: typeof DesafioPrRoute
+  MuralRoute: typeof MuralRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/desafio-pr': {
+      id: '/desafio-pr'
+      path: '/desafio-pr'
+      fullPath: '/desafio-pr'
+      preLoaderRoute: typeof DesafioPrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mural': {
+      id: '/mural'
+      path: '/mural'
+      fullPath: '/mural'
+      preLoaderRoute: typeof MuralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesafioPrRoute: DesafioPrRoute,
+  MuralRoute: MuralRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
