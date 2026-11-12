@@ -41,7 +41,7 @@ import {
   type Member,
   type AvatarCategory,
 } from "@/lib/community";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseConfigured } from "@/lib/supabase";
 import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
 const steps = ["Boas-vindas", "Seu perfil", "A ideia", "O estilo", "Revisão"];
@@ -186,6 +186,10 @@ export function Onboarding() {
     const parsed = registrationSchema.safeParse(data);
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Confira suas escolhas.");
+      return;
+    }
+    if (!supabaseConfigured) {
+      setError("O site está sem a configuração do banco. Avise a liderança 🙏");
       return;
     }
     setSaving(true);
