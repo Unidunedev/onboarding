@@ -118,7 +118,7 @@ Abra o endereço que aparecer no terminal (geralmente http://localhost:5173).
 
 ## 🤖 Sobre o uso de IA neste projeto
 
-Sim, usamos IA para acelerar a criação desta base, e não temos vergonha disso.
+Sim, usamos IA para acelerar a criação desta base!
 Mas cada parte foi revisada, entendida e ajustada por pessoas.
 
 É exatamente isso que queremos ensinar aqui: a IA é uma ferramenta para ir mais rápido, não um substituto para o seu aprendizado. Use-a para tirar dúvidas, entender erros e explorar ideias, mas escreva, quebre e conserte o código você mesmo.
