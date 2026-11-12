@@ -2007,3 +2007,24 @@ textarea.text-input {
   padding: 4px;
   scrollbar-width: thin;
 }
+
+/* Aviso do nome do arquivo do membro */
+.filename-warning {
+  margin: 18px auto 0 !important;
+  max-width: 760px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid oklch(0.8 0.1 70);
+  background: oklch(0.96 0.04 85);
+  color: var(--foreground);
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: left;
+}
+.filename-warning code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: var(--secondary);
+  padding: 1px 6px;
+  border-radius: 4px;
+}

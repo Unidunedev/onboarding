@@ -24,6 +24,7 @@ import {
   CodeBlock,
   GitWelcome,
   HelpTip,
+  FileNameWarning,
 } from "@/components/community-ui";
 import { StylePicker, STYLES } from "@/components/style-picker";
 import {
@@ -605,6 +606,7 @@ function Final({ passport }: { passport: Member }) {
           <code>membros/{passport.github}.json</code>
           <CopyButton text={`membros/${passport.github}.json`} />
         </div>
+        <FileNameWarning username={passport.github} />
       </section>
       <section className="final-section">
         <h2 className="section-heading">🏆 Desafio do 1º PR</h2>
