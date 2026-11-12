@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inscricoes: {
+        Row: {
+          areas: string[]
+          avatar: string
+          created_at: string
+          estilo_artistico: string
+          frase: string
+          github_username: string
+          id: string
+          ideia_projeto: string
+          ideia_texto: string
+          nome: string
+          periodo: string
+          sugestao_nome: string
+        }
+        Insert: {
+          areas: string[]
+          avatar: string
+          created_at?: string
+          estilo_artistico: string
+          frase?: string
+          github_username: string
+          id?: string
+          ideia_projeto: string
+          ideia_texto?: string
+          nome: string
+          periodo: string
+          sugestao_nome?: string
+        }
+        Update: {
+          areas?: string[]
+          avatar?: string
+          created_at?: string
+          estilo_artistico?: string
+          frase?: string
+          github_username?: string
+          id?: string
+          ideia_projeto?: string
+          ideia_texto?: string
+          nome?: string
+          periodo?: string
+          sugestao_nome?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
