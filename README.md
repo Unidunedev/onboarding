@@ -21,7 +21,7 @@ Aqui você:
 3. **Ganha seu "passaporte"**, um arquivo JSON com o seu perfil
 4. **Faz seu primeiro Pull Request** colocando esse JSON no repositório, e seu card aparece no **Mural da galera** 🏆
 
-> Nunca usou Git ou GitHub? Comece pelo [ComecePorAqui](https://github.com/unidunedev/ComecePorAqui). Lá tem o passo a passo para Windows e Mac.
+> Nunca usou Git ou GitHub? Comece pelo [ComecePorAqui](https://github.com/Unidunedev/comece-por-aqui). Lá tem o passo a passo para Windows e Mac.
 
 ## 🏆 Desafio do 1º PR
 
