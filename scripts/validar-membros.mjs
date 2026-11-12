@@ -15,7 +15,20 @@ const AREAS = [
   "PO/Produto",
   "Ainda não sei",
 ];
-const PERIODOS = ["1º", "2º", "3º", "4º", "5º", "6º", "7º", "8º", "9º", "10º", "Já formado"];
+const PERIODOS = [
+  "1º",
+  "2º",
+  "3º",
+  "4º",
+  "5º",
+  "6º",
+  "7º",
+  "8º",
+  "9º",
+  "10º",
+  "Já formado",
+  "Prefiro não informar",
+];
 
 const membro = z
   .object({
@@ -30,7 +43,13 @@ const membro = z
       .trim()
       .min(1, "o nome não pode ficar vazio")
       .max(80, "o nome pode ter até 80 caracteres"),
-    avatar: z.string().url("o avatar precisa ser um link (https://...)").max(500),
+    avatar: z
+      .string()
+      .max(500)
+      .refine(
+        (v) => /^\/avatares\/[a-z]+\/\d{2}\.svg$/.test(v) || /^https:\/\/\S+$/.test(v),
+        "use o avatar que o site gerou (/avatares/...) ou um link https://",
+      ),
     periodo: z.enum(PERIODOS, {
       errorMap: () => ({ message: `use um destes: ${PERIODOS.join(", ")}` }),
     }),

@@ -1,5 +1,9 @@
+import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  AVATAR_CATEGORIES,
+  avatarCount,
+  avatarUrl,
   profileSchema,
   registrationSchema,
   makePassport,
@@ -19,7 +23,7 @@ describe("Community rules", () => {
     expect(profileSchema.safeParse({ ...profile, frase: "a".repeat(80) }).success).toBe(true);
     expect(profileSchema.safeParse({ ...profile, frase: "a".repeat(81) }).success).toBe(false);
   });
-  it("provides all ten periods and graduated option", () => {
+  it("provides all ten periods, graduated and opt-out options", () => {
     expect(PERIODOS).toEqual([
       "1º",
       "2º",
@@ -32,6 +36,7 @@ describe("Community rules", () => {
       "9º",
       "10º",
       "Já formado",
+      "Prefiro não informar",
     ]);
     expect(profileSchema.safeParse({ ...profile, periodo: "11º" }).success).toBe(false);
   });
@@ -68,5 +73,17 @@ describe("Community rules", () => {
   });
   it("does not include underscore example files in member list", () => {
     expect(loadMembers().some((m) => m.github === "seu-username")).toBe(false);
+  });
+  it("builds distinct avatar URLs per category", () => {
+    const urls = AVATAR_CATEGORIES.map((c) => avatarUrl(c, 1));
+    expect(new Set(urls).size).toBe(AVATAR_CATEGORIES.length);
+    expect(avatarUrl("Feminino", 1)).toBe("/avatares/feminino/01.svg");
+    expect(avatarUrl("Masculino", 22)).toBe("/avatares/masculino/22.svg");
+    for (const c of ["Feminino", "Masculino"] as const) {
+      for (let i = 1; i <= avatarCount(c); i++) {
+        expect(existsSync(`public${avatarUrl(c, i)}`)).toBe(true);
+      }
+    }
+    urls.forEach((u) => expect(profileSchema.shape.avatar.safeParse(u).success).toBe(true));
   });
 });

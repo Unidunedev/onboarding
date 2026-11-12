@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Users, ArrowUpRight, Heart, Copy, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { REPO_URL, COMECE_POR_AQUI_URL } from "@/config";
@@ -33,9 +33,32 @@ export function Footer() {
       <span>
         Uma comunidade. Muitos primeiros commits. <Heart size={12} />
       </span>
+      <small className="footer-credits">
+        Avatares Feminino e Masculino: IconScout e Avataaars. Demais por{" "}
+        <a href="https://www.dicebear.com" target="_blank" rel="noreferrer">
+          DiceBear
+        </a>
+        : Bottts e Avataaars (Pablo Stanley); Miniavs (Webpixels) e Fun Emoji (Davis Uche) sob CC BY
+        4.0; Lorelei (Lisa Wischofsky), Notionists (Zoish) e Pixel Art em domínio público.
+      </small>
     </footer>
   );
 }
+
+/** Ícone "?" que mostra uma explicação ao passar o mouse ou focar com o teclado. */
+export function HelpTip({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span className="help-tip">
+      <button type="button" className="help-tip-trigger" aria-label={label}>
+        ?
+      </button>
+      <span className="help-tip-bubble" role="tooltip">
+        {children}
+      </span>
+    </span>
+  );
+}
+
 export function MemberCard({ member, highlight = false }: { member: Member; highlight?: boolean }) {
   return (
     <article className={`member-card ${highlight ? "highlight-member" : ""}`}>
@@ -51,7 +74,11 @@ export function MemberCard({ member, highlight = false }: { member: Member; high
       <h3>{member.nome || "Seu nome aqui"}</h3>
       <p className="member-username">@{member.github || "seu-username"}</p>
       <p className="member-period">
-        {member.periodo === "Já formado" ? "🎓 Já formado" : `🎓 ${member.periodo} período`}
+        {member.periodo === "Prefiro não informar"
+          ? "☕ Na comunidade"
+          : member.periodo === "Já formado"
+            ? "🎓 Já formado"
+            : `🎓 ${member.periodo} período`}
       </p>
       <div className="chip-wrap">
         {member.areas.map((area) => (
