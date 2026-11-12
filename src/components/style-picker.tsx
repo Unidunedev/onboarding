@@ -1,6 +1,114 @@
-import { Check, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import forest from '@/assets/enchanted-forest.jpg';
-export const STYLES=[{id:'gamificado',title:'A próxima fase\né nossa.',name:'Gamificado',description:'Cada commit é uma conquista. Cada bug resolvido, um novo nível. Vamos transformar o aprendizado em uma aventura.',details:['Estética pixel e espírito arcade','Missões, conquistas e barra de XP','Uma comunidade que evolui junto'],className:'game-style'},{id:'floresta',title:'Todo começo\né uma descoberta.',name:'Fantasia florestal',description:'Entre em uma floresta de possibilidades. Um universo encantado onde ideias criam raízes e cada caminho revela algo novo.',details:['Florestas ancestrais e luz dourada','Camadas de natureza e magia sutil','Uma jornada de aventura e descoberta'],className:'forest-style'},{id:'clean',title:'Boas ideias.\nSem distrações.',name:'Profissional clean',description:'O essencial em primeiro plano. Um espaço leve, organizado e elegante para deixar nossos projetos brilharem.',details:['Tipografia moderna e espaço para respirar','Grid sutil e detalhes bem pensados','Clareza em cada interação'],className:'clean-style'}] as const;
-export function StylePicker({value,onChange}:{value:string;onChange:(value:'gamificado'|'floresta'|'clean')=>void}){return <div>{STYLES.map((s,index)=><section key={s.id} className={`style-card ${s.className} ${value===s.id?'selected':''}`}>{s.id==='floresta'&&<><img className="forest-image" src={forest} alt="Floresta encantada com árvores ancestrais e raios dourados" width={1920} height={1024} loading="lazy"/><div className="fireflies"/></>}{s.id==='gamificado'&&<div className="hud"><span>PLAYER_01 · READY TO START<div className="xp-bar"/></span><span>XP 000 / 100</span></div>}{value===s.id&&<motion.span initial={{scale:0}} animate={{scale:1}} className="style-check"><Check size={23}/></motion.span>}<div className="style-content"><span className="section-kicker">0{index+1} / {s.name}</span><h2>{s.title.split('\n').map((line,i)=><span key={line}>{i>0&&<br/>}{line}</span>)}</h2><p>{s.description}</p><ul>{s.details.map(d=><li key={d}>{d}</li>)}</ul><Button className="coffee-cta" onClick={()=>onChange(s.id)}>{value===s.id?'Estilo escolhido':'Escolher este estilo'}{value===s.id?<Check/>:<ArrowRight/>}</Button></div></section>)}</div>}
+import { Check, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import forest from "@/assets/enchanted-forest.jpg";
+export const STYLES = [
+  {
+    id: "gamificado",
+    title: "A próxima fase\né nossa.",
+    name: "Gamificado",
+    description:
+      "Cada commit é uma conquista. Cada bug resolvido, um novo nível. Vamos transformar o aprendizado em uma aventura.",
+    details: [
+      "Estética pixel e espírito arcade",
+      "Missões, conquistas e barra de XP",
+      "Uma comunidade que evolui junto",
+    ],
+    className: "game-style",
+  },
+  {
+    id: "floresta",
+    title: "Todo começo\né uma descoberta.",
+    name: "Fantasia florestal",
+    description:
+      "Entre em uma floresta de possibilidades. Um universo encantado onde ideias criam raízes e cada caminho revela algo novo.",
+    details: [
+      "Florestas ancestrais e luz dourada",
+      "Camadas de natureza e magia sutil",
+      "Uma jornada de aventura e descoberta",
+    ],
+    className: "forest-style",
+  },
+  {
+    id: "clean",
+    title: "Boas ideias.\nSem distrações.",
+    name: "Profissional clean",
+    description:
+      "O essencial em primeiro plano. Um espaço leve, organizado e elegante para deixar nossos projetos brilharem.",
+    details: [
+      "Tipografia moderna e espaço para respirar",
+      "Grid sutil e detalhes bem pensados",
+      "Clareza em cada interação",
+    ],
+    className: "clean-style",
+  },
+] as const;
+export function StylePicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: "gamificado" | "floresta" | "clean") => void;
+}) {
+  return (
+    <div>
+      {STYLES.map((s, index) => (
+        <section
+          key={s.id}
+          className={`style-card ${s.className} ${value === s.id ? "selected" : ""}`}
+        >
+          {s.id === "floresta" && (
+            <>
+              <img
+                className="forest-image"
+                src={forest}
+                alt="Floresta encantada com árvores ancestrais e raios dourados"
+                width={1920}
+                height={1024}
+                loading="lazy"
+              />
+              <div className="fireflies" />
+            </>
+          )}
+          {s.id === "gamificado" && (
+            <div className="hud">
+              <span>
+                PLAYER_01 · READY TO START
+                <div className="xp-bar" />
+              </span>
+              <span>XP 000 / 100</span>
+            </div>
+          )}
+          {value === s.id && (
+            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="style-check">
+              <Check size={23} />
+            </motion.span>
+          )}
+          <div className="style-content">
+            <span className="section-kicker">
+              0{index + 1} / {s.name}
+            </span>
+            <h2>
+              {s.title.split("\n").map((line, i) => (
+                <span key={line}>
+                  {i > 0 && <br />}
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p>{s.description}</p>
+            <ul>
+              {s.details.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+            <Button className="coffee-cta" onClick={() => onChange(s.id)}>
+              {value === s.id ? "Estilo escolhido" : "Escolher este estilo"}
+              {value === s.id ? <Check /> : <ArrowRight />}
+            </Button>
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}

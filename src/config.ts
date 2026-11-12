@@ -1,3 +1,5 @@
-export const REPO_URL = "https://github.com/ORGANIZACAO/comece-por-aqui";
-export const COMECE_POR_AQUI_URL = "https://github.com/ORGANIZACAO/ComecePorAqui";
-export const MEMBROS_FOLDER_URL = REPO_URL + "/tree/main/membros";
+// Links usados no site. Troque aqui se algum repositório mudar de nome.
+export const ORG_URL = "https://github.com/unidunedev";
+export const REPO_URL = `${ORG_URL}/onboarding`;
+export const COMECE_POR_AQUI_URL = `${ORG_URL}/ComecePorAqui`;
+export const MEMBROS_FOLDER_URL = `${REPO_URL}/tree/main/membros`;
