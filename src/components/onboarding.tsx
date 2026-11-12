@@ -23,10 +23,13 @@ import {
   CopyButton,
   CodeBlock,
   GitWelcome,
+  HelpTip,
 } from "@/components/community-ui";
 import { StylePicker, STYLES } from "@/components/style-picker";
 import {
   AREAS,
+  AVATAR_CATEGORIES,
+  avatarCount,
   PERIODOS,
   IDEIAS,
   avatarUrl,
@@ -36,15 +39,16 @@ import {
   loadMembers,
   type Registration,
   type Member,
+  type AvatarCategory,
 } from "@/lib/community";
 import { supabase } from "@/lib/supabase";
-import { REPO_URL } from "@/config";
+import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
 const steps = ["Boas-vindas", "Seu perfil", "A ideia", "O estilo", "Revisão"];
 const initial: Registration = {
   nome: "",
   github: "",
-  avatar: avatarUrl("Feminino", 1),
+  avatar: avatarUrl("Robôs", 1),
   periodo: "1º",
   areas: [],
   frase: "",
@@ -149,7 +153,7 @@ function Welcome({ onStart }: { onStart: () => void }) {
 export function Onboarding() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<Registration>(initial);
-  const [category, setCategory] = useState("Feminino");
+  const [category, setCategory] = useState<AvatarCategory>("Robôs");
   const [error, setError] = useState("");
   const [duplicate, setDuplicate] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -240,9 +244,16 @@ export function Onboarding() {
               <p className="section-kicker">ETAPA 04 · A PERSONALIDADE DO NOSSO PROJETO</p>
               <h1 className="form-heading">Qual universo vamos construir?</h1>
               <p className="form-subtitle">
-                Três caminhos, muitas possibilidades. Escolha o que faz seus olhos brilharem.
+                Três caminhos, muitas possibilidades. Veja como{" "}
+                {data.sugestao_nome.trim() ? (
+                  <strong>{data.sugestao_nome.trim()}</strong>
+                ) : (
+                  "o nosso projeto"
+                )}{" "}
+                ficaria em cada um e escolha o que faz seus olhos brilharem.
               </p>
               <StylePicker
+                projectName={data.sugestao_nome.trim()}
                 value={data.estilo_artistico}
                 onChange={(v) => update("estilo_artistico", v)}
               />
@@ -276,14 +287,26 @@ export function Onboarding() {
                           onChange={(e) => update("nome", e.target.value)}
                         />
                       </label>
-                      <label className="field">
-                        Username do GitHub
+                      <div className="field">
+                        <span className="field-label">
+                          <label htmlFor="github-username">Username do GitHub</label>
+                          <HelpTip label="O que é o username do GitHub?">
+                            É o seu nome de usuário no GitHub, aquele que aparece em{" "}
+                            <code>github.com/seu-usuario</code>. Ainda não tem conta ou não sabe
+                            usar?{" "}
+                            <a href={COMECE_POR_AQUI_URL} target="_blank" rel="noreferrer">
+                              Comece pelo ComecePorAqui →
+                            </a>
+                          </HelpTip>
+                        </span>
                         <div className="input-avatar">
                           <input
+                            id="github-username"
                             className="text-input"
                             placeholder="seu-username"
                             value={data.github}
                             maxLength={39}
+                            autoComplete="username"
                             onChange={(e) => update("github", e.target.value.toLowerCase())}
                           />
                           {/^[a-z0-9][a-z0-9-]*$/.test(data.github) && (
@@ -298,7 +321,7 @@ export function Onboarding() {
                             />
                           )}
                         </div>
-                      </label>
+                      </div>
                     </div>
                     <div className="field">
                       <span>
@@ -308,7 +331,7 @@ export function Onboarding() {
                         </span>
                       </span>
                       <div className="avatar-tabs" role="tablist" aria-label="Categorias de avatar">
-                        {["Feminino", "Masculino", "Sérios", "Dark"].map((c) => (
+                        {AVATAR_CATEGORIES.map((c) => (
                           <Button
                             role="tab"
                             aria-selected={category === c}
@@ -322,20 +345,20 @@ export function Onboarding() {
                         ))}
                       </div>
                       <div className="avatar-grid">
-                        {Array.from({ length: 12 }, (_, i) => avatarUrl(category, i + 1)).map(
-                          (url, i) => (
-                            <Button
-                              key={url}
-                              variant="ghost"
-                              className={`avatar-option ${data.avatar === url ? "selected" : ""}`}
-                              aria-label={`Escolher avatar ${category} ${i + 1}`}
-                              aria-pressed={data.avatar === url}
-                              onClick={() => update("avatar", url)}
-                            >
-                              <img src={url} alt="" width={70} height={70} />
-                            </Button>
-                          ),
-                        )}
+                        {Array.from({ length: avatarCount(category) }, (_, i) =>
+                          avatarUrl(category, i + 1),
+                        ).map((url, i) => (
+                          <Button
+                            key={url}
+                            variant="ghost"
+                            className={`avatar-option ${data.avatar === url ? "selected" : ""}`}
+                            aria-label={`Escolher avatar ${category} ${i + 1}`}
+                            aria-pressed={data.avatar === url}
+                            onClick={() => update("avatar", url)}
+                          >
+                            <img src={url} alt="" width={70} height={70} loading="lazy" />
+                          </Button>
+                        ))}
                       </div>
                     </div>
                     <label className="field">
@@ -446,6 +469,9 @@ export function Onboarding() {
                         onChange={(e) => update("sugestao_nome", e.target.value)}
                         placeholder="Todo grande projeto começa com um nome... ou não."
                       />
+                      <span className="field-hint">
+                        Se escolher um nome, você vai vê-lo nas prévias do próximo passo ✨
+                      </span>
                     </label>
                   </>
                 ) : (
