@@ -9,6 +9,7 @@ import {
   makePassport,
   PERIODOS,
   loadMembers,
+  sortMembers,
 } from "@/lib/community";
 const profile = {
   nome: "Ana",
@@ -85,5 +86,20 @@ describe("Community rules", () => {
       }
     }
     urls.forEach((u) => expect(profileSchema.shape.avatar.safeParse(u).success).toBe(true));
+  });
+  it("sorts members by most recent first, or by name", () => {
+    const base = {
+      avatar: "https://x.dev/a.png",
+      periodo: "1º" as const,
+      areas: ["Mobile" as const],
+      frase: "",
+    };
+    const list = [
+      { ...base, github: "bia", nome: "Bia", entrouEm: "2026-11-10" },
+      { ...base, github: "ana", nome: "Ana", entrouEm: "2026-11-12" },
+      { ...base, github: "caio", nome: "Caio", entrouEm: "2026-11-12" },
+    ];
+    expect(sortMembers(list, "recentes").map((m) => m.github)).toEqual(["ana", "caio", "bia"]);
+    expect(sortMembers(list, "nome").map((m) => m.github)).toEqual(["ana", "bia", "caio"]);
   });
 });

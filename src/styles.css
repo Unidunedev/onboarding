@@ -2028,3 +2028,33 @@ textarea.text-input {
   padding: 1px 6px;
   border-radius: 4px;
 }
+
+/* Mural: contador, ordenação e "ver mais" */
+.mural-count {
+  margin-top: 14px !important;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--caramel-dark);
+}
+.mural-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+/* Tela final: aviso de rascunho salvo */
+.restart-note {
+  margin-top: 40px !important;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
