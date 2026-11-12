@@ -45,6 +45,19 @@ export function Footer() {
   );
 }
 
+/** Aviso fixo: o nome do arquivo do membro precisa ser igual ao username. */
+export function FileNameWarning({ username }: { username?: string }) {
+  const user = username || "seu-username";
+  return (
+    <p className="filename-warning" role="note">
+      <strong>⚠️ Atenção ao nome do arquivo:</strong> ele precisa ser{" "}
+      <strong>exatamente o seu username do GitHub, em minúsculas</strong>, igual ao campo{" "}
+      <code>"github"</code> do JSON. Exemplo: <code>"github": "{user}"</code> →{" "}
+      <code>membros/{user}.json</code>. Se forem diferentes, o check do PR fica vermelho.
+    </p>
+  );
+}
+
 /** Ícone "?" que mostra uma explicação ao passar o mouse ou focar com o teclado. */
 export function HelpTip({ label, children }: { label: string; children: ReactNode }) {
   return (

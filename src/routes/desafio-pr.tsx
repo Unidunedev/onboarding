@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight, Globe, Terminal, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CodeBlock, GitWelcome } from "@/components/community-ui";
+import { CodeBlock, FileNameWarning, GitWelcome } from "@/components/community-ui";
 import { pageHead } from "@/lib/community";
 import { REPO_URL } from "@/config";
 import { z } from "zod";
@@ -98,6 +98,7 @@ function Tutorial() {
       <p className="section-subtitle">
         Seu card no mural começa aqui. Sem pressa: um passo, um commit, um café.
       </p>
+      <FileNameWarning />
       <div className="tutorial-tabs" role="tablist" aria-label="Caminho do desafio">
         {[
           { id: "1", label: "Pelo navegador (Nível 1)", icon: Globe },
