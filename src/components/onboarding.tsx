@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
@@ -38,6 +38,7 @@ import {
   registrationSchema,
   makePassport,
   loadMembers,
+  sortMembers,
   type Registration,
   type Member,
   type AvatarCategory,
@@ -151,14 +152,62 @@ function Welcome({ onStart }: { onStart: () => void }) {
   );
 }
 
+// Rascunho salvo no navegador: sair para outra página não apaga o que foi preenchido.
+const DRAFT_KEY = "unidunedev:inscricao";
+type Draft = {
+  step: number;
+  data: Registration;
+  category: AvatarCategory;
+  passport: Member | null;
+};
+
+function readDraft(): Partial<Draft> {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as Partial<Draft>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveDraft(draft: Draft) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Navegador sem storage (aba anônima restrita etc.): segue sem salvar.
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // ignora
+  }
+}
+
 export function Onboarding() {
-  const [step, setStep] = useState(0);
-  const [data, setData] = useState<Registration>(initial);
-  const [category, setCategory] = useState<AvatarCategory>("Robôs");
+  const [draft] = useState(readDraft);
+  const [step, setStep] = useState(() => Math.min(Math.max(draft.step ?? 0, 0), 4));
+  const [data, setData] = useState<Registration>(() => ({ ...initial, ...draft.data }));
+  const [category, setCategory] = useState<AvatarCategory>(() =>
+    draft.category && AVATAR_CATEGORIES.includes(draft.category) ? draft.category : "Robôs",
+  );
   const [error, setError] = useState("");
   const [duplicate, setDuplicate] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [passport, setPassport] = useState<Member | null>(null);
+  const [passport, setPassport] = useState<Member | null>(draft.passport ?? null);
+  useEffect(() => {
+    saveDraft({ step, data, category, passport });
+  }, [step, data, category, passport]);
+  const restart = () => {
+    clearDraft();
+    setPassport(null);
+    setData(initial);
+    setCategory("Robôs");
+    setStep(0);
+    window.scrollTo({ top: 0 });
+  };
   const reduced = useReducedMotion();
   const update = <K extends keyof Registration>(key: K, value: Registration[K]) =>
     setData((prev) => ({ ...prev, [key]: value }));
@@ -215,7 +264,7 @@ export function Onboarding() {
     }
   };
   const preview: Member = { ...data, entrouEm: "" };
-  if (step === 5 && passport) return <Final passport={passport} />;
+  if (passport) return <Final passport={passport} onRestart={restart} />;
   return (
     <>
       <div className="stepper" aria-label="Etapas da inscrição">
@@ -568,8 +617,11 @@ export function Onboarding() {
   );
 }
 
-function Final({ passport }: { passport: Member }) {
-  const members = loadMembers();
+function Final({ passport, onRestart }: { passport: Member; onRestart: () => void }) {
+  const members = sortMembers(
+    loadMembers().filter((m) => m.github !== passport.github),
+    "recentes",
+  );
   const json = JSON.stringify(passport, null, 2);
   return (
     <main className="content-page">
@@ -592,10 +644,11 @@ function Final({ passport }: { passport: Member }) {
             <GhostCard key={i} />
           ))}
         </div>
+        {/* Abre em nova aba para ninguém sair daqui antes de copiar o JSON */}
         <Button asChild variant="outline">
-          <Link to="/mural">
-            Ver mural completo <Users />
-          </Link>
+          <a href="/mural" target="_blank" rel="noopener">
+            Ver mural completo (nova aba) <Users />
+          </a>
         </Button>
       </section>
       <section className="final-section">
@@ -668,6 +721,13 @@ function Final({ passport }: { passport: Member }) {
         </p>
         <GitWelcome />
       </section>
+      <p className="restart-note">
+        Suas escolhas ficam salvas neste navegador, então pode voltar aqui quando quiser para copiar
+        o JSON.{" "}
+        <button type="button" className="link-button" onClick={onRestart}>
+          Fazer outra inscrição
+        </button>
+      </p>
     </main>
   );
 }

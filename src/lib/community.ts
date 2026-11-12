@@ -77,6 +77,16 @@ export function makePassport(data: Registration, date: string): Member {
   const { github, nome, avatar, periodo, areas, frase } = data;
   return { github, nome, avatar, periodo, areas, frase, entrouEm: date };
 }
+export type MemberSort = "recentes" | "nome";
+
+/** Ordena o mural: mais recentes primeiro (desempate por nome) ou A–Z. */
+export function sortMembers(members: Member[], mode: MemberSort): Member[] {
+  const byName = (a: Member, b: Member) => a.nome.localeCompare(b.nome, "pt-BR");
+  return [...members].sort((a, b) =>
+    mode === "nome" ? byName(a, b) : b.entrouEm.localeCompare(a.entrouEm) || byName(a, b),
+  );
+}
+
 export function loadMembers(): Member[] {
   const files = import.meta.glob("../../membros/*.json", { eager: true, import: "default" });
   return Object.entries(files)
