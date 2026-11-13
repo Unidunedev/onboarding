@@ -37,6 +37,20 @@ export function clearDraft() {
   }
 }
 
+export const EVENTO_INICIO = "unidunedev:inicio";
+
+/**
+ * Logo do cabeçalho: volta para a tela de boas-vindas sem apagar o que foi preenchido.
+ * Quem já terminou a inscrição continua vendo a tela final (com o JSON).
+ */
+export function voltarAoInicio() {
+  const draft = readDraft();
+  if (draft.data && !draft.passport) {
+    saveDraft({ ...(draft as Draft), step: 0 });
+  }
+  window.dispatchEvent(new Event(EVENTO_INICIO));
+}
+
 /** O "passaporte" de quem já se inscreveu neste navegador, se houver. */
 export function readSavedPassport(): Member | null {
   return readDraft().passport ?? null;

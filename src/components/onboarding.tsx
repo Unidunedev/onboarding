@@ -44,7 +44,7 @@ import {
   type AvatarCategory,
 } from "@/lib/community";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
-import { clearDraft, readDraft, saveDraft } from "@/lib/draft";
+import { EVENTO_INICIO, clearDraft, readDraft, saveDraft } from "@/lib/draft";
 import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
 const steps = ["Boas-vindas", "Seu perfil", "A ideia", "O estilo", "Revisão"];
@@ -186,6 +186,17 @@ export function Onboarding() {
     setStep(next);
     window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
   };
+  // Clique no logo enquanto já está nesta página: volta para as boas-vindas.
+  useEffect(() => {
+    const irParaInicio = () => {
+      setError("");
+      setDuplicate(false);
+      setStep(0);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener(EVENTO_INICIO, irParaInicio);
+    return () => window.removeEventListener(EVENTO_INICIO, irParaInicio);
+  }, []);
   const next = () => {
     if (step === 1) {
       const parsed = profileSchema.safeParse(data);

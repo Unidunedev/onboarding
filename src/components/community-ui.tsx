@@ -3,13 +3,14 @@ import { Github, Users, ArrowUpRight, Heart, Copy, Check } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
+import { voltarAoInicio } from "@/lib/draft";
 import { ORG_URL, COMECE_POR_AQUI_URL } from "@/config";
 import { type Member, avatarUrl } from "@/lib/community";
 
 export function Header() {
   return (
     <header className="site-header">
-      <Link to="/" className="brand" aria-label="Unidunedev, início">
+      <Link to="/" className="brand" aria-label="Unidunedev, início" onClick={voltarAoInicio}>
         <Logo size={44} />
       </Link>
       <nav className="navigation">
