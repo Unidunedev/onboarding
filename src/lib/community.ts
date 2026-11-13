@@ -61,7 +61,7 @@ export const registrationSchema = profileSchema
     ideia_projeto: z.enum(IDEIAS),
     ideia_texto: z.string().max(600),
     sugestao_nome: z.string().max(80),
-    estilo_artistico: z.enum(["gamificado", "floresta", "clean"]),
+    estilo_artistico: z.enum(["gamificado", "floresta", "clean", "lofi", "terminal", "brutalismo"]),
   })
   .superRefine((v, ctx) => {
     if (v.ideia_projeto === "Outra ideia" && !v.ideia_texto.trim())

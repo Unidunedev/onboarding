@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { avatarUrl } from "@/lib/community";
 import forest from "@/assets/enchanted-forest.jpg";
 
-type StyleId = "gamificado" | "floresta" | "clean";
-
 export const STYLES = [
   {
     id: "gamificado",
@@ -46,7 +44,48 @@ export const STYLES = [
     ],
     className: "clean-style",
   },
+  {
+    id: "lofi",
+    title: "Seu cantinho.\nSeu ritmo.",
+    name: "Lo-fi Café",
+    description:
+      "Noite, chuva na janela e um café quentinho. Um espaço calmo para quem gosta de programar no seu canto, sem pressa e sem barulho.",
+    details: [
+      "Luz de abajur e tons de café com lilás",
+      "Tipografia arredondada e acolhedora",
+      "Animações suaves, como uma playlist lo-fi",
+    ],
+    className: "lofi-style",
+  },
+  {
+    id: "terminal",
+    title: "> acesso\nconcedido_",
+    name: "Terminal hacker",
+    description:
+      "Fundo escuro, neon e tudo com cara de linha de comando. As conversas parecem saídas direto do terminal. É a cara de dev.",
+    details: [
+      "Verde e ciano neon sobre o preto",
+      "Fonte monoespaçada e efeito glitch",
+      "Mensagens no formato de comandos",
+    ],
+    className: "terminal-style",
+  },
+  {
+    id: "brutalismo",
+    title: "Sem medo\nde ousar.",
+    name: "Neo-brutalismo",
+    description:
+      "Cores chapadas, bordas grossas e sombras duras. O visual ousado que está em alta nos produtos digitais mais modernos.",
+    details: [
+      "Amarelo, rosa e azul em blocos sólidos",
+      "Bordas pretas grossas e sombras deslocadas",
+      "Tipografia enorme e cheia de personalidade",
+    ],
+    className: "brutal-style",
+  },
 ] as const;
+
+type StyleId = (typeof STYLES)[number]["id"];
 
 type Message = { who: string; avatar: string; tag?: string; text: string; meta?: string };
 
@@ -124,6 +163,67 @@ const PREVIEW: Record<
     typing: "Bia está digitando...",
     placeholder: "Escreva uma mensagem...",
   },
+  lofi: {
+    rooms: ["sala-de-estar", "playlist", "estudos", "madrugada"],
+    online: "12 pessoas por aqui",
+    messages: [
+      {
+        who: "Ana",
+        avatar: avatarUrl("Anime", 4),
+        text: "Chuva, café e meu primeiro deploy ☕",
+      },
+      {
+        who: "Caio",
+        avatar: avatarUrl("Anime", 9),
+        text: "Que vibe boa. Bora codar juntos hoje?",
+        meta: "🌙 3",
+      },
+    ],
+    project: { name: "diario-lofi", info: "React · CSS", stat: "9" },
+    typing: "Bia está escrevendo devagarinho...",
+    placeholder: "Escreva algo com calma...",
+  },
+  terminal: {
+    rooms: ["root", "deploy", "bugs", "logs"],
+    online: "12 conectados",
+    messages: [
+      {
+        who: "ana_dev",
+        avatar: avatarUrl("Robôs", 3),
+        tag: "sudo",
+        text: "> git push origin main ✓",
+      },
+      {
+        who: "caio.sh",
+        avatar: avatarUrl("Robôs", 7),
+        text: "> review --pr 42 --approve",
+        meta: "[OK]",
+      },
+    ],
+    project: { name: "cli-unidunedev", info: "Node.js · Bash", stat: "17" },
+    typing: "bia@unidunedev:~$ digitando_",
+    placeholder: "$ digite um comando...",
+  },
+  brutalismo: {
+    rooms: ["GERAL", "PROJETOS", "MEMES", "VAGAS"],
+    online: "12 ONLINE",
+    messages: [
+      {
+        who: "ANA",
+        avatar: avatarUrl("Emoji", 4),
+        text: "LANCEI MEU PORTFÓLIO!!!",
+      },
+      {
+        who: "CAIO",
+        avatar: avatarUrl("Emoji", 8),
+        text: "Ficou absurdo. Bora ver.",
+        meta: "🔥 12",
+      },
+    ],
+    project: { name: "portfolio-bruto", info: "Next.js · Tailwind", stat: "33" },
+    typing: "BIA ESTÁ DIGITANDO...",
+    placeholder: "ESCREVA ALGO OUSADO",
+  },
 };
 
 function ChatPreview({ style, projectName }: { style: StyleId; projectName: string }) {
@@ -195,6 +295,54 @@ function ChatPreview({ style, projectName }: { style: StyleId; projectName: stri
   );
 }
 
+/** Janela com chuva, abajur, xícara com vapor e um gatinho dormindo. */
+function LofiScene() {
+  return (
+    <div className="lofi-scene" aria-hidden="true">
+      <div className="lofi-window">
+        <span className="lofi-rain" />
+        <span className="lofi-moon" />
+      </div>
+      <span className="lofi-lamp" />
+      <div className="lofi-desk">
+        <span className="lofi-mug">
+          <span className="lofi-steam" />
+          <span className="lofi-steam" />
+        </span>
+        <span className="lofi-cat">
+          <span className="lofi-zzz">z</span>
+          <span className="lofi-zzz">z</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const MATRIX_CHARS = "01アカサタナ{}<>=;$#λ01";
+const MATRIX_COLUMNS = Array.from({ length: 18 }, (_, i) => ({
+  left: `${(i * 100) / 18 + 1}%`,
+  delay: `${(i * 7) % 11}s`,
+  duration: `${7 + ((i * 5) % 6)}s`,
+  text: (MATRIX_CHARS.slice(i % 10) + MATRIX_CHARS.slice(0, i % 10)).repeat(2),
+}));
+
+/** "Chuva" de caracteres no estilo Matrix + uma linha sendo digitada. */
+function MatrixRain() {
+  return (
+    <div className="matrix" aria-hidden="true">
+      {MATRIX_COLUMNS.map((c) => (
+        <span
+          key={c.left}
+          style={{ left: c.left, animationDelay: c.delay, animationDuration: c.duration }}
+        >
+          {c.text}
+        </span>
+      ))}
+      <p className="terminal-typing">$ npm run unidunedev --modo=hacker</p>
+    </div>
+  );
+}
+
 export function StylePicker({
   value,
   onChange,
@@ -236,6 +384,15 @@ export function StylePicker({
                 <div className="xp-bar" />
               </span>
               <span>XP 000 / 100</span>
+            </div>
+          )}
+          {s.id === "lofi" && <LofiScene />}
+          {s.id === "terminal" && <MatrixRain />}
+          {s.id === "brutalismo" && (
+            <div className="brutal-shapes" aria-hidden="true">
+              <span className="b-square" />
+              <span className="b-circle" />
+              <span className="b-star">✦</span>
             </div>
           )}
           {value === s.id && (
