@@ -631,6 +631,28 @@ function Final({
         <h1 className="page-title">Falta só 1 passo para você aparecer no mural!</h1>
       </section>
 
+      <section className="final-preview">
+        <p className="section-subtitle">
+          Assim você vai aparecer no <strong>Mural da Galera</strong> depois que o seu PR for
+          aprovado:
+        </p>
+        <div className="member-grid">
+          <MemberCard member={passport} highlight />
+          {members.slice(0, 2).map((m) => (
+            <MemberCard member={m} key={m.github} />
+          ))}
+          {Array.from({ length: Math.max(0, 2 - members.length) }, (_, i) => (
+            <GhostCard key={i} />
+          ))}
+        </div>
+        {/* Abre em nova aba para ninguém sair daqui antes de copiar o JSON */}
+        <Button asChild variant="outline">
+          <a href="/mural" target="_blank" rel="noopener">
+            Ver mural completo (nova aba) <Users />
+          </a>
+        </Button>
+      </section>
+
       <div className="pr-alert" role="alert">
         <span className="pr-alert-icon" aria-hidden="true">
           ⚠️
@@ -727,29 +749,6 @@ function Final({
           </a>
         </Button>
         <GitWelcome />
-      </section>
-
-      <section className="final-section">
-        <p className="section-kicker">PASSO 4 · DEPOIS DA APROVAÇÃO</p>
-        <h2 className="section-heading">É assim que você vai aparecer no Mural da Galera</h2>
-        <p className="section-subtitle">
-          Poucos minutos depois de o seu PR ser aprovado, o seu card entra no mural.
-        </p>
-        <div className="member-grid">
-          <MemberCard member={passport} highlight />
-          {members.slice(0, 2).map((m) => (
-            <MemberCard member={m} key={m.github} />
-          ))}
-          {Array.from({ length: Math.max(0, 2 - members.length) }, (_, i) => (
-            <GhostCard key={i} />
-          ))}
-        </div>
-        {/* Abre em nova aba para ninguém sair daqui antes de copiar o JSON */}
-        <Button asChild variant="outline">
-          <a href="/mural" target="_blank" rel="noopener">
-            Ver mural completo (nova aba) <Users />
-          </a>
-        </Button>
       </section>
 
       <p className="restart-note">

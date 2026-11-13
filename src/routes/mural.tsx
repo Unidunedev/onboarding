@@ -40,21 +40,6 @@ function Mural() {
       <p className="section-subtitle">
         Cada card, um primeiro passo. Cada pessoa, uma nova possibilidade.
       </p>
-      {meuPassaporte && !estouNoMural && (
-        <div className="pr-alert" role="note">
-          <span className="pr-alert-icon" aria-hidden="true">
-            👀
-          </span>
-          <span>
-            <strong>Cadê você, {meuPassaporte.nome}?</strong> Seu card ainda não está aqui porque
-            ele só entra no mural depois que o seu <strong>Pull Request</strong> for aprovado. Já
-            abriu o seu?{" "}
-            <Link to="/" className="pr-alert-link">
-              Ver meu JSON e o passo a passo →
-            </Link>
-          </span>
-        </div>
-      )}
       {meuPassaporte && estouNoMural && (
         <p className="mural-voce">
           🎉 Você já está no mural, {meuPassaporte.nome}! Bem-vindo(a) à mesa.
