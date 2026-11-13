@@ -44,6 +44,7 @@ import {
   type AvatarCategory,
 } from "@/lib/community";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
+import { useResumoInscricoes } from "@/lib/resumo";
 import { EVENTO_INICIO, clearDraft, readDraft, saveDraft } from "@/lib/draft";
 import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
@@ -178,6 +179,16 @@ export function Onboarding() {
     window.scrollTo({ top: 0 });
   };
   const reduced = useReducedMotion();
+  // Escolhas da galera, ao vivo. A sua própria escolha entra na conta na hora (+1).
+  const resumo = useResumoInscricoes();
+  const contagem = (area: string) =>
+    (resumo?.areas[area] ?? 0) + (data.areas.includes(area as (typeof AREAS)[number]) ? 1 : 0);
+  const maisEscolhida =
+    resumo && resumo.total > 0
+      ? AREAS.filter((a) => a !== "Ainda não sei").reduce((top, a) =>
+          (resumo.areas[a] ?? 0) > (resumo.areas[top] ?? 0) ? a : top,
+        )
+      : null;
   const update = <K extends keyof Registration>(key: K, value: Registration[K]) =>
     setData((prev) => ({ ...prev, [key]: value }));
   const go = (next: number) => {
@@ -423,11 +434,23 @@ export function Onboarding() {
                       <span className="field-hint">
                         Pode escolher mais de uma. E pode não saber ainda.
                       </span>
+                      {resumo && resumo.total > 0 && (
+                        <span className="live-hint">
+                          <span className="live-dot" aria-hidden="true" /> Ao vivo:{" "}
+                          <strong>
+                            {resumo.total}{" "}
+                            {resumo.total === 1
+                              ? "pessoa já se inscreveu"
+                              : "pessoas já se inscreveram"}
+                          </strong>
+                          . Veja o que a galera está escolhendo 👇
+                        </span>
+                      )}
                       <div className="chip-wrap">
                         {AREAS.map((a) => (
                           <Button
                             key={a}
-                            className="chip"
+                            className={`chip ${a === maisEscolhida ? "chip-top" : ""}`}
                             variant={data.areas.includes(a) ? "default" : "outline"}
                             aria-pressed={data.areas.includes(a)}
                             onClick={() =>
@@ -440,6 +463,15 @@ export function Onboarding() {
                             }
                           >
                             {data.areas.includes(a) && <Check size={12} />} {a}
+                            {resumo && resumo.total > 0 && (
+                              <span
+                                className="chip-count"
+                                aria-label={`${contagem(a)} pessoas escolheram`}
+                              >
+                                {a === maisEscolhida && "🔥 "}
+                                {contagem(a)}
+                              </span>
+                            )}
                           </Button>
                         ))}
                       </div>

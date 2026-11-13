@@ -36,7 +36,12 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      resumo_inscricoes: {
+        Args: Record<string, never>;
+        Returns: { total: number; areas: Record<string, number> };
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

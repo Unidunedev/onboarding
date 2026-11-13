@@ -2826,3 +2826,44 @@ textarea.text-input {
     display: none;
   }
 }
+
+/* Áreas ao vivo */
+.live-hint {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.live-dot {
+  display: inline-block;
+  vertical-align: middle;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5484d;
+  margin-right: 2px;
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+@keyframes live-pulse {
+  50% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+}
+.chip-count {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--secondary);
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+.chip[aria-pressed="true"] .chip-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: inherit;
+}
+.chip-top {
+  border-color: var(--caramel);
+}
