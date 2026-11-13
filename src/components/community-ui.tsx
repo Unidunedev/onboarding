@@ -75,7 +75,7 @@ export function HelpTip({ label, children }: { label: string; children: ReactNod
 export function MemberCard({ member, highlight = false }: { member: Member; highlight?: boolean }) {
   return (
     <article className={`member-card ${highlight ? "highlight-member" : ""}`}>
-      {highlight && <span className="member-badge">Você aqui em breve ✨</span>}
+      {highlight && <span className="member-badge">Aparece após o PR aprovado ✨</span>}
       <img
         className="member-avatar"
         src={member.avatar}
@@ -116,7 +116,15 @@ export function GhostCard() {
     </article>
   );
 }
-export function CopyButton({ text, code = false }: { text: string; code?: boolean }) {
+export function CopyButton({
+  text,
+  code = false,
+  onCopy,
+}: {
+  text: string;
+  code?: boolean;
+  onCopy?: (() => void) | undefined;
+}) {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(false);
   return (
@@ -130,6 +138,7 @@ export function CopyButton({ text, code = false }: { text: string; code?: boolea
           await navigator.clipboard.writeText(text);
           setCopied(true);
           setError(false);
+          onCopy?.();
           setTimeout(() => setCopied(false), 2200);
         } catch {
           setError(true);
@@ -141,10 +150,18 @@ export function CopyButton({ text, code = false }: { text: string; code?: boolea
     </Button>
   );
 }
-export function CodeBlock({ text, json = false }: { text: string; json?: boolean }) {
+export function CodeBlock({
+  text,
+  json = false,
+  onCopy,
+}: {
+  text: string;
+  json?: boolean;
+  onCopy?: (() => void) | undefined;
+}) {
   return (
     <div className="code-block">
-      <CopyButton text={text} code />
+      <CopyButton text={text} code onCopy={onCopy} />
       <pre>
         {json
           ? text.split("\n").map((line, i) => {

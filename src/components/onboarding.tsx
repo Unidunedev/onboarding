@@ -44,6 +44,7 @@ import {
   type AvatarCategory,
 } from "@/lib/community";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
+import { clearDraft, readDraft, saveDraft } from "@/lib/draft";
 import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
 const steps = ["Boas-vindas", "Seu perfil", "A ideia", "O estilo", "Revisão"];
@@ -152,40 +153,6 @@ function Welcome({ onStart }: { onStart: () => void }) {
   );
 }
 
-// Rascunho salvo no navegador: sair para outra página não apaga o que foi preenchido.
-const DRAFT_KEY = "unidunedev:inscricao";
-type Draft = {
-  step: number;
-  data: Registration;
-  category: AvatarCategory;
-  passport: Member | null;
-};
-
-function readDraft(): Partial<Draft> {
-  try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    return raw ? (JSON.parse(raw) as Partial<Draft>) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveDraft(draft: Draft) {
-  try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  } catch {
-    // Navegador sem storage (aba anônima restrita etc.): segue sem salvar.
-  }
-}
-
-function clearDraft() {
-  try {
-    localStorage.removeItem(DRAFT_KEY);
-  } catch {
-    // ignora
-  }
-}
-
 export function Onboarding() {
   const [draft] = useState(readDraft);
   const [step, setStep] = useState(() => Math.min(Math.max(draft.step ?? 0, 0), 4));
@@ -197,12 +164,14 @@ export function Onboarding() {
   const [duplicate, setDuplicate] = useState(false);
   const [saving, setSaving] = useState(false);
   const [passport, setPassport] = useState<Member | null>(draft.passport ?? null);
+  const [jsonCopiado, setJsonCopiado] = useState(draft.jsonCopiado ?? false);
   useEffect(() => {
-    saveDraft({ step, data, category, passport });
-  }, [step, data, category, passport]);
+    saveDraft({ step, data, category, passport, jsonCopiado });
+  }, [step, data, category, passport, jsonCopiado]);
   const restart = () => {
     clearDraft();
     setPassport(null);
+    setJsonCopiado(false);
     setData(initial);
     setCategory("Robôs");
     setStep(0);
@@ -264,7 +233,15 @@ export function Onboarding() {
     }
   };
   const preview: Member = { ...data, entrouEm: "" };
-  if (passport) return <Final passport={passport} onRestart={restart} />;
+  if (passport)
+    return (
+      <Final
+        passport={passport}
+        jsonCopiado={jsonCopiado}
+        onJsonCopiado={() => setJsonCopiado(true)}
+        onRestart={restart}
+      />
+    );
   return (
     <>
       <div className="stepper" aria-label="Etapas da inscrição">
@@ -553,9 +530,13 @@ export function Onboarding() {
                         </div>
                       ))}
                     </dl>
-                    <p className="small-note">
-                      <ShieldCheck size={14} /> Suas escolhas ficam guardadas. Seu card só entra no
-                      mural pelo PR.
+                    <p className="pr-alert pr-alert-soft" role="note">
+                      <ShieldCheck size={18} />
+                      <span>
+                        <strong>Importante:</strong> a inscrição guarda suas escolhas, mas o seu
+                        card <strong>só aparece no mural depois de um Pull Request</strong>{" "}
+                        aprovado. Na próxima tela a gente te mostra o passo a passo.
+                      </span>
                     </p>
                   </>
                 )}
@@ -617,54 +598,83 @@ export function Onboarding() {
   );
 }
 
-function Final({ passport, onRestart }: { passport: Member; onRestart: () => void }) {
+function Final({
+  passport,
+  jsonCopiado,
+  onJsonCopiado,
+  onRestart,
+}: {
+  passport: Member;
+  jsonCopiado: boolean;
+  onJsonCopiado: () => void;
+  onRestart: () => void;
+}) {
   const members = sortMembers(
     loadMembers().filter((m) => m.github !== passport.github),
     "recentes",
   );
   const json = JSON.stringify(passport, null, 2);
+  const etapas = [
+    { titulo: "Inscrição feita", feito: true },
+    { titulo: "Copiar seu JSON", feito: jsonCopiado },
+    { titulo: "Abrir o Pull Request", feito: false },
+    { titulo: "PR aprovado → card no mural 🎉", feito: false },
+  ];
+  const atual = etapas.findIndex((e) => !e.feito);
   return (
     <main className="content-page">
       <section className="celebration">
         <span className="celebration-icon" aria-hidden="true">
           ☕✨
         </span>
-        <p className="section-kicker mt-5">BEM-VINDO À MESA</p>
-        <h1 className="page-title">Inscrição feita!</h1>
-        <p className="section-subtitle">Agora vem a parte mais legal 👇</p>
+        <p className="section-kicker mt-5">INSCRIÇÃO FEITA</p>
+        <h1 className="page-title">Falta só 1 passo para você aparecer no mural!</h1>
       </section>
+
+      <div className="pr-alert" role="alert">
+        <span className="pr-alert-icon" aria-hidden="true">
+          ⚠️
+        </span>
+        <span>
+          <strong>Seu card ainda NÃO está no mural.</strong> Ele só aparece depois que você abrir um{" "}
+          <strong>Pull Request</strong> com o seu JSON e alguém da liderança aprovar.{" "}
+          <strong>Sem PR, sem card!</strong> 😉
+        </span>
+      </div>
+
+      <ol className="pr-tracker" aria-label="Seu progresso até o mural">
+        {etapas.map((e, i) => (
+          <li
+            key={e.titulo}
+            className={e.feito ? "feito" : i === atual ? "atual" : ""}
+            aria-current={i === atual ? "step" : undefined}
+          >
+            <span className="pr-tracker-num">{e.feito ? <Check size={14} /> : i + 1}</span>
+            {e.titulo}
+          </li>
+        ))}
+      </ol>
+
       <section className="final-section">
-        <h2 className="section-heading">Assim você vai aparecer no Mural da Galera</h2>
-        <div className="member-grid">
-          <MemberCard member={passport} highlight />
-          {members.slice(0, 2).map((m) => (
-            <MemberCard member={m} key={m.github} />
-          ))}
-          {Array.from({ length: Math.max(0, 2 - members.length) }, (_, i) => (
-            <GhostCard key={i} />
-          ))}
-        </div>
-        {/* Abre em nova aba para ninguém sair daqui antes de copiar o JSON */}
-        <Button asChild variant="outline">
-          <a href="/mural" target="_blank" rel="noopener">
-            Ver mural completo (nova aba) <Users />
-          </a>
-        </Button>
-      </section>
-      <section className="final-section">
-        <p className="section-kicker">UM PEQUENO ARQUIVO. UM GRANDE PRIMEIRO PASSO.</p>
-        <h2 className="section-heading">Seu passaporte para o Mural 🎫</h2>
-        <CodeBlock text={json} json />
+        <p className="section-kicker">PASSO 2 · COPIE SEU PASSAPORTE</p>
+        <h2 className="section-heading">Seu JSON para o mural 🎫</h2>
+        <p className="section-subtitle">
+          Clique em <strong>Copiar</strong>. Você vai colar esse texto num arquivo no GitHub.
+        </p>
+        <CodeBlock text={json} json onCopy={onJsonCopiado} />
         <div className="filename-row">
+          <span>Nome do arquivo:</span>
           <code>membros/{passport.github}.json</code>
           <CopyButton text={`membros/${passport.github}.json`} />
         </div>
         <FileNameWarning username={passport.github} />
       </section>
+
       <section className="final-section">
+        <p className="section-kicker">PASSO 3 · ABRA O PULL REQUEST</p>
         <h2 className="section-heading">🏆 Desafio do 1º PR</h2>
         <p className="section-subtitle">
-          Coloque seu card no Mural da Galera! Escolha seu caminho e dê o primeiro passo.
+          É aqui que o seu card vira realidade. Escolha seu caminho:
         </p>
         <div className="journey-levels">
           {[
@@ -713,17 +723,37 @@ function Final({ passport, onRestart }: { passport: Member; onRestart: () => voi
         </div>
         <Button asChild className="coffee-cta">
           <a href={REPO_URL} target="_blank" rel="noreferrer">
-            <Github /> Abrir o repositório 🚀
+            <Github /> Abrir o repositório e fazer meu PR 🚀
           </a>
         </Button>
-        <p className="section-subtitle">
-          Quando seu PR for aprovado, seu card aparece no mural em poucos minutos!
-        </p>
         <GitWelcome />
       </section>
+
+      <section className="final-section">
+        <p className="section-kicker">PASSO 4 · DEPOIS DA APROVAÇÃO</p>
+        <h2 className="section-heading">É assim que você vai aparecer no Mural da Galera</h2>
+        <p className="section-subtitle">
+          Poucos minutos depois de o seu PR ser aprovado, o seu card entra no mural.
+        </p>
+        <div className="member-grid">
+          <MemberCard member={passport} highlight />
+          {members.slice(0, 2).map((m) => (
+            <MemberCard member={m} key={m.github} />
+          ))}
+          {Array.from({ length: Math.max(0, 2 - members.length) }, (_, i) => (
+            <GhostCard key={i} />
+          ))}
+        </div>
+        {/* Abre em nova aba para ninguém sair daqui antes de copiar o JSON */}
+        <Button asChild variant="outline">
+          <a href="/mural" target="_blank" rel="noopener">
+            Ver mural completo (nova aba) <Users />
+          </a>
+        </Button>
+      </section>
+
       <p className="restart-note">
-        Suas escolhas ficam salvas neste navegador, então pode voltar aqui quando quiser para copiar
-        o JSON.{" "}
+        Esta tela fica salva neste navegador: pode voltar aqui quando quiser para copiar o JSON.{" "}
         <button type="button" className="link-button" onClick={onRestart}>
           Fazer outra inscrição
         </button>

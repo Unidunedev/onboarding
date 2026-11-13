@@ -2058,3 +2058,106 @@ textarea.text-input {
   cursor: pointer;
   font: inherit;
 }
+
+/* ---------- Destaque do Pull Request ---------- */
+.pr-alert {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  max-width: 820px;
+  margin: 24px auto 0;
+  padding: 18px 22px;
+  border-radius: 12px;
+  border: 2px solid oklch(0.72 0.14 55);
+  background: oklch(0.95 0.06 75);
+  color: var(--foreground);
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: left;
+}
+.pr-alert-soft {
+  border-width: 1px;
+  font-size: 15px;
+  margin: 20px 0 0;
+  max-width: none;
+}
+.pr-alert-soft svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--primary);
+}
+.pr-alert-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+.pr-alert-link {
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pr-tracker {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 920px;
+  margin: 22px auto 8px;
+  padding: 0;
+}
+.pr-tracker li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 15px;
+  font-weight: 500;
+}
+.pr-tracker-num {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.pr-tracker li.feito {
+  color: var(--sage);
+}
+.pr-tracker li.feito .pr-tracker-num {
+  background: var(--sage);
+  color: #fff;
+}
+.pr-tracker li.atual {
+  border: 2px solid var(--primary);
+  color: var(--foreground);
+  box-shadow: 0 0 0 4px var(--accent);
+}
+.pr-tracker li.atual .pr-tracker-num {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.filename-row > span {
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.mural-voce {
+  margin-top: 16px !important;
+  font-weight: 600;
+  color: var(--sage);
+}
+@media (max-width: 760px) {
+  .pr-tracker {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pr-alert {
+    font-size: 15px;
+    padding: 14px 16px;
+  }
+}

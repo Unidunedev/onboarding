@@ -6,6 +6,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { loadMembers, sortMembers, AREAS, pageHead, type MemberSort } from "@/lib/community";
 import { MemberCard, GhostCard } from "@/components/community-ui";
+import { readSavedPassport } from "@/lib/draft";
 export const Route = createFileRoute("/mural")({
   head: () =>
     pageHead(
@@ -29,6 +30,9 @@ function Mural() {
       (!area || m.areas.includes(area as (typeof AREAS)[number])),
   );
   const shown = filtered.slice(0, visible);
+  // Quem se inscreveu neste navegador, mas ainda não tem card: lembrete do PR.
+  const [meuPassaporte] = useState(readSavedPassport);
+  const estouNoMural = !!meuPassaporte && all.some((m) => m.github === meuPassaporte.github);
   return (
     <main className="content-page">
       <p className="section-kicker">GENTE DE VERDADE. APRENDIZADO COMPARTILHADO.</p>
@@ -36,6 +40,26 @@ function Mural() {
       <p className="section-subtitle">
         Cada card, um primeiro passo. Cada pessoa, uma nova possibilidade.
       </p>
+      {meuPassaporte && !estouNoMural && (
+        <div className="pr-alert" role="note">
+          <span className="pr-alert-icon" aria-hidden="true">
+            👀
+          </span>
+          <span>
+            <strong>Cadê você, {meuPassaporte.nome}?</strong> Seu card ainda não está aqui porque
+            ele só entra no mural depois que o seu <strong>Pull Request</strong> for aprovado. Já
+            abriu o seu?{" "}
+            <Link to="/" className="pr-alert-link">
+              Ver meu JSON e o passo a passo →
+            </Link>
+          </span>
+        </div>
+      )}
+      {meuPassaporte && estouNoMural && (
+        <p className="mural-voce">
+          🎉 Você já está no mural, {meuPassaporte.nome}! Bem-vindo(a) à mesa.
+        </p>
+      )}
       {all.length > 0 && (
         <p className="mural-count">
           ☕ {all.length} {all.length === 1 ? "pessoa" : "pessoas"} na mesa
