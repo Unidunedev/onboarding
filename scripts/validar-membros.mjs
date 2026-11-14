@@ -64,6 +64,21 @@ const membro = z
 const pasta = "membros";
 let erros = 0;
 
+// Tudo precisa ficar direto em membros/: subpastas e outros tipos de arquivo não aparecem no mural.
+for (const item of readdirSync(pasta, { withFileTypes: true })) {
+  if (item.isDirectory()) {
+    console.error(
+      `❌ ${join(pasta, item.name)}/: não crie pastas aqui dentro. O arquivo vai direto em membros/<seu-username>.json (se você já estava na pasta membros, digite só o nome do arquivo).`,
+    );
+    erros++;
+  } else if (!item.name.endsWith(".json")) {
+    console.error(
+      `❌ ${join(pasta, item.name)}: o arquivo precisa terminar em .json → membros/<seu-username>.json`,
+    );
+    erros++;
+  }
+}
+
 for (const arquivo of readdirSync(pasta)
   .filter((f) => f.endsWith(".json"))
   .sort()) {
