@@ -80,11 +80,11 @@ const guardianSteps = [
   },
   {
     title: "Faça uma revisão acolhedora",
-    text: "Use comentários para sugerir melhorias e explicar o porquê. Clique em Review changes. Se tudo estiver certo, selecione Approve e envie a revisão. Se houver algo a corrigir, peça a mudança com gentileza.",
+    text: "Use comentários para sugerir melhorias e explicar o porquê. Clique em Review changes, escolha Comment e envie sua revisão. Se houver algo a corrigir, aponte com gentileza. (Você até consegue marcar Approve, mas é a aprovação da liderança que libera o merge.)",
   },
   {
-    title: "Deixe a integração com os responsáveis",
-    text: "A aprovação de um colega é uma conquista, mas quem tem permissão no repositório faz o merge. Se você ainda não tem essa permissão, tudo bem: sua revisão já ajudou a comunidade.",
+    title: "A aprovação final é da liderança",
+    text: "Quem aprova e integra o PR é a liderança da Unidunedev. Sua revisão ajuda o colega a corrigir antes e deixa a aprovação muito mais rápida. É assim que funciona nas empresas: todo mundo revisa, e quem tem permissão faz o merge.",
   },
 ];
 function Tutorial() {

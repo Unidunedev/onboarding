@@ -757,7 +757,10 @@ function Final({
           <div className="journey-levels">
             <article className="journey-level">
               <h3>🛡️ Vire Guardião</h3>
-              <p>Revise o Pull Request de um colega e ajude ele a entrar no mural também.</p>
+              <p>
+                Revise o PR de um colega: confira o JSON e deixe comentários e sugestões. A
+                aprovação final é da liderança.
+              </p>
               <Button asChild variant="link" className="px-0">
                 <Link to="/desafio-pr" search={{ nivel: "3" }}>
                   Como revisar um PR <ArrowRight />
@@ -832,7 +835,7 @@ function Final({
                   steps: [
                     "Abra o PR de um colega",
                     "Confira o JSON e as mudanças",
-                    "Deixe sua revisão e aprove",
+                    "Comente e sugira melhorias",
                   ],
                   nivel: "3",
                 },
