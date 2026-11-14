@@ -117,38 +117,61 @@ export type AvatarCategory = (typeof AVATAR_CATEGORIES)[number];
 const LOCAL_AVATARS: Partial<Record<AvatarCategory, { folder: string; count: number }>> = {
   Feminino: { folder: "feminino", count: 22 },
   Masculino: { folder: "masculino", count: 22 },
+  Fofinhos: { folder: "fofinhos", count: 20 }, // bichinhos feitos pela Unidunedev
 };
 
 const PASTEL = "d1d4f9,c0aede,b6e3f4,ffd5dc,ffdfbf,e8f0d8";
-const ANIME_HAIR = [13, 14, 15, 16, 18, 19, 23, 29, 31, 32, 33, 40, 41, 42, 45]
-  .map((n) => `variant${String(n).padStart(2, "0")}`)
-  .join(",");
+
+// Anime: cada posição da grade recebe um penteado, uma cor e um fundo diferentes,
+// para não sair tudo parecido (o sorteio do DiceBear repetia muito).
+const ANIME_CABELOS = [
+  9, 13, 26, 14, 31, 35, 10, 40, 22, 15, 45, 18, 29, 41, 16, 37, 24, 30, 42, 19, 32, 46, 21, 38,
+];
+const ANIME_CORES = [
+  "2c1b18",
+  "f48fb1",
+  "6a3b2a",
+  "5b8def",
+  "e0a36b",
+  "8e7cc3",
+  "c0392b",
+  "f6c453",
+  "4db6ac",
+  "1f1f2e",
+  "b5651d",
+  "ff8a65",
+];
+const ANIME_FUNDOS = ["ffd5dc", "f8d9ff", "dbeafe", "fde2e4", "e0f7ec", "fff1c9"];
+
+function animeParams(seed: number) {
+  const i = seed - 1;
+  const cabelo = ANIME_CABELOS[i % ANIME_CABELOS.length]!;
+  return [
+    `hair=variant${String(cabelo).padStart(2, "0")}`,
+    `hairColor=${ANIME_CORES[(i * 5) % ANIME_CORES.length]}`,
+    `backgroundColor=${ANIME_FUNDOS[i % ANIME_FUNDOS.length]}`,
+    "mouth=happy01,happy02,happy03,happy04,happy05,happy06",
+    "beardProbability=0",
+    "earringsProbability=60",
+    "glassesProbability=12",
+    "hairAccessoriesProbability=25",
+  ].join("&");
+}
 
 // Avatares gerados pelo DiceBear (https://www.dicebear.com). Créditos no rodapé do site.
 const DICEBEAR_STYLES: Partial<Record<AvatarCategory, { style: string; params: string }>> = {
   Robôs: { style: "bottts-neutral", params: `backgroundColor=${PASTEL}` },
-  Anime: {
-    style: "lorelei",
-    params: [
-      `hair=${ANIME_HAIR}`,
-      "mouth=happy01,happy02,happy03,happy04,happy05,happy06",
-      "beardProbability=0",
-      "earringsProbability=70",
-      "glassesProbability=10",
-      "hairColor=3b2219,6a3b2a,b5651d,2c1b4a,e0a36b,8a2c3c",
-      "skinColor=ffe0cc,f2c9a8,d9a07a,a86b4a",
-      "backgroundColor=ffd5dc,f8d9ff,ffe4ec,fde2e4",
-    ].join("&"),
-  },
-  Fofinhos: { style: "miniavs", params: `backgroundColor=${PASTEL}` },
+  Anime: { style: "lorelei", params: "" }, // parâmetros por posição: animeParams()
   Sérios: { style: "notionists", params: "backgroundColor=f3e8dc" },
   Pixel: { style: "pixel-art", params: "backgroundColor=e8f0d8,f3e8dc,dfe7f2" },
   Emoji: { style: "fun-emoji", params: "" },
 };
 
+const QUANTIDADE: Partial<Record<AvatarCategory, number>> = { Anime: ANIME_CABELOS.length };
+
 /** Quantos avatares a categoria mostra na grade. */
 export function avatarCount(category: AvatarCategory) {
-  return LOCAL_AVATARS[category]?.count ?? 12;
+  return LOCAL_AVATARS[category]?.count ?? QUANTIDADE[category] ?? 12;
 }
 
 export function avatarUrl(category: AvatarCategory, seed: number) {
@@ -157,7 +180,8 @@ export function avatarUrl(category: AvatarCategory, seed: number) {
     const n = ((seed - 1) % local.count) + 1;
     return `/avatares/${local.folder}/${String(n).padStart(2, "0")}.svg`;
   }
-  const { style, params } = DICEBEAR_STYLES[category]!;
+  const { style } = DICEBEAR_STYLES[category]!;
+  const params = category === "Anime" ? animeParams(seed) : DICEBEAR_STYLES[category]!.params;
   const query = `seed=${encodeURIComponent(category + seed)}${params ? `&${params}` : ""}`;
   return `https://api.dicebear.com/9.x/${style}/svg?${query}`;
 }

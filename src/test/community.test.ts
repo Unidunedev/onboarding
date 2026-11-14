@@ -80,7 +80,7 @@ describe("Community rules", () => {
     expect(new Set(urls).size).toBe(AVATAR_CATEGORIES.length);
     expect(avatarUrl("Feminino", 1)).toBe("/avatares/feminino/01.svg");
     expect(avatarUrl("Masculino", 22)).toBe("/avatares/masculino/22.svg");
-    for (const c of ["Feminino", "Masculino"] as const) {
+    for (const c of ["Feminino", "Masculino", "Fofinhos"] as const) {
       for (let i = 1; i <= avatarCount(c); i++) {
         expect(existsSync(`public${avatarUrl(c, i)}`)).toBe(true);
       }
@@ -101,5 +101,11 @@ describe("Community rules", () => {
     ];
     expect(sortMembers(list, "recentes").map((m) => m.github)).toEqual(["ana", "caio", "bia"]);
     expect(sortMembers(list, "nome").map((m) => m.github)).toEqual(["ana", "bia", "caio"]);
+  });
+  it("gives every Anime avatar a different hairstyle", () => {
+    const cabelos = Array.from({ length: avatarCount("Anime") }, (_, i) =>
+      new URL(avatarUrl("Anime", i + 1)).searchParams.get("hair"),
+    );
+    expect(new Set(cabelos).size).toBe(cabelos.length);
   });
 });

@@ -2867,3 +2867,15 @@ textarea.text-input {
 .chip-top {
   border-color: var(--caramel);
 }
+
+/* Quem já tem o card no mural */
+.pr-alert-ok {
+  border-color: var(--sage);
+  background: var(--sage-light);
+}
+.journey-level p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin: 8px 0 4px !important;
+}

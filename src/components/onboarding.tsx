@@ -46,7 +46,7 @@ import {
 import { supabase, supabaseConfigured } from "@/lib/supabase";
 import { useResumoInscricoes } from "@/lib/resumo";
 import { EVENTO_INICIO, clearDraft, readDraft, saveDraft } from "@/lib/draft";
-import { COMECE_POR_AQUI_URL, REPO_URL } from "@/config";
+import { COMECE_POR_AQUI_URL, ORG_URL, REPO_URL } from "@/config";
 import welcome from "@/assets/coffee-welcome.jpg";
 const steps = ["Boas-vindas", "Seu perfil", "A ideia", "O estilo", "Revisão"];
 const initial: Registration = {
@@ -657,11 +657,13 @@ function Final({
     "recentes",
   );
   const json = JSON.stringify(passport, null, 2);
+  // PR aprovado? O card dessa pessoa já está na pasta membros/ (o mural é gerado a partir dela).
+  const cardNoMural = loadMembers().find((m) => m.github === passport.github) ?? null;
   const etapas = [
     { titulo: "Inscrição feita", feito: true },
-    { titulo: "Copiar seu JSON", feito: jsonCopiado },
-    { titulo: "Abrir o Pull Request", feito: false },
-    { titulo: "PR aprovado → card no mural 🎉", feito: false },
+    { titulo: "Copiar seu JSON", feito: jsonCopiado || !!cardNoMural },
+    { titulo: "Abrir o Pull Request", feito: !!cardNoMural },
+    { titulo: "PR aprovado → card no mural 🎉", feito: !!cardNoMural },
   ];
   const atual = etapas.findIndex((e) => !e.feito);
   return (
@@ -670,17 +672,33 @@ function Final({
         <span className="celebration-icon" aria-hidden="true">
           ☕✨
         </span>
-        <p className="section-kicker mt-5">INSCRIÇÃO FEITA</p>
-        <h1 className="page-title">Falta só 1 passo para você aparecer no mural!</h1>
+        <p className="section-kicker mt-5">{cardNoMural ? "PR APROVADO" : "INSCRIÇÃO FEITA"}</p>
+        <h1 className="page-title">
+          {cardNoMural
+            ? `Você já está no mural, ${cardNoMural.nome}! 🎉`
+            : "Falta só 1 passo para você aparecer no mural!"}
+        </h1>
       </section>
 
       <section className="final-preview">
         <p className="section-subtitle">
-          Assim você vai aparecer no <strong>Mural da Galera</strong> depois que o seu PR for
-          aprovado:
+          {cardNoMural ? (
+            <>
+              Seu card já está no <strong>Mural da Galera</strong>:
+            </>
+          ) : (
+            <>
+              Assim você vai aparecer no <strong>Mural da Galera</strong> depois que o seu PR for
+              aprovado:
+            </>
+          )}
         </p>
         <div className="member-grid">
-          <MemberCard member={passport} highlight />
+          <MemberCard
+            member={cardNoMural ?? passport}
+            highlight
+            badge={cardNoMural ? "Você está aqui! 🎉" : undefined}
+          />
           {members.slice(0, 2).map((m) => (
             <MemberCard member={m} key={m.github} />
           ))}
@@ -696,16 +714,28 @@ function Final({
         </Button>
       </section>
 
-      <div className="pr-alert" role="alert">
-        <span className="pr-alert-icon" aria-hidden="true">
-          ⚠️
-        </span>
-        <span>
-          <strong>Seu card ainda NÃO está no mural.</strong> Ele só aparece depois que você abrir um{" "}
-          <strong>Pull Request</strong> com o seu JSON e alguém da liderança aprovar.{" "}
-          <strong>Sem PR, sem card!</strong> 😉
-        </span>
-      </div>
+      {cardNoMural ? (
+        <div className="pr-alert pr-alert-ok" role="status">
+          <span className="pr-alert-icon" aria-hidden="true">
+            🏆
+          </span>
+          <span>
+            <strong>Seu Pull Request foi aprovado</strong> e o seu card já está no mural. Parabéns
+            pelo primeiro PR! Agora você faz parte da galera de verdade. 💜
+          </span>
+        </div>
+      ) : (
+        <div className="pr-alert" role="alert">
+          <span className="pr-alert-icon" aria-hidden="true">
+            ⚠️
+          </span>
+          <span>
+            <strong>Seu card ainda NÃO está no mural.</strong> Ele só aparece depois que você abrir
+            um <strong>Pull Request</strong> com o seu JSON e alguém da liderança aprovar.{" "}
+            <strong>Sem PR, sem card!</strong> 😉
+          </span>
+        </div>
+      )}
 
       <ol className="pr-tracker" aria-label="Seu progresso até o mural">
         {etapas.map((e, i) => (
@@ -720,79 +750,117 @@ function Final({
         ))}
       </ol>
 
-      <section className="final-section">
-        <p className="section-kicker">PASSO 2 · COPIE SEU PASSAPORTE</p>
-        <h2 className="section-heading">Seu JSON para o mural 🎫</h2>
-        <p className="section-subtitle">
-          Clique em <strong>Copiar</strong>. Você vai colar esse texto num arquivo no GitHub.
-        </p>
-        <CodeBlock text={json} json onCopy={onJsonCopiado} />
-        <div className="filename-row">
-          <span>Nome do arquivo:</span>
-          <code>membros/{passport.github}.json</code>
-          <CopyButton text={`membros/${passport.github}.json`} />
-        </div>
-        <FileNameWarning username={passport.github} />
-      </section>
-
-      <section className="final-section">
-        <p className="section-kicker">PASSO 3 · ABRA O PULL REQUEST</p>
-        <h2 className="section-heading">🏆 Desafio do 1º PR</h2>
-        <p className="section-subtitle">
-          É aqui que o seu card vira realidade. Escolha seu caminho:
-        </p>
-        <div className="journey-levels">
-          {[
-            {
-              name: "🌱 Nível 1 — Explorador",
-              steps: [
-                "Faça um fork do repositório",
-                "Add file → cole seu JSON",
-                "Commit → abra um Pull Request",
-              ],
-              nivel: "1",
-            },
-            {
-              name: "⚔️ Nível 2 — Aventureiro",
-              steps: [
-                "Clone seu fork e crie uma branch",
-                "Crie o JSON e faça um commit",
-                "Push → abra um Pull Request",
-              ],
-              nivel: "2",
-            },
-            {
-              name: "🛡️ Nível 3 — Guardião",
-              steps: [
-                "Abra o PR de um colega",
-                "Confira o JSON e as mudanças",
-                "Deixe sua revisão e aprove",
-              ],
-              nivel: "3",
-            },
-          ].map((l) => (
-            <article className="journey-level" key={l.nivel}>
-              <h3>{l.name}</h3>
-              <ol>
-                {l.steps.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ol>
+      {cardNoMural ? (
+        <section className="final-section">
+          <p className="section-kicker">E AGORA?</p>
+          <h2 className="section-heading">Próximos passos 🚀</h2>
+          <div className="journey-levels">
+            <article className="journey-level">
+              <h3>🛡️ Vire Guardião</h3>
+              <p>Revise o Pull Request de um colega e ajude ele a entrar no mural também.</p>
               <Button asChild variant="link" className="px-0">
-                <Link to="/desafio-pr" search={{ nivel: l.nivel }}>
-                  Ver tutorial completo <ArrowRight />
+                <Link to="/desafio-pr" search={{ nivel: "3" }}>
+                  Como revisar um PR <ArrowRight />
                 </Link>
               </Button>
             </article>
-          ))}
-        </div>
-        <Button asChild className="coffee-cta">
-          <a href={REPO_URL} target="_blank" rel="noreferrer">
-            <Github /> Abrir o repositório e fazer meu PR 🚀
-          </a>
-        </Button>
-        <GitWelcome />
-      </section>
+            <article className="journey-level">
+              <h3>📚 Pratique toda semana</h3>
+              <p>Desafios de lógica, C, Python e Java com correção automática no PR.</p>
+              <Button asChild variant="link" className="px-0">
+                <a href={`${ORG_URL}/estudos`} target="_blank" rel="noreferrer">
+                  Abrir os estudos <ArrowRight />
+                </a>
+              </Button>
+            </article>
+            <article className="journey-level">
+              <h3>🌿 Domine o Git</h3>
+              <p>Branches, conflitos, rebase e o que fazer quando algo dá errado.</p>
+              <Button asChild variant="link" className="px-0">
+                <a href={COMECE_POR_AQUI_URL} target="_blank" rel="noreferrer">
+                  Continuar a trilha <ArrowRight />
+                </a>
+              </Button>
+            </article>
+          </div>
+        </section>
+      ) : (
+        <>
+          <section className="final-section">
+            <p className="section-kicker">PASSO 2 · COPIE SEU PASSAPORTE</p>
+            <h2 className="section-heading">Seu JSON para o mural 🎫</h2>
+            <p className="section-subtitle">
+              Clique em <strong>Copiar</strong>. Você vai colar esse texto num arquivo no GitHub.
+            </p>
+            <CodeBlock text={json} json onCopy={onJsonCopiado} />
+            <div className="filename-row">
+              <span>Nome do arquivo:</span>
+              <code>membros/{passport.github}.json</code>
+              <CopyButton text={`membros/${passport.github}.json`} />
+            </div>
+            <FileNameWarning username={passport.github} />
+          </section>
+
+          <section className="final-section">
+            <p className="section-kicker">PASSO 3 · ABRA O PULL REQUEST</p>
+            <h2 className="section-heading">🏆 Desafio do 1º PR</h2>
+            <p className="section-subtitle">
+              É aqui que o seu card vira realidade. Escolha seu caminho:
+            </p>
+            <div className="journey-levels">
+              {[
+                {
+                  name: "🌱 Nível 1 — Explorador",
+                  steps: [
+                    "Faça um fork do repositório",
+                    "Add file → cole seu JSON",
+                    "Commit → abra um Pull Request",
+                  ],
+                  nivel: "1",
+                },
+                {
+                  name: "⚔️ Nível 2 — Aventureiro",
+                  steps: [
+                    "Clone seu fork e crie uma branch",
+                    "Crie o JSON e faça um commit",
+                    "Push → abra um Pull Request",
+                  ],
+                  nivel: "2",
+                },
+                {
+                  name: "🛡️ Nível 3 — Guardião",
+                  steps: [
+                    "Abra o PR de um colega",
+                    "Confira o JSON e as mudanças",
+                    "Deixe sua revisão e aprove",
+                  ],
+                  nivel: "3",
+                },
+              ].map((l) => (
+                <article className="journey-level" key={l.nivel}>
+                  <h3>{l.name}</h3>
+                  <ol>
+                    {l.steps.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
+                  <Button asChild variant="link" className="px-0">
+                    <Link to="/desafio-pr" search={{ nivel: l.nivel }}>
+                      Ver tutorial completo <ArrowRight />
+                    </Link>
+                  </Button>
+                </article>
+              ))}
+            </div>
+            <Button asChild className="coffee-cta">
+              <a href={REPO_URL} target="_blank" rel="noreferrer">
+                <Github /> Abrir o repositório e fazer meu PR 🚀
+              </a>
+            </Button>
+            <GitWelcome />
+          </section>
+        </>
+      )}
 
       <p className="restart-note">
         Esta tela fica salva neste navegador: pode voltar aqui quando quiser para copiar o JSON.{" "}

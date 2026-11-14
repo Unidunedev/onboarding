@@ -35,12 +35,13 @@ export function Footer() {
         Uma comunidade. Muitos primeiros commits. <Heart size={12} />
       </span>
       <small className="footer-credits">
-        Avatares Feminino e Masculino: IconScout e Avataaars. Demais por{" "}
+        Avatares Feminino e Masculino: IconScout e Avataaars. Fofinhos: feitos pela Unidunedev.
+        Demais por{" "}
         <a href="https://www.dicebear.com" target="_blank" rel="noreferrer">
           DiceBear
         </a>
-        : Bottts e Avataaars (Pablo Stanley); Miniavs (Webpixels) e Fun Emoji (Davis Uche) sob CC BY
-        4.0; Lorelei (Lisa Wischofsky), Notionists (Zoish) e Pixel Art em domínio público.
+        : Bottts (Pablo Stanley) e Fun Emoji (Davis Uche) sob CC BY 4.0; Lorelei (Lisa Wischofsky),
+        Notionists (Zoish) e Pixel Art em domínio público.
       </small>
     </footer>
   );
@@ -73,10 +74,20 @@ export function HelpTip({ label, children }: { label: string; children: ReactNod
   );
 }
 
-export function MemberCard({ member, highlight = false }: { member: Member; highlight?: boolean }) {
+export function MemberCard({
+  member,
+  highlight = false,
+  badge,
+}: {
+  member: Member;
+  highlight?: boolean;
+  badge?: string | undefined;
+}) {
   return (
     <article className={`member-card ${highlight ? "highlight-member" : ""}`}>
-      {highlight && <span className="member-badge">Aparece após o PR aprovado ✨</span>}
+      {highlight && (
+        <span className="member-badge">{badge ?? "Aparece após o PR aprovado ✨"}</span>
+      )}
       <img
         className="member-avatar"
         src={member.avatar}
