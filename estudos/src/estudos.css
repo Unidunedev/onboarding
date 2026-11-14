@@ -327,65 +327,11 @@ button {
   margin-top: 6px;
 }
 
-/* Cena lofi */
+/* Cena lofi: mesa de estudos à noite (desenho em components/lofi.tsx) */
 .cena-lofi {
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-.cena-janela {
-  position: absolute;
-  top: 40px;
-  right: 5%;
-  width: min(40%, 460px);
-  height: 62%;
-  border: 10px solid #5a4230;
-  border-radius: 18px;
-  background: linear-gradient(#1b2342, #2c2f5e);
-  overflow: hidden;
-  opacity: 0.9;
-}
-.cena-janela::before,
-.cena-janela::after {
-  content: "";
-  position: absolute;
-  background: #5a4230;
-  z-index: 2;
-}
-.cena-janela::before {
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 8px;
-  transform: translateX(-50%);
-}
-.cena-janela::after {
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 8px;
-}
-.cena-chuva {
-  position: absolute;
-  inset: -100% -10% 0 -10%;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(190, 205, 255, 0.5) 0 1px,
-    transparent 1px 18px
-  );
-  -webkit-mask-image: repeating-linear-gradient(transparent 0 26px, #000 26px 40px);
-  mask-image: repeating-linear-gradient(transparent 0 26px, #000 26px 40px);
-  animation: chuva 0.9s linear infinite;
-}
-.cena-lua {
-  position: absolute;
-  top: 16%;
-  right: 18%;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #f5e9c8;
-  box-shadow: 0 0 30px 8px rgba(245, 233, 200, 0.35);
 }
 .cena-luz {
   position: absolute;
@@ -394,7 +340,7 @@ button {
   width: 480px;
   height: 480px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 190, 110, 0.22), transparent 65%);
+  background: radial-gradient(circle, rgba(255, 190, 110, 0.2), transparent 65%);
   animation: brilho 5s ease-in-out infinite alternate;
 }
 .cena-mesa {
@@ -406,106 +352,62 @@ button {
   background: linear-gradient(#5a3b26, #47301f);
   border-top: 4px solid #6d4a31;
 }
-.cena-livros {
+.cena-svg {
   position: absolute;
-  bottom: 58px;
-  right: calc(5% + 40px);
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
+  right: 4%;
+  bottom: 56px;
+  width: min(48%, 640px);
+  height: auto;
+  overflow: visible;
 }
-.cena-livros i {
-  display: block;
-  width: 16px;
-  height: 52px;
-  border-radius: 3px 3px 0 0;
-  background: #8fbfec;
+.cs-chuva {
+  animation: cs-chuva 0.8s linear infinite;
 }
-.cena-livros i:nth-child(2) {
-  height: 62px;
-  background: #ffd95a;
+.cs-estrela {
+  animation: cs-estrela 3s ease-in-out infinite alternate;
 }
-.cena-livros i:nth-child(3) {
-  height: 46px;
-  background: #ffad66;
-  transform: rotate(10deg);
-  transform-origin: bottom left;
+.cs-postit {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: cs-balancar 6s ease-in-out infinite alternate;
 }
-.cena-caneca {
-  position: absolute;
-  bottom: 58px;
-  right: calc(5% + 130px);
-  width: 46px;
-  height: 40px;
-  background: #c8803e;
-  border-radius: 4px 4px 14px 14px;
+.cs-postit2 {
+  animation-delay: -2s;
 }
-.cena-caneca::after {
-  content: "";
-  position: absolute;
-  right: -14px;
-  top: 8px;
-  width: 14px;
-  height: 18px;
-  border: 5px solid #c8803e;
-  border-left: 0;
-  border-radius: 0 10px 10px 0;
+.cs-brilho {
+  animation: cs-tremular 4s ease-in-out infinite alternate;
 }
-.cena-vapor {
-  position: absolute;
-  bottom: 44px;
-  left: 12px;
-  width: 6px;
-  height: 22px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.5);
-  filter: blur(2px);
-  animation: vapor-cena 2.6s ease-in-out infinite;
+.cs-cone {
+  animation: cs-tremular 6s ease-in-out infinite alternate;
 }
-.cena-vapor + .cena-vapor {
-  left: 26px;
-  animation-delay: 1.2s;
+.cs-linha {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: cs-digitar 10s ease-out infinite both;
 }
-.cena-gato {
-  position: absolute;
-  bottom: 58px;
-  right: calc(5% + 210px);
-  width: 64px;
-  height: 34px;
-  background: #1c1424;
-  border-radius: 34px 34px 8px 8px;
-  animation: respirar 3.5s ease-in-out infinite;
-  transform-origin: bottom;
+.cs-cursor {
+  animation: piscar 1s steps(1) infinite;
 }
-.cena-gato::before,
-.cena-gato::after {
-  content: "";
-  position: absolute;
-  top: -8px;
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 12px solid #1c1424;
+.cs-olhos {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cs-piscar-olhos 5s ease-in-out infinite;
 }
-.cena-gato::before {
-  left: 8px;
+.cs-rabo {
+  transform-box: view-box;
+  transform-origin: 98px 396px;
+  animation: cs-rabo 2.6s ease-in-out infinite alternate;
 }
-.cena-gato::after {
-  left: 24px;
+.cs-planta {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: cs-balancar 5s ease-in-out infinite alternate;
 }
-.cena-zzz {
-  position: absolute;
-  top: -26px;
-  left: 4px;
-  color: #e8dcc8;
-  font-weight: 800;
-  font-size: 13px;
-  opacity: 0;
-  animation: zzz 3s ease-in-out infinite;
+.cs-nota {
+  animation: cs-nota 6s ease-in infinite both;
 }
-.cena-zzz + .cena-zzz {
-  animation-delay: 1.5s;
+.cs-nota2 {
+  animation-delay: 3s;
 }
 
 /* Cardápio */
@@ -2005,50 +1907,10 @@ kbd {
     opacity: 1;
   }
 }
-@keyframes chuva {
-  to {
-    transform: translateY(40px);
-  }
-}
 @keyframes brilho {
   to {
     opacity: 0.6;
     transform: scale(1.06);
-  }
-}
-@keyframes vapor-cena {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scaleX(1);
-  }
-  40% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-26px) scaleX(1.6);
-  }
-}
-@keyframes respirar {
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(1.06);
-  }
-}
-@keyframes zzz {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0);
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(16px, -22px);
   }
 }
 @keyframes flutuar {
@@ -2138,6 +2000,89 @@ kbd {
   }
 }
 
+@keyframes cs-chuva {
+  from {
+    transform: translateY(-40px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes cs-estrela {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes cs-balancar {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}
+@keyframes cs-tremular {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes cs-digitar {
+  0%,
+  2% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  8% {
+    transform: scaleX(1);
+  }
+  86% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes cs-piscar-olhos {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.1);
+  }
+}
+@keyframes cs-rabo {
+  from {
+    transform: rotate(-8deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+@keyframes cs-nota {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18px, -70px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2151,6 +2096,14 @@ kbd {
 }
 
 /* ---------- Telas menores ---------- */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .home-hero-texto {
+    max-width: 48%;
+  }
+  .cena-svg {
+    width: 46%;
+  }
+}
 @media (max-width: 960px) {
   .aula-layout {
     grid-template-columns: minmax(0, 1fr);
@@ -2197,30 +2150,12 @@ kbd {
   }
   .home-hero {
     min-height: 0;
-    padding: 40px 16px 150px;
+    padding: 40px 16px calc(80px + 62vw);
   }
-  .cena-janela {
-    top: auto;
-    bottom: 70px;
-    right: 16px;
-    width: 120px;
-    height: 90px;
-    border-width: 6px;
-  }
-  .cena-lua {
-    width: 22px;
-    height: 22px;
-  }
-  .cena-livros {
-    right: 150px;
-  }
-  .cena-caneca {
-    right: auto;
-    left: 24px;
-  }
-  .cena-gato {
-    right: auto;
-    left: 96px;
+  .cena-svg {
+    right: 50%;
+    transform: translateX(50%);
+    width: calc(100% - 24px);
   }
   .trilha-hero {
     grid-template-columns: minmax(0, 1fr);
