@@ -756,32 +756,25 @@ function Final({
           <h2 className="section-heading">Próximos passos 🚀</h2>
           <div className="journey-levels">
             <article className="journey-level">
-              <h3>🛡️ Vire Guardião</h3>
+              <h3>📣 Fique de olho no grupo</h3>
               <p>
-                Revise o PR de um colega: confira o JSON e deixe comentários e sugestões. A
-                aprovação final é da liderança.
+                Aguarde as mensagens dos líderes no grupo sobre os próximos passos para começarmos
+                os projetos.
               </p>
-              <Button asChild variant="link" className="px-0">
-                <Link to="/desafio-pr" search={{ nivel: "3" }}>
-                  Como revisar um PR <ArrowRight />
-                </Link>
-              </Button>
             </article>
             <article className="journey-level">
-              <h3>📚 Pratique toda semana</h3>
-              <p>Desafios de lógica, C, Python e Java com correção automática no PR.</p>
-              <Button asChild variant="link" className="px-0">
-                <a href={`${ORG_URL}/estudos`} target="_blank" rel="noreferrer">
-                  Abrir os estudos <ArrowRight />
-                </a>
-              </Button>
+              <h3>💡 Sugira um projeto</h3>
+              <p>
+                Envie sugestões de projetos com base nas suas dificuldades ou nas linguagens que
+                você quer praticar.
+              </p>
             </article>
             <article className="journey-level">
-              <h3>🌿 Domine o Git</h3>
-              <p>Branches, conflitos, rebase e o que fazer quando algo dá errado.</p>
+              <h3>📸 Mostre seu card</h3>
+              <p>Tire um print do seu card no mural e mande no grupo!</p>
               <Button asChild variant="link" className="px-0">
-                <a href={COMECE_POR_AQUI_URL} target="_blank" rel="noreferrer">
-                  Continuar a trilha <ArrowRight />
+                <a href="/mural" target="_blank" rel="noopener">
+                  Abrir o mural <ArrowRight />
                 </a>
               </Button>
             </article>
