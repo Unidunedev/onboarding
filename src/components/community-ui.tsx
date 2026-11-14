@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Users, ArrowUpRight, Heart, Copy, Check } from "lucide-react";
+import { Github, Users, ArrowUpRight, Heart, Copy, Check, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
@@ -15,14 +15,16 @@ export function Header() {
       </Link>
       <nav className="navigation">
         <Link to="/mural">
-          <Users size={14} /> Mural da galera
-        </Link>
-        <Link to="/desafio-pr" search={{ nivel: "1" }}>
-          Desafio do 1º PR <ArrowUpRight size={13} />
+          <Users size={14} /> <span className="nav-longo">Mural da galera</span>
+          <span className="nav-curto">Mural</span>
         </Link>
         <a className="nav-estudos" href={ESTUDOS_URL} target="_blank" rel="noreferrer">
-          Estudos <ArrowUpRight size={13} />
+          <BookOpen size={15} /> Estudos
         </a>
+        <Link to="/desafio-pr" search={{ nivel: "1" }}>
+          <span className="nav-longo">Desafio do 1º PR</span>
+          <span className="nav-curto">1º PR</span> <ArrowUpRight size={13} />
+        </Link>
         <a className="nav-github" href={ORG_URL} target="_blank" rel="noreferrer">
           <Github size={16} /> GitHub
         </a>

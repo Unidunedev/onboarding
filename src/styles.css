@@ -139,6 +139,23 @@
   border-left: 1px solid var(--border);
   padding-left: 25px;
 }
+.navigation a.nav-estudos {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--caramel);
+  color: var(--primary);
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+.navigation a.nav-estudos:hover {
+  background: var(--secondary);
+  transform: translateY(-1px);
+}
+.nav-curto {
+  display: none;
+}
 .hero {
   position: relative;
   min-height: 650px;
@@ -1021,11 +1038,23 @@ textarea.text-input {
     font-size: 13px;
   }
   .nav-github,
-  .nav-estudos {
+  .nav-longo {
     display: none !important;
+  }
+  .nav-curto {
+    display: inline;
+  }
+  .navigation a {
+    white-space: nowrap;
+  }
+  .navigation a.nav-estudos {
+    padding: 5px 10px;
   }
   .navigation svg {
     display: none;
+  }
+  .navigation .nav-estudos svg {
+    display: block;
   }
   .hero {
     min-height: 660px;
@@ -2879,4 +2908,14 @@ textarea.text-input {
   line-height: 1.6;
   color: var(--muted-foreground);
   margin: 8px 0 4px !important;
+}
+
+/* Celulares estreitos: só a xícara da logo, para o menu caber numa linha */
+@media (max-width: 430px) {
+  .brand .udd-wordmark {
+    display: none;
+  }
+  .navigation {
+    gap: 12px;
+  }
 }
