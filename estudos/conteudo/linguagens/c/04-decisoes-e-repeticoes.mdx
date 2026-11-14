@@ -1,0 +1,241 @@
+Até agora os programas seguiam sempre o mesmo caminho, de cima para baixo. Agora eles vão **decidir** e **repetir**. É aqui que a programação começa a ficar divertida.
+
+## if e else: tomando decisões
+
+```c
+#include <stdio.h>
+
+int main() {
+    float nota;
+    scanf("%f", &nota);
+
+    if (nota >= 7) {
+        printf("Aprovado!\n");
+    } else {
+        printf("Reprovado.\n");
+    }
+    return 0;
+}
+```
+
+Lê-se: **se** a nota for maior ou igual a 7, mostre "Aprovado!"; **senão**, mostre "Reprovado.". A condição vai sempre entre parênteses, e cada bloco fica entre chaves.
+
+### Comparações
+
+| Operador | Significa |
+| --- | --- |
+| `==` | igual a |
+| `!=` | diferente de |
+| `>` e `<` | maior que e menor que |
+| `>=` e `<=` | maior ou igual e menor ou igual |
+
+### Mais de dois caminhos
+
+```c
+if (nota >= 7) {
+    printf("Aprovado\n");
+} else if (nota >= 4) {
+    printf("Exame\n");
+} else {
+    printf("Reprovado\n");
+}
+```
+
+O C testa de cima para baixo e entra **só no primeiro** bloco verdadeiro.
+
+### Juntando condições
+
+| Operador | Nome | Verdadeiro quando |
+| --- | --- | --- |
+| `&&` | E | as duas condições são verdadeiras |
+| `\|\|` | OU | pelo menos uma é verdadeira |
+| `!` | NÃO | a condição é falsa |
+
+```c
+if (idade >= 16 && idade < 18) {
+    printf("Voto opcional\n");
+}
+```
+
+<Nota tipo="cuidado" titulo="O erro mais traiçoeiro do C">
+`if (x = 5)` **não compara**: guarda 5 em `x`, e como 5 é diferente de zero, a condição é sempre verdadeira. Para comparar, use `==`. O compilador até costuma avisar com um *warning*: leia os avisos!
+</Nota>
+
+## switch: escolhendo entre valores fixos
+
+Quando você compara a **mesma** variável com vários valores exatos, o `switch` fica mais organizado:
+
+```c
+int opcao;
+scanf("%d", &opcao);
+
+switch (opcao) {
+    case 1:
+        printf("Café coado\n");
+        break;
+    case 2:
+        printf("Espresso\n");
+        break;
+    default:
+        printf("Opção inválida\n");
+}
+```
+
+O `break` faz o programa sair do `switch`. Sem ele, o C continua executando os próximos `case` também!
+
+## while: repetir enquanto for verdade
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n = 3;
+    while (n > 0) {
+        printf("%d...\n", n);
+        n = n - 1;
+    }
+    printf("Já!\n");
+    return 0;
+}
+```
+
+```saida
+3...
+2...
+1...
+Já!
+```
+
+Antes de cada volta, o C confere a condição. Quando ela fica falsa, o laço acaba. Se nada dentro do laço mudar a condição, ele **nunca** termina (o famoso loop infinito).
+
+## for: o laço com contador
+
+O `for` junta as três partes de um laço com contador numa linha só:
+
+<Passos itens={[
+  { icone: "1️⃣", titulo: "Início", texto: "int i = 1 (roda uma vez)" },
+  { icone: "❓", titulo: "Condição", texto: "i <= 5 (testa antes de cada volta)" },
+  { icone: "🔁", titulo: "Corpo", texto: "o que está entre as chaves" },
+  { icone: "➕", titulo: "Passo", texto: "i++ (depois de cada volta)" },
+]} />
+
+```c
+for (int i = 1; i <= 5; i++) {
+    printf("Volta %d\n", i);
+}
+```
+
+O `i++` é um atalho para `i = i + 1`. Vamos fazer um **teste de mesa**, acompanhando o valor de `i` no papel:
+
+| Volta | `i` | `i <= 5`? | Mostra |
+| --- | --- | --- | --- |
+| 1 | 1 | sim | Volta 1 |
+| 2 | 2 | sim | Volta 2 |
+| ... | ... | ... | ... |
+| 5 | 5 | sim | Volta 5 |
+| fim | 6 | **não** | sai do laço |
+
+<Nota tipo="analogia">
+`while` é "enquanto tiver café na garrafa, sirva uma xícara": você não sabe quantas vezes vai ser. `for` é "sirva 5 xícaras": você sabe exatamente quantas voltas quer.
+</Nota>
+
+## Os dois padrões que você vai usar sempre
+
+**Contador** (conta quantas vezes algo acontece) e **acumulador** (vai somando):
+
+```c
+#include <stdio.h>
+
+int main() {
+    int soma = 0, pares = 0;
+
+    for (int i = 1; i <= 10; i++) {
+        soma = soma + i;      // acumulador
+        if (i % 2 == 0) {
+            pares++;          // contador
+        }
+    }
+    printf("Soma: %d\n", soma);
+    printf("Pares: %d\n", pares);
+    return 0;
+}
+```
+
+```saida
+Soma: 55
+Pares: 5
+```
+
+## break e do-while
+
+- `break` sai do laço na hora, mesmo que a condição ainda seja verdadeira.
+- `do { ... } while (condição);` roda o corpo **pelo menos uma vez** e só depois testa. É ótimo para menus.
+
+```c
+int senha;
+do {
+    printf("Senha: ");
+    scanf("%d", &senha);
+} while (senha != 1234);
+printf("Bem-vindo!\n");
+```
+
+<Tarefa titulo="Tabuada">
+
+Leia um número e mostre a tabuada dele, de 1 a 10, no formato abaixo.
+
+```saida
+7
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+...
+7 x 10 = 70
+```
+
+<Dica>
+
+Um `for` de 1 até 10. Dentro dele, um `printf` com três `%d`: o número, o `i` e a multiplicação.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 1; i <= 10; i++) {
+        printf("%d x %d = %d\n", n, i, n * i);
+    }
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Quantas vezes o laço for (int i = 0; i < 3; i++) executa o corpo?"
+  opcoes={["2", "3", "4"]}
+  correta={1}
+  explicacao="i vale 0, 1 e 2. Quando chega a 3, a condição i < 3 fica falsa. Começar do 0 e usar < é o jeito mais comum em C."
+/>
+
+<Quiz
+  pergunta="O que if (x = 0) faz?"
+  opcoes={["Compara x com 0", "Guarda 0 em x e a condição é sempre falsa", "Dá erro de compilação"]}
+  correta={1}
+  explicacao="Um = só é atribuição. O valor da atribuição é 0, que em C significa falso. Para comparar, use ==."
+/>
+
+## Resumindo
+
+- `if`, `else if` e `else` escolhem um caminho. Comparar é `==`.
+- `&&` (E), `||` (OU) e `!` (NÃO) juntam condições.
+- `while` repete enquanto for verdade; `for` é o laço com contador.
+- Teste de mesa: acompanhe as variáveis no papel quando ficar confuso.

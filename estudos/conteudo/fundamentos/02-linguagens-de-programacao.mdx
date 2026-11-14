@@ -1,0 +1,122 @@
+Existem centenas de linguagens de programação. Por que tantas? Porque cada uma faz escolhas diferentes, e entender essas escolhas ajuda você a aprender qualquer uma delas.
+
+## Alto nível × baixo nível
+
+**Baixo nível** é perto da máquina: você controla memória e detalhes do processador. **Alto nível** é perto de nós: a linguagem cuida dos detalhes para você.
+
+Veja como somar dois números em três "alturas" diferentes:
+
+<Abas>
+<Aba rotulo="Assembly (baixíssimo)">
+
+```texto
+mov eax, 3
+mov ebx, 4
+add eax, ebx
+```
+
+</Aba>
+<Aba rotulo="C (baixo/médio)">
+
+```c
+int a = 3, b = 4;
+int soma = a + b;
+```
+
+</Aba>
+<Aba rotulo="Python (alto)">
+
+```python
+soma = 3 + 4
+```
+
+</Aba>
+</Abas>
+
+Nenhuma é "melhor": C é rápido e controla tudo, Python é rápido de **escrever**. Cada uma brilha num tipo de problema.
+
+## Tipagem: como a linguagem trata os tipos
+
+### Estática × dinâmica
+
+Na tipagem **estática** (C, Java), você declara o tipo e ele não muda. Na **dinâmica** (Python, JavaScript), a variável pode guardar qualquer tipo, e ele é descoberto enquanto o programa roda.
+
+<Abas>
+<Aba rotulo="Java (estática)">
+
+```java
+int idade = 20;
+idade = "vinte"; // ERRO: idade é int, não aceita texto
+```
+
+</Aba>
+<Aba rotulo="Python (dinâmica)">
+
+```python
+idade = 20
+idade = "vinte"  # tudo bem: agora idade é um texto
+```
+
+</Aba>
+</Abas>
+
+### Forte × fraca
+
+Na tipagem **forte**, a linguagem se recusa a misturar tipos sem você pedir. Na **fraca**, ela tenta "dar um jeito" (às vezes de um jeito estranho):
+
+<Abas>
+<Aba rotulo="Python (forte)">
+
+```python
+print("1" + 1)  # TypeError: não dá para somar texto com número
+```
+
+</Aba>
+<Aba rotulo="JavaScript (fraca)">
+
+```texto
+console.log("1" + 1)  // "11" (transformou o 1 em texto!)
+console.log("5" - 2)  // 3  (agora transformou o texto em número 🤯)
+```
+
+</Aba>
+</Abas>
+
+## Paradigmas: estilos de pensar o programa
+
+| Paradigma | Ideia | Exemplos |
+| --- | --- | --- |
+| Estruturado (procedural) | sequência de passos, com funções | C |
+| Orientado a objetos | o mundo como objetos com dados e ações | Java, Python, C# |
+| Funcional | funções que transformam dados, sem mudar estado | Haskell, Elixir, partes de JS e Python |
+
+Muitas linguagens modernas misturam paradigmas. Python, por exemplo, aceita os três.
+
+## Onde cada linguagem costuma aparecer
+
+| Linguagem | Onde brilha |
+| --- | --- |
+| C | sistemas operacionais, embarcados, drivers, performance |
+| Python | automação, ciência de dados, IA, back-end |
+| Java | sistemas de empresas e bancos, back-end, Android |
+| JavaScript / TypeScript | sites, front-end e back-end com Node |
+| Dart (Flutter) | apps mobile para Android e iOS com um código só |
+| SQL | consultar e organizar bancos de dados |
+
+<Nota tipo="dica" titulo="Qual aprender primeiro?">
+A primeira linguagem importa menos do que parece. Lógica, variáveis, condicionais, laços e funções existem em **todas**. Aprendeu bem uma, a segunda vem muito mais rápido.
+</Nota>
+
+<Quiz
+  pergunta="Em qual tipo de tipagem uma variável pode guardar um número e depois um texto?"
+  opcoes={["Estática", "Dinâmica", "Fraca"]}
+  correta={1}
+  explicacao="Na tipagem dinâmica o tipo pertence ao valor, não à variável. Python é o exemplo clássico."
+/>
+
+## Resumindo
+
+- Baixo nível = perto da máquina; alto nível = perto de nós.
+- Estática × dinâmica: quando o tipo é decidido. Forte × fraca: se a linguagem mistura tipos sozinha.
+- Paradigmas são estilos: estruturado, orientado a objetos, funcional.
+- Cada linguagem tem seu lugar. O que você aprende numa vale para as outras.

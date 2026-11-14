@@ -1,0 +1,141 @@
+A boa notícia: `if`, `for` e `while` em Java são quase idênticos aos do C. Se você já viu lógica, vai se sentir em casa.
+
+## if, else if e else
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int nota = sc.nextInt();
+
+        if (nota >= 7) {
+            System.out.println("Aprovado");
+        } else if (nota >= 4) {
+            System.out.println("Exame");
+        } else {
+            System.out.println("Reprovado");
+        }
+    }
+}
+```
+
+Operadores: `==`, `!=`, `>`, `<`, `>=`, `<=` para comparar; `&&` (E), `||` (OU) e `!` (NÃO) para juntar condições.
+
+### O operador ternário
+
+Um `if` de uma linha, que **devolve** um valor:
+
+```java
+String situacao = nota >= 7 ? "Aprovado" : "Reprovado";
+```
+
+<Nota tipo="cuidado" titulo="Comparando Strings">
+Para comparar textos em Java, **não use** `==`. Use `.equals()`: `if (senha.equals("1234"))`. O `==` compara se são o **mesmo objeto** na memória, e não se têm o mesmo conteúdo. Esse erro aparece em todo começo de curso!
+</Nota>
+
+## switch
+
+```java
+int opcao = 2;
+
+switch (opcao) {
+    case 1 -> System.out.println("Café coado");
+    case 2 -> System.out.println("Cappuccino");
+    default -> System.out.println("Opção inválida");
+}
+```
+
+Essa é a forma moderna, com `->` (Java 14+), que não precisa de `break`. Você ainda vai ver a forma antiga, igual à do C, com `case 1:` e `break;`.
+
+## while e do-while
+
+```java
+int n = 3;
+while (n > 0) {
+    System.out.println(n + "...");
+    n--;
+}
+System.out.println("Já!");
+```
+
+O `do { } while (condição);` roda o corpo pelo menos uma vez, ideal para menus.
+
+## for
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Volta " + i);
+        }
+    }
+}
+```
+
+<Passos itens={[
+  { icone: "1️⃣", titulo: "int i = 1", texto: "início, roda uma vez" },
+  { icone: "❓", titulo: "i <= 5", texto: "testa antes de cada volta" },
+  { icone: "🔁", titulo: "corpo", texto: "o que está entre chaves" },
+  { icone: "➕", titulo: "i++", texto: "depois de cada volta" },
+]} />
+
+## break e continue
+
+```java
+for (int i = 1; i <= 10; i++) {
+    if (i % 3 == 0) continue;   // pula múltiplos de 3
+    if (i > 8) break;           // para depois do 8
+    System.out.print(i + " ");  // 1 2 4 5 7 8
+}
+```
+
+<Tarefa titulo="Soma e contagem">
+
+Leia 5 números inteiros. Mostre a soma de todos e quantos são pares.
+
+```saida
+4 7 10 3 8
+Soma: 32
+Pares: 3
+```
+
+<Resposta>
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int soma = 0, pares = 0;
+
+        for (int i = 0; i < 5; i++) {
+            int n = sc.nextInt();
+            soma += n;
+            if (n % 2 == 0) pares++;
+        }
+        System.out.println("Soma: " + soma);
+        System.out.println("Pares: " + pares);
+    }
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta={'Como comparar se a String nome é igual a "Ana"?'}
+  opcoes={['nome == "Ana"', 'nome.equals("Ana")', 'nome = "Ana"']}
+  correta={1}
+  explicacao="Em Java, Strings são comparadas pelo conteúdo com equals. O == compara se é o mesmo objeto na memória."
+/>
+
+## Resumindo
+
+- `if / else if / else`, `while` e `for` são iguais aos do C.
+- Ternário: `condição ? a : b`.
+- `switch` moderno usa `->` e dispensa o `break`.
+- Strings se comparam com `.equals()`, nunca com `==`.

@@ -1,0 +1,137 @@
+Bem-vindo ao C! ☕ Antes de qualquer teoria, vamos fazer o computador falar com você. Depois a gente entende **cada pedacinho** do que aconteceu.
+
+## Seu primeiro programa
+
+Clique em **Testar** no bloco abaixo. O código vai ser copiado e o OnlineGDB vai abrir em outra aba. Lá, apague o exemplo que já vem, cole (<kbd>Ctrl</kbd>+<kbd>V</kbd>) e clique em **Run**.
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Olá, mundo!\n");
+    return 0;
+}
+```
+
+Se apareceu isto na parte de baixo da tela, parabéns: você acabou de rodar um programa em C! 🎉
+
+```saida
+Olá, mundo!
+```
+
+## Linha por linha
+
+Parece pouco, mas tem muita coisa acontecendo aí. Vamos com calma:
+
+| Linha | O que faz |
+| --- | --- |
+| `#include <stdio.h>` | Traz a "caixa de ferramentas" de entrada e saída (**st**an**d**ard **i**nput/**o**utput). É ela que tem o `printf`. |
+| `int main() {` | Todo programa em C começa a rodar pela função `main`. O `int` diz que ela devolve um número inteiro no final. |
+| `printf("Olá, mundo!\n");` | Mostra o texto na tela. O `\n` é uma **quebra de linha**, como apertar Enter. |
+| `return 0;` | Avisa ao sistema: "terminei e deu tudo certo". Zero = sucesso. |
+| `}` | Fecha o bloco da função `main`. |
+
+<Nota tipo="cuidado" titulo="O ponto e vírgula">
+Em C, quase toda instrução termina com `;`. Esquecer dele é o erro número 1 de quem está começando. Se o compilador reclamar de algo na linha 5, olhe se faltou `;` na linha 4!
+</Nota>
+
+## Do texto ao programa: o que o compilador faz
+
+O computador não entende `printf`. Ele só entende instruções de máquina, que são números. Quem traduz o seu texto para essa linguagem é o **compilador** (no C, o mais famoso é o `gcc`). Quando você clica em Run, o OnlineGDB faz tudo isto por baixo dos panos:
+
+<Passos itens={[
+  { icone: "📝", titulo: "Código-fonte", texto: "ola.c, o texto que você escreveu" },
+  { icone: "🧹", titulo: "Pré-processador", texto: "cola o conteúdo do #include" },
+  { icone: "⚙️", titulo: "Compilador", texto: "traduz para instruções de máquina" },
+  { icone: "🔗", titulo: "Ligador", texto: "junta com o código do printf" },
+  { icone: "🚀", titulo: "Executável", texto: "ola.exe, pronto para rodar" },
+]} />
+
+No seu computador, com o `gcc` instalado, você faria isso em dois comandos no terminal:
+
+```terminal
+gcc ola.c -o ola
+./ola
+```
+
+O primeiro **compila** (cria o arquivo `ola`, ou `ola.exe` no Windows). O segundo **executa**. Depois de compilado, o programa roda sem precisar do código-fonte, e é por isso que você baixa programas prontos sem ver o código deles.
+
+<Nota tipo="analogia">
+O compilador é como um tradutor de livros: traduz o livro inteiro **antes** de alguém ler. Se tiver um erro de digitação grave, ele nem termina a tradução e te devolve uma lista de problemas. Por isso, em C, um erro de sintaxe impede o programa de rodar até você consertar.
+</Nota>
+
+## Quando dá erro (e vai dar!)
+
+Errar faz parte. Tire o `;` depois do `printf` e clique em Run de novo. Você vai ver algo assim:
+
+```saida
+main.c: In function 'main':
+main.c:4:30: error: expected ';' before 'return'
+    4 |     printf("Olá, mundo!\n")
+      |                              ^
+      |                              ;
+```
+
+Lendo com calma: **arquivo** `main.c`, **linha** 4, **coluna** 30, **erro**: "esperava `;` antes de `return`". O compilador até desenha onde falta! Ler a mensagem com calma resolve a maioria dos problemas.
+
+<Nota tipo="ia">
+Antes de colar o erro numa IA, tente ler a mensagem você mesmo. Linha, coluna e o que ele esperava: 90% das vezes a resposta está ali. Esse hábito vale ouro em entrevista e no trabalho.
+</Nota>
+
+<Tarefa titulo="Seu cartão de visitas">
+
+Faça um programa que mostre três linhas: seu nome, seu curso e uma linguagem que você quer aprender.
+
+```saida
+Cleidson
+Análise e Desenvolvimento de Sistemas
+Quero aprender: C
+```
+
+<Dica>
+
+Você pode usar três `printf`, um para cada linha. Não esqueça o `\n` no final de cada texto!
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Cleidson\n");
+    printf("Análise e Desenvolvimento de Sistemas\n");
+    printf("Quero aprender: C\n");
+    return 0;
+}
+```
+
+Também daria para fazer tudo em um `printf` só: `printf("Cleidson\nADS\nQuero aprender: C\n");`
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="O que acontece se você tirar o \n do printf?"
+  opcoes={["O programa não compila", "O texto aparece, mas sem pular linha no final", "O texto aparece duas vezes"]}
+  correta={1}
+  explicacao="O \n é só uma quebra de linha. Sem ele o programa roda normalmente, mas o próximo texto aparece grudado na mesma linha."
+/>
+
+<Quiz
+  pergunta="Qual função é o ponto de partida de todo programa em C?"
+  opcoes={["start()", "printf()", "main()"]}
+  correta={2}
+  explicacao="O sistema operacional sempre começa executando a função main. Sem ela, o programa nem é gerado."
+/>
+
+## Resumindo
+
+- Todo programa em C começa pela função `main`.
+- `#include <stdio.h>` traz o `printf`.
+- O compilador traduz o código **inteiro** antes de rodar. Errou a sintaxe? Não roda.
+- Mensagem de erro = arquivo, linha, coluna e o que deu errado. Leia com calma!
+
+Na próxima aula, o programa vai **guardar valores** e **conversar** com você pelo teclado. ⌨️

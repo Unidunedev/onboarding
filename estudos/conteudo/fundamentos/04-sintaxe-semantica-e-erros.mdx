@@ -1,0 +1,148 @@
+Todo programador passa o dia lidando com erros. A diferença entre quem está começando e quem tem experiência não é errar menos: é **entender o erro mais rápido**.
+
+## Sintaxe × semântica
+
+- **Sintaxe** é a gramática: onde vai o ponto e vírgula, as chaves, os parênteses.
+- **Semântica** é o significado: o que o código faz de verdade.
+
+Em português: "O gato comeu o peixe" e "O peixe comeu o gato" têm a sintaxe perfeita, mas significados bem diferentes. E "gato o peixe comeu o" tem sintaxe errada.
+
+## O mesmo programa em 4 linguagens
+
+A lógica é a mesma; só a sintaxe muda. Clique nas abas:
+
+<Abas>
+<Aba rotulo="Pseudocódigo">
+
+```pseudo
+leia nota
+se nota >= 7 então
+    escreva "Aprovado"
+senão
+    escreva "Reprovado"
+fim-se
+```
+
+</Aba>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    float nota;
+    scanf("%f", &nota);
+    if (nota >= 7) {
+        printf("Aprovado\n");
+    } else {
+        printf("Reprovado\n");
+    }
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+nota = float(input())
+if nota >= 7:
+    print("Aprovado")
+else:
+    print("Reprovado")
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double nota = sc.nextDouble();
+        if (nota >= 7) {
+            System.out.println("Aprovado");
+        } else {
+            System.out.println("Reprovado");
+        }
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+## Os 3 tipos de erro
+
+| Tipo | Quando aparece | Exemplo |
+| --- | --- | --- |
+| **De sintaxe** | antes de rodar (ou ao chegar na linha, em Python) | esqueceu um `;` ou um `:` |
+| **De execução** | durante a execução: o programa "quebra" | dividir por zero, acessar posição que não existe |
+| **De lógica** | nunca! O programa roda e dá resposta errada | usar `>` no lugar de `>=` |
+
+<Nota tipo="cuidado" titulo="O erro de lógica é o mais perigoso">
+Os outros dois avisam você. O de lógica fica quietinho. O único jeito de pegar é **testar**: pense em entradas diferentes (inclusive as estranhas, como zero, negativo ou o valor exato do limite) e confira se a saída faz sentido.
+</Nota>
+
+## Lendo mensagens de erro
+
+Mensagens de erro parecem assustadoras, mas quase sempre têm a mesma estrutura: **onde** e **o quê**.
+
+```python
+idade = input("Idade: ")
+print(idade + 1)
+```
+
+```saida
+Traceback (most recent call last):
+  File "main.py", line 2, in <module>
+    print(idade + 1)
+          ~~~~~~^~~
+TypeError: can only concatenate str (not "int") to str
+```
+
+Lendo de baixo para cima:
+
+1. **O quê:** `TypeError`, ou seja, erro de tipo: não dá para juntar texto (`str`) com número (`int`).
+2. **Onde:** arquivo `main.py`, linha 2.
+3. **Por quê:** o `input` sempre devolve texto. A correção é `int(input("Idade: "))`.
+
+<Nota tipo="ia">
+Copiar o erro e colar numa IA resolve na hora, mas você não aprende a ler. Tente primeiro: identifique o tipo do erro, a linha e um palpite do motivo. Depois, se precisar, peça ajuda e compare com o seu palpite.
+</Nota>
+
+<Tarefa titulo="Caça ao erro">
+
+Este programa deveria mostrar se a pessoa pode votar (16 anos ou mais). Ele roda, mas responde errado para alguém com exatamente 16 anos. Que tipo de erro é esse, e como corrigir?
+
+```python
+idade = int(input())
+if idade > 16:
+    print("Pode votar")
+else:
+    print("Não pode votar")
+```
+
+<Resposta>
+
+É um **erro de lógica**: o programa roda sem reclamar, mas a condição está errada. Com 16 anos, `16 > 16` é falso. O certo é `idade >= 16`. É por isso que vale sempre testar o **valor exato do limite**!
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Um programa roda até o fim, sem nenhuma mensagem, mas calcula a média errado. Que tipo de erro é?"
+  opcoes={["Sintaxe", "Execução", "Lógica"]}
+  correta={2}
+  explicacao="Se não houve mensagem e o resultado está errado, a linguagem não tinha como saber: é erro de lógica."
+/>
+
+## Resumindo
+
+- Sintaxe é a forma; semântica é o significado.
+- Erros: de sintaxe (não roda), de execução (quebra no meio) e de lógica (resposta errada).
+- Leia a mensagem: tipo do erro, arquivo, linha.
+- Teste os limites: zero, negativo, o valor exato.

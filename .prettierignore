@@ -2,3 +2,6 @@ node_modules
 dist
 package-lock.json
 src/routeTree.gen.ts
+dist-estudos
+# As aulas .mdx usam recursos do MDX 3 que o Prettier ainda não entende bem
+estudos/conteudo

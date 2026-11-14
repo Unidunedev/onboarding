@@ -1,0 +1,88 @@
+O processador só entende instruções de máquina. Então alguém precisa **traduzir** o seu código. Existem dois jeitos principais de fazer isso, e eles explicam muita coisa sobre cada linguagem.
+
+## A analogia do livro
+
+<Nota tipo="analogia">
+Imagine um livro em inglês que você quer ler em português.
+
+- **Compilar** é contratar um tradutor que traduz o livro **inteiro** antes. Demora um pouco no começo, mas depois a leitura é rápida, e você nem precisa mais do original.
+- **Interpretar** é ter um intérprete ao seu lado traduzindo **frase por frase** enquanto você lê. Começa na hora, mas cada leitura depende dele.
+</Nota>
+
+## Linguagens compiladas
+
+O **compilador** lê todo o código, confere se está tudo certo e gera um **executável**: um arquivo com instruções de máquina, pronto para rodar.
+
+<Passos itens={[
+  { icone: "📝", titulo: "Código", texto: "programa.c" },
+  { icone: "⚙️", titulo: "Compilador", texto: "gcc confere e traduz tudo" },
+  { icone: "📦", titulo: "Executável", texto: "programa.exe" },
+  { icone: "🚀", titulo: "Roda", texto: "direto no processador" },
+]} />
+
+- ✅ Muito rápido para executar.
+- ✅ Erros de sintaxe aparecem **antes** de rodar.
+- ⚠️ O executável é feito para um sistema (o `.exe` do Windows não roda no Mac).
+- Exemplos: **C**, C++, Go, Rust.
+
+## Linguagens interpretadas
+
+O **interpretador** lê o código e executa linha por linha, na hora. Não existe um executável separado: para rodar, você precisa do interpretador instalado.
+
+<Passos itens={[
+  { icone: "📝", titulo: "Código", texto: "programa.py" },
+  { icone: "🗣️", titulo: "Interpretador", texto: "python lê e executa linha a linha" },
+  { icone: "🚀", titulo: "Roda", texto: "enquanto traduz" },
+]} />
+
+- ✅ Rápido de testar: escreveu, rodou.
+- ✅ O mesmo código roda em qualquer sistema com o interpretador.
+- ⚠️ Costuma ser mais lento.
+- ⚠️ Um erro na linha 50 só aparece quando o programa **chega** na linha 50.
+- Exemplos: **Python**, JavaScript, Ruby, PHP.
+
+## O meio-termo: bytecode e máquina virtual
+
+O **Java** faz as duas coisas: o compilador `javac` traduz o código para **bytecode**, uma linguagem intermediária. Depois, a **JVM** (Java Virtual Machine) executa esse bytecode em qualquer sistema.
+
+<Passos itens={[
+  { icone: "📝", titulo: "Main.java", texto: "seu código" },
+  { icone: "⚙️", titulo: "javac", texto: "compila para bytecode" },
+  { icone: "📦", titulo: "Main.class", texto: "bytecode" },
+  { icone: "☕", titulo: "JVM", texto: "executa em qualquer sistema" },
+]} />
+
+É o famoso lema "escreva uma vez, rode em qualquer lugar". O C# faz algo parecido, e até o Python, por baixo dos panos, gera um bytecode (aqueles arquivos `.pyc`).
+
+## Resumo
+
+| | Compilada | Interpretada | Bytecode + VM |
+| --- | --- | --- | --- |
+| Exemplo | C | Python | Java |
+| Tradução | tudo antes | linha a linha | antes (bytecode) + na hora (JVM) |
+| Velocidade | 🚀🚀🚀 | 🚀 | 🚀🚀 |
+| Precisa instalar para rodar | nada | o interpretador | a JVM |
+
+## E o que isso muda para "instalar uma linguagem"?
+
+Agora faz sentido: "instalar C" é instalar um **compilador** (como o `gcc`). "Instalar Python" é instalar o **interpretador**. "Instalar Java" é instalar o **JDK**, que traz o compilador `javac` e a JVM. As IDEs online, como o OnlineGDB, já têm tudo isso instalado no servidor delas.
+
+<Quiz
+  pergunta="Em qual tipo de linguagem um erro de sintaxe na última linha impede o programa inteiro de rodar?"
+  opcoes={["Compilada", "Interpretada", "Nas duas"]}
+  correta={0}
+  explicacao="O compilador confere o código todo antes de gerar o executável. No interpretador, o programa roda até chegar na linha com erro."
+/>
+
+<Quiz
+  pergunta="O que a JVM executa?"
+  opcoes={["O código .java direto", "O bytecode (.class)", "Um .exe"]}
+  correta={1}
+  explicacao="O javac transforma o .java em bytecode (.class), e a JVM executa esse bytecode."
+/>
+
+## Resumindo
+
+- Compilar = traduzir tudo antes. Interpretar = traduzir enquanto roda.
+- C é compilado, Python é interpretado, Java usa bytecode e a JVM.
+- "Instalar uma linguagem" = instalar o tradutor dela.

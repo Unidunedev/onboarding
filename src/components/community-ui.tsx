@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { voltarAoInicio } from "@/lib/draft";
-import { ORG_URL, COMECE_POR_AQUI_URL } from "@/config";
+import { ORG_URL, COMECE_POR_AQUI_URL, ESTUDOS_URL } from "@/config";
 import { type Member, avatarUrl } from "@/lib/community";
 
 export function Header() {
@@ -20,6 +20,9 @@ export function Header() {
         <Link to="/desafio-pr" search={{ nivel: "1" }}>
           Desafio do 1º PR <ArrowUpRight size={13} />
         </Link>
+        <a className="nav-estudos" href={ESTUDOS_URL} target="_blank" rel="noreferrer">
+          Estudos <ArrowUpRight size={13} />
+        </a>
         <a className="nav-github" href={ORG_URL} target="_blank" rel="noreferrer">
           <Github size={16} /> GitHub
         </a>

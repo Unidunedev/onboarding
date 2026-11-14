@@ -1,0 +1,166 @@
+Python tem estruturas prontas e poderosas para guardar muitos valores. As duas que você vai usar todo dia são a **lista** e o **dicionário**.
+
+## Listas
+
+Uma lista guarda vários valores em ordem, entre colchetes:
+
+```python
+frutas = ["maçã", "banana", "uva"]
+
+print(frutas[0])     # maçã: o índice começa em 0
+print(frutas[-1])    # uva: índice negativo conta do fim
+print(len(frutas))   # 3
+
+frutas.append("manga")   # adiciona no final
+frutas.remove("banana")  # remove pelo valor
+frutas[0] = "pera"       # troca um item
+print(frutas)            # ['pera', 'uva', 'manga']
+```
+
+<Memoria
+  legenda="Índices positivos contam do começo; negativos, do fim."
+  celulas={[
+    { endereco: "[0] ou [-3]", valor: '"pera"' },
+    { endereco: "[1] ou [-2]", valor: '"uva"' },
+    { endereco: "[2] ou [-1]", valor: '"manga"', destaque: true },
+  ]}
+/>
+
+### Percorrendo e perguntando
+
+```python
+notas = [8, 6, 10, 7]
+
+for nota in notas:
+    print(nota)
+
+print(sum(notas), max(notas), min(notas))   # 31 10 6
+print(10 in notas)                          # True: o 10 está na lista?
+notas.sort()                                # ordena: [6, 7, 8, 10]
+```
+
+### Fatiando (slicing)
+
+```python
+numeros = [10, 20, 30, 40, 50]
+print(numeros[1:3])   # [20, 30]: do índice 1 até o 3 (sem incluir)
+print(numeros[:2])    # [10, 20]: os dois primeiros
+print(numeros[::-1])  # [50, 40, 30, 20, 10]: invertida!
+```
+
+### Lendo vários números numa linha
+
+Muito usado nos desafios:
+
+```python
+numeros = [int(x) for x in input().split()]
+# digitando "3 8 1" → [3, 8, 1]
+```
+
+O `split()` quebra o texto nos espaços, e o `[int(x) for x in ...]` converte cada pedaço. Essa forma de criar listas se chama **list comprehension**:
+
+```python
+quadrados = [n ** 2 for n in range(1, 6)]   # [1, 4, 9, 16, 25]
+pares = [n for n in range(10) if n % 2 == 0]  # [0, 2, 4, 6, 8]
+```
+
+## Tuplas
+
+Uma **tupla** é como uma lista que não pode ser alterada. Usa parênteses:
+
+```python
+ponto = (3, 7)
+x, y = ponto      # "desempacota" nas duas variáveis
+print(x, y)
+```
+
+## Dicionários
+
+Um dicionário guarda pares **chave → valor**. Em vez de acessar pelo índice, você acessa pelo nome:
+
+```python
+aluno = {
+    "nome": "Ana",
+    "idade": 19,
+    "curso": "ADS",
+}
+
+print(aluno["nome"])          # Ana
+aluno["idade"] = 20           # altera
+aluno["periodo"] = 3          # cria uma chave nova
+print(aluno.get("email", "sem email"))   # valor padrão se a chave não existir
+
+for chave, valor in aluno.items():
+    print(f"{chave}: {valor}")
+```
+
+<Nota tipo="analogia">
+Uma lista é como uma fila numerada: "quem está na posição 2?". Um dicionário é como uma agenda de contatos: "qual é o telefone da Ana?". Use dicionário quando você procura as coisas **pelo nome**.
+</Nota>
+
+### Contando coisas com dicionário
+
+Um padrão clássico: contar quantas vezes cada item aparece.
+
+```python
+votos = ["back", "front", "back", "mobile", "back", "front"]
+contagem = {}
+
+for v in votos:
+    contagem[v] = contagem.get(v, 0) + 1
+
+print(contagem)   # {'back': 3, 'front': 2, 'mobile': 1}
+```
+
+## Qual usar?
+
+| Estrutura | Sintaxe | Use quando |
+| --- | --- | --- |
+| lista | `[1, 2, 3]` | a ordem importa e você acessa por posição |
+| tupla | `(1, 2)` | os valores não devem mudar |
+| dicionário | `{"a": 1}` | você procura pelo nome (chave) |
+| conjunto | `{1, 2, 3}` | você quer itens sem repetição |
+
+<Tarefa titulo="Lista de compras">
+
+Leia itens de compra até a pessoa digitar "fim". Depois mostre quantos itens são e a lista em ordem alfabética.
+
+```saida
+café
+pão
+açúcar
+fim
+3 itens: ['açúcar', 'café', 'pão']
+```
+
+<Resposta>
+
+```python
+itens = []
+while True:
+    item = input()
+    if item == "fim":
+        break
+    itens.append(item)
+
+itens.sort()
+print(f"{len(itens)} itens: {itens}")
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Se precos = {'cafe': 18.5, 'pao': 0.75}, como pegar o preço do pão?"
+  opcoes={["precos[1]", "precos['pao']", "precos.pao"]}
+  correta={1}
+  explicacao="Dicionários são acessados pela chave entre colchetes: precos['pao']."
+/>
+
+## Resumindo
+
+- Lista: `[ ]`, ordenada, acessa por índice, cresce com `append`.
+- Fatias: `lista[inicio:fim]`, e `[::-1]` inverte.
+- Dicionário: `{chave: valor}`, acessa pelo nome.
+- `input().split()` + list comprehension para ler vários números.

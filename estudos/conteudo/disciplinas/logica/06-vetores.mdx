@@ -1,0 +1,171 @@
+## O problema
+
+Guardar 3 notas é fácil: `nota1`, `nota2`, `nota3`. E 40? E mil? Precisamos de uma variável que guarde **vários valores**.
+
+## Um armário com gavetas numeradas
+
+Um **vetor** (ou lista, ou array) é uma sequência de caixinhas com um nome só. Cada caixinha tem um número, o **índice**, que começa em **zero**.
+
+<Memoria
+  legenda="Um vetor com 5 notas. O índice do primeiro é 0 e o do último é 4."
+  celulas={[
+    { endereco: "[0]", valor: "8", nome: "notas[0]" },
+    { endereco: "[1]", valor: "6", nome: "notas[1]" },
+    { endereco: "[2]", valor: "10", nome: "notas[2]", destaque: true },
+    { endereco: "[3]", valor: "7", nome: "notas[3]" },
+    { endereco: "[4]", valor: "9", nome: "notas[4]" },
+  ]}
+/>
+
+<Nota tipo="curiosidade" titulo="Por que começa do zero?">
+O índice é a **distância** do começo do vetor. O primeiro elemento está a zero passos do início, o segundo a um passo, e assim por diante.
+</Nota>
+
+## Criando e usando
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+int notas[5] = {8, 6, 10, 7, 9};
+printf("%d\n", notas[2]);   // 10
+notas[1] = 7;               // troca o 6 por 7
+```
+
+Em C o tamanho é fixo, definido na criação.
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+notas = [8, 6, 10, 7, 9]
+print(notas[2])     # 10
+notas[1] = 7
+notas.append(5)     # em Python a lista pode crescer!
+print(len(notas))   # 6
+print(notas[-1])    # 5: índice negativo conta do fim
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+int[] notas = {8, 6, 10, 7, 9};
+System.out.println(notas[2]);      // 10
+notas[1] = 7;
+System.out.println(notas.length);  // 5
+```
+
+Em Java o array também tem tamanho fixo (para listas que crescem existe o `ArrayList`).
+
+</Aba>
+</Abas>
+
+## Percorrendo um vetor com um laço
+
+Vetores e laços andam sempre juntos. O laço passa o índice de 0 até o último:
+
+```pseudo
+soma <- 0
+para i de 0 até 4 faça
+    soma <- soma + notas[i]
+fim-para
+escreva "Média:", soma / 5
+```
+
+```python
+notas = [8, 6, 10, 7, 9]
+soma = 0
+for i in range(len(notas)):
+    soma += notas[i]
+print("Média:", soma / len(notas))
+
+# ou, quando você não precisa do índice:
+for nota in notas:
+    print(nota)
+```
+
+## Algoritmos clássicos com vetores
+
+**Achar o maior:** comece supondo que o primeiro é o maior e compare com os outros.
+
+```pseudo
+maior <- notas[0]
+para i de 1 até 4 faça
+    se notas[i] > maior então
+        maior <- notas[i]
+    fim-se
+fim-para
+```
+
+**Procurar um valor:** passe por todos até encontrar (isso se chama **busca linear**).
+
+**Contar:** quantas notas são maiores ou iguais a 7? Um contador dentro do laço.
+
+<Nota tipo="cuidado" titulo="Fora dos limites">
+Num vetor de 5 posições, `notas[5]` **não existe**. Python e Java avisam com um erro (`IndexError`, `ArrayIndexOutOfBoundsException`). O C não avisa e lê um pedaço aleatório da memória. Os laços de `0` até `tamanho - 1` evitam isso.
+</Nota>
+
+## Texto é um vetor de caracteres
+
+Uma palavra também é uma sequência: `"café"` é `'c'`, `'a'`, `'f'`, `'é'`. Por isso dá para percorrer letra por letra:
+
+```python
+palavra = "programar"
+vogais = 0
+for letra in palavra:
+    if letra in "aeiou":
+        vogais += 1
+print(vogais)   # 3
+```
+
+<Tarefa titulo="Acima da média">
+
+Leia 5 números, calcule a média e mostre quantos ficaram **acima** dela.
+
+```saida
+4 8 6 10 2
+Média: 6.0
+Acima da média: 2
+```
+
+<Dica>
+
+São dois laços: o primeiro lê e soma; o segundo, depois de calcular a média, conta quantos são maiores que ela. Você precisa do vetor porque precisa olhar os números **duas vezes**.
+
+</Dica>
+
+<Resposta>
+
+```python
+numeros = [int(x) for x in input().split()]
+media = sum(numeros) / len(numeros)
+
+acima = 0
+for n in numeros:
+    if n > media:
+        acima += 1
+
+print("Média:", media)
+print("Acima da média:", acima)
+```
+
+O `input().split()` quebra a linha "4 8 6 10 2" em pedaços, e o `int(x)` converte cada um.
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Num vetor com 8 elementos, qual o índice do último?"
+  opcoes={["8", "7", "9"]}
+  correta={1}
+  explicacao="Os índices vão de 0 até tamanho - 1. Com 8 elementos: de 0 a 7."
+/>
+
+## Resumindo
+
+- Vetor = várias caixinhas com um nome só, acessadas pelo índice.
+- O índice começa em 0 e vai até `tamanho - 1`.
+- Laço + vetor: somar, achar o maior, contar, procurar.
+- Texto também é uma sequência de caracteres.

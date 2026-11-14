@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "../src/components/logo.tsx", "../src/config.ts"],
+  "compilerOptions": {
+    "types": ["vite/client", "vitest/globals", "mdx"],
+    "paths": {
+      "@/*": ["../src/*"],
+      "~/*": ["./src/*"]
+    }
+  }
+}

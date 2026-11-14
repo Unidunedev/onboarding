@@ -1,0 +1,78 @@
+Para programar você precisa de dois tipos de ferramenta: um lugar para **escrever** o código e algo para **rodar** o código. Vamos organizar quem é quem.
+
+## Editor × IDE
+
+- **Editor de código**: um bloco de notas turbinado, com cores, autocompletar e atalhos. Exemplo: **VS Code**, o mais usado do mundo.
+- **IDE** (ambiente de desenvolvimento integrado): editor + compilador + depurador + ferramentas, tudo junto. Exemplos: IntelliJ (Java), PyCharm (Python), Android Studio.
+
+O VS Code fica no meio do caminho: é um editor, mas com extensões ele vira praticamente uma IDE para qualquer linguagem.
+
+## IDEs online: zero instalação
+
+Para começar, você não precisa instalar nada. Sites como estes rodam o código num servidor e mostram o resultado no navegador:
+
+| Site | Bom para |
+| --- | --- |
+| [OnlineGDB](https://www.onlinegdb.com) | C, Python e Java; aceita entrada do teclado; é o padrão deste site |
+| [Programiz](https://www.programiz.com/c-programming/online-compiler/) | interface simples, funciona bem no celular |
+
+Todo bloco de código de C, Python e Java aqui no site tem o botão **Testar**: ele copia o código e abre o OnlineGDB. É só colar e clicar em **Run**.
+
+<Nota tipo="dica" titulo="Mas instale também!">
+As IDEs online são ótimas para aprender, mas no dia a dia (e nos desafios do GitHub) você vai querer o código no seu computador. Cada trilha de linguagem tem o passo a passo de instalação para Windows e Mac.
+</Nota>
+
+## O terminal
+
+O terminal é onde você conversa com o computador por **texto**. Parece coisa de filme de hacker, mas são poucos comandos para começar:
+
+| Comando | Windows (PowerShell) | Linux / Mac | O que faz |
+| --- | --- | --- | --- |
+| onde estou? | `pwd` | `pwd` | mostra a pasta atual |
+| listar | `ls` ou `dir` | `ls` | mostra o que tem na pasta |
+| entrar | `cd projetos` | `cd projetos` | entra numa pasta |
+| voltar | `cd ..` | `cd ..` | sobe uma pasta |
+| criar pasta | `mkdir aula1` | `mkdir aula1` | cria uma pasta |
+
+E é no terminal que você compila e roda programas:
+
+```terminal
+gcc ola.c -o ola      # compila um programa em C
+./ola                 # roda o programa
+python ola.py         # roda um programa em Python
+java Main.java        # roda um programa em Java
+```
+
+## O que significa "instalar uma linguagem"?
+
+Lembra da aula anterior? É instalar o **tradutor** dela: o compilador `gcc` (C), o interpretador `python` (Python) ou o JDK (Java).
+
+## O PATH
+
+Quando você digita `python` no terminal, como o computador sabe onde o programa está? Ele procura numa lista de pastas chamada **PATH**.
+
+Se aparecer "comando não encontrado" ou "não é reconhecido como um comando interno", quase sempre é isso: a linguagem até está instalada, mas a pasta dela não está no PATH. Os guias de instalação mostram como resolver (no instalador do Python, por exemplo, é marcar a caixinha **Add python.exe to PATH**).
+
+## Extensões úteis do VS Code
+
+- **C/C++** (Microsoft): cores, autocompletar e depuração para C.
+- **Python** (Microsoft): tudo para Python, incluindo o botão de rodar.
+- **Extension Pack for Java** (Microsoft): o kit completo de Java.
+- **Portuguese (Brazil) Language Pack**: o VS Code em português, se preferir.
+- **GitLens**: mostra quem mudou cada linha (vai ser útil nos projetos em grupo!).
+
+<Quiz
+  pergunta="Você instalou o Python, mas o terminal diz que o comando python não existe. Qual é a causa mais provável?"
+  opcoes={["O computador é fraco", "A pasta do Python não está no PATH", "Precisa reiniciar a internet"]}
+  correta={1}
+  explicacao="O terminal só encontra programas que estão nas pastas listadas no PATH. Reinstalar marcando Add to PATH costuma resolver."
+/>
+
+## Resumindo
+
+- Editor escreve; IDE escreve, roda e depura. VS Code é o curinga.
+- IDEs online (OnlineGDB, Programiz) são ótimas para começar.
+- Terminal: `pwd`, `ls`, `cd`, `mkdir` e os comandos para compilar e rodar.
+- "Comando não encontrado"? Confira o PATH.
+
+Fim dos fundamentos! ☕ Próximo passo: a trilha de **Lógica de programação**.

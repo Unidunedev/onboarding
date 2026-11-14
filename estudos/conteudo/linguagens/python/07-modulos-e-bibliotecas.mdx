@@ -1,0 +1,150 @@
+Uma das maiores forças do Python é a quantidade de código pronto que você pode usar. A frase da comunidade é: "o Python vem com as **baterias incluídas**".
+
+## import: usando módulos
+
+Um **módulo** é um arquivo `.py` com funções e classes prontas. Para usar, você **importa**:
+
+```python
+import math
+import random
+
+print(math.sqrt(16))          # 4.0
+print(math.pi)                # 3.141592653589793
+print(random.randint(1, 6))   # um dado: número aleatório de 1 a 6
+print(random.choice(["café", "chá", "suco"]))
+```
+
+Três jeitos de importar:
+
+```python
+import math                     # usa math.sqrt(...)
+from math import sqrt, pi       # usa sqrt(...) direto
+import datetime as dt           # apelido: dt.date.today()
+```
+
+## Alguns módulos da biblioteca padrão
+
+Vêm junto com o Python, sem instalar nada:
+
+| Módulo | Para quê |
+| --- | --- |
+| `math` | raiz, potência, trigonometria, `pi` |
+| `random` | números e escolhas aleatórias |
+| `datetime` | datas e horas |
+| `os` e `pathlib` | arquivos e pastas |
+| `json` | ler e escrever JSON (o formato do mural do onboarding!) |
+| `statistics` | média, mediana, moda |
+
+```python
+from datetime import date
+
+hoje = date.today()
+print(hoje.strftime("%d/%m/%Y"))
+```
+
+## Criando seu próprio módulo
+
+Qualquer arquivo `.py` é um módulo. Se você tem um `calculos.py`:
+
+```python
+# calculos.py
+def media(a, b):
+    return (a + b) / 2
+```
+
+Em outro arquivo, na **mesma pasta**:
+
+```python
+# main.py
+from calculos import media
+
+print(media(6, 9))
+```
+
+Assim um projeto grande fica dividido em arquivos menores e organizados. (No OnlineGDB, dá para criar mais de um arquivo pelo botão de novo arquivo, ao lado do `main.py`.)
+
+## O famoso `if __name__ == "__main__"`
+
+Você vai ver isso em muitos códigos:
+
+```python
+def principal():
+    print("Rodando o programa!")
+
+if __name__ == "__main__":
+    principal()
+```
+
+Significa: "só rode isto se este arquivo for executado **diretamente**". Se outro arquivo importar este, o `principal()` não roda sozinho.
+
+## pip: instalando bibliotecas de terceiros
+
+Além da biblioteca padrão, existem centenas de milhares de pacotes no **PyPI** (o repositório oficial). Você instala pelo terminal com o `pip`:
+
+```terminal
+pip install requests
+```
+
+```python
+import requests
+
+resposta = requests.get("https://api.github.com/orgs/unidunedev")
+print(resposta.json()["public_repos"])
+```
+
+Alguns muito famosos: `requests` (internet), `pandas` (planilhas e dados), `flask` e `fastapi` (back-end), `pygame` (jogos).
+
+<Nota tipo="dica" titulo="Ambiente virtual">
+Em projetos de verdade, crie um **ambiente virtual** para cada projeto (`python -m venv .venv`), assim as bibliotecas de um não bagunçam o outro. O guia de instalação do repositório mostra como.
+</Nota>
+
+<Nota tipo="ia" titulo="Não reinvente a roda (mas entenda a roda)">
+Antes de escrever algo do zero, vale procurar se já existe pronto. Mas, enquanto estiver aprendendo, implementar à mão (média, ordenação, busca) é o que treina a lógica. Use bibliotecas e IA para ir mais longe, não para pular o aprendizado.
+</Nota>
+
+<Tarefa titulo="Sorteio de grupos">
+
+Use o `random` para embaralhar uma lista de nomes e dividir em duplas.
+
+```saida
+Dupla 1: Carla e Ana
+Dupla 2: Edu e Bruno
+```
+
+<Dica>
+
+`random.shuffle(lista)` embaralha a lista no lugar. Depois, um `for i in range(0, len(nomes), 2)` pega os nomes de dois em dois.
+
+</Dica>
+
+<Resposta>
+
+```python
+import random
+
+nomes = ["Ana", "Bruno", "Carla", "Edu"]
+random.shuffle(nomes)
+
+for i in range(0, len(nomes), 2):
+    print(f"Dupla {i // 2 + 1}: {nomes[i]} e {nomes[i + 1]}")
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual comando instala uma biblioteca de terceiros?"
+  opcoes={["import requests", "pip install requests", "python requests"]}
+  correta={1}
+  explicacao="pip install baixa e instala o pacote. Depois disso, o import passa a funcionar no código."
+/>
+
+## Resumindo
+
+- `import` traz módulos; `from x import y` traz só uma parte.
+- A biblioteca padrão já tem muita coisa: `math`, `random`, `datetime`, `json`...
+- Seus arquivos `.py` também são módulos.
+- `pip install` instala pacotes do PyPI.
+
+Fim da trilha de Python! 🧋 Agora é hora de praticar com os desafios do GitHub.

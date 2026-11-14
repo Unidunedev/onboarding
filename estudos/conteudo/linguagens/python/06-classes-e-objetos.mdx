@@ -1,0 +1,160 @@
+Até aqui, dados e funções viviam separados. A **orientação a objetos** junta os dois: um objeto tem **atributos** (o que ele é) e **métodos** (o que ele faz).
+
+## Classe é o molde, objeto é o biscoito
+
+<Nota tipo="analogia">
+A **classe** é a forminha de biscoito: define o formato. Os **objetos** são os biscoitos: cada um feito com a mesma forma, mas um pode ter chocolate e outro, coco.
+</Nota>
+
+```python
+class Conta:
+    def __init__(self, titular, saldo=0):
+        self.titular = titular
+        self.saldo = saldo
+
+    def depositar(self, valor):
+        self.saldo += valor
+
+    def sacar(self, valor):
+        if valor > self.saldo:
+            print("Saldo insuficiente!")
+            return
+        self.saldo -= valor
+
+
+minha = Conta("Cleidson", 100)
+sua = Conta("Ana")
+
+minha.depositar(50)
+sua.depositar(20)
+sua.sacar(100)
+
+print(minha.titular, minha.saldo)   # Cleidson 150
+print(sua.titular, sua.saldo)       # Ana 20
+```
+
+## Destrinchando
+
+| Parte | O que é |
+| --- | --- |
+| `class Conta:` | cria o molde (por convenção, nome com letra maiúscula) |
+| `__init__` | o **construtor**: roda quando você cria um objeto |
+| `self` | "este objeto aqui". É como o objeto se refere a ele mesmo |
+| `self.saldo` | um **atributo**: cada objeto tem o seu |
+| `def depositar(self, ...)` | um **método**: uma função que pertence ao objeto |
+| `Conta("Ana")` | cria um **objeto** novo (uma instância) |
+
+Repare: `minha` e `sua` são da mesma classe, mas cada uma tem o **seu** saldo.
+
+## `__str__`: como o objeto aparece no print
+
+```python
+class Produto:
+    def __init__(self, nome, preco):
+        self.nome = nome
+        self.preco = preco
+
+    def __str__(self):
+        return f"{self.nome} (R$ {self.preco:.2f})"
+
+
+cafe = Produto("Café", 18.5)
+print(cafe)   # Café (R$ 18.50)
+```
+
+Sem o `__str__`, o print mostraria algo como `<__main__.Produto object at 0x7f...>`.
+
+## Herança: reaproveitando uma classe
+
+Uma classe pode **herdar** de outra: ganha tudo dela e acrescenta ou muda o que quiser.
+
+```python
+class Conta:
+    def __init__(self, titular, saldo=0):
+        self.titular = titular
+        self.saldo = saldo
+
+    def sacar(self, valor):
+        if valor <= self.saldo:
+            self.saldo -= valor
+
+
+class ContaEspecial(Conta):
+    def __init__(self, titular, saldo=0, limite=200):
+        super().__init__(titular, saldo)   # reaproveita o construtor do pai
+        self.limite = limite
+
+    def sacar(self, valor):                # sobrescreve o método do pai
+        if valor <= self.saldo + self.limite:
+            self.saldo -= valor
+
+
+c = ContaEspecial("Bruno", 50)
+c.sacar(150)
+print(c.saldo)   # -100: usou o limite
+```
+
+## Encapsulamento (o jeito Python)
+
+Python não tem `private` de verdade. A convenção é: atributo que começa com `_` é "interno, não mexa de fora".
+
+```python
+class Conta:
+    def __init__(self):
+        self._saldo = 0     # "por favor, use os métodos"
+
+    def ver_saldo(self):
+        return self._saldo
+```
+
+<Tarefa titulo="Classe Aluno">
+
+Crie a classe `Aluno` com `nome` e uma lista de `notas` (vazia no começo). Ela deve ter os métodos `adicionar_nota(nota)`, `media()` e `situacao()`, que devolve "Aprovado" se a média for pelo menos 7.
+
+```saida
+Ana: média 8.0, Aprovado
+```
+
+<Resposta>
+
+```python
+class Aluno:
+    def __init__(self, nome):
+        self.nome = nome
+        self.notas = []
+
+    def adicionar_nota(self, nota):
+        self.notas.append(nota)
+
+    def media(self):
+        if not self.notas:
+            return 0
+        return sum(self.notas) / len(self.notas)
+
+    def situacao(self):
+        return "Aprovado" if self.media() >= 7 else "Reprovado"
+
+
+ana = Aluno("Ana")
+ana.adicionar_nota(7)
+ana.adicionar_nota(9)
+print(f"{ana.nome}: média {ana.media():.1f}, {ana.situacao()}")
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Para que serve o self?"
+  opcoes={["É uma palavra opcional", "Representa o próprio objeto, para acessar seus atributos e métodos", "Cria uma cópia do objeto"]}
+  correta={1}
+  explicacao="self é o objeto que chamou o método. Por isso self.saldo é o saldo daquele objeto específico."
+/>
+
+## Resumindo
+
+- Classe = molde; objeto = coisa criada a partir do molde.
+- `__init__` monta o objeto; `self` é o próprio objeto.
+- Métodos são funções da classe; atributos são as variáveis de cada objeto.
+- Herança: `class Filha(Pai):` + `super()` para reaproveitar.

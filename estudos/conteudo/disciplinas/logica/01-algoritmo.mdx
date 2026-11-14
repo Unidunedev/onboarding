@@ -1,0 +1,156 @@
+Antes de qualquer linguagem, existe a **lógica**: pensar no passo a passo para resolver um problema. A linguagem é só a forma de escrever esse passo a passo para o computador.
+
+## Uma receita de bolo
+
+Um **algoritmo** é uma sequência finita de passos bem definidos para resolver um problema. Você já segue algoritmos o tempo todo:
+
+```pseudo
+1. Pegue uma xícara
+2. Coloque o pó de café no filtro
+3. Ferva a água
+4. Despeje a água sobre o pó, devagar
+5. Sirva
+```
+
+A ordem importa: servir antes de ferver a água não dá certo. E cada passo precisa ser claro.
+
+## O computador é um ajudante muito literal
+
+<Nota tipo="analogia">
+Imagine pedir para alguém que **nunca viu uma cozinha** fazer café, e essa pessoa faz **exatamente** o que você escreveu, nada a mais. "Ferva a água" → em quê? Quanta água? Até quando? O computador é assim: não adivinha nada. Seu algoritmo precisa dizer tudo.
+</Nota>
+
+## Entrada → processamento → saída
+
+Quase todo programa segue este formato:
+
+<Passos itens={[
+  { icone: "⌨️", titulo: "Entrada", texto: "os dados que chegam: duas notas" },
+  { icone: "⚙️", titulo: "Processamento", texto: "o que fazer: somar e dividir por 2" },
+  { icone: "🖥️", titulo: "Saída", texto: "o resultado: a média" },
+]} />
+
+Diante de qualquer desafio, pergunte primeiro: **o que entra? o que sai? o que preciso fazer no meio?**
+
+## Pseudocódigo: o rascunho do programa
+
+Pseudocódigo é escrever o algoritmo em português estruturado, sem se preocupar com a sintaxe de uma linguagem:
+
+```pseudo
+algoritmo media
+    leia nota1
+    leia nota2
+    media <- (nota1 + nota2) / 2
+    escreva "Média:", media
+fim
+```
+
+A seta `<-` significa "recebe". Depois, traduzir para uma linguagem é quase mecânico. Clique nas abas:
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    float nota1, nota2;
+    scanf("%f %f", &nota1, &nota2);
+    float media = (nota1 + nota2) / 2;
+    printf("Média: %.1f\n", media);
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+nota1 = float(input())
+nota2 = float(input())
+media = (nota1 + nota2) / 2
+print("Média:", media)
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double nota1 = sc.nextDouble();
+        double nota2 = sc.nextDouble();
+        double media = (nota1 + nota2) / 2;
+        System.out.println("Média: " + media);
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+<Nota tipo="dica">
+A aba que você escolher fica lembrada nas próximas aulas. Escolha a linguagem que você está estudando na faculdade!
+</Nota>
+
+## Teste de mesa: rodando o programa no papel
+
+Antes de digitar, dá para "executar" o algoritmo à mão, anotando o valor de cada variável numa tabela. Com as notas 6 e 9:
+
+| Passo | `nota1` | `nota2` | `media` | Tela |
+| --- | --- | --- | --- | --- |
+| leia nota1 | 6 | | | |
+| leia nota2 | 6 | 9 | | |
+| calcula | 6 | 9 | 7.5 | |
+| escreva | 6 | 9 | 7.5 | Média: 7.5 |
+
+Parece bobo com 4 linhas, mas quando aparecerem laços e condições, o teste de mesa vai ser seu melhor amigo para achar erros.
+
+## Como resolver qualquer desafio
+
+1. **Entenda** o problema. Leia duas vezes. Quais são a entrada e a saída?
+2. **Resolva à mão** com um exemplo pequeno.
+3. **Escreva em pseudocódigo** os passos que você fez.
+4. **Traduza** para a linguagem.
+5. **Teste** com vários exemplos, inclusive os estranhos.
+
+<Nota tipo="ia">
+A IA escreve código em segundos, mas não faz os passos 1 e 2 **por você**: quem precisa entender o problema é você. Use a lógica primeiro e a IA depois, para comparar soluções.
+</Nota>
+
+<Tarefa titulo="Algoritmo do troco">
+
+Escreva em pseudocódigo um algoritmo que lê o preço de um produto e o valor pago, e mostra o troco.
+
+<Resposta>
+
+```pseudo
+algoritmo troco
+    leia preco
+    leia pago
+    troco <- pago - preco
+    escreva "Troco:", troco
+fim
+```
+
+E se o valor pago for menor que o preço? Na aula de condicionais a gente resolve isso. 😉
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Num programa que calcula a área de um retângulo, o que é a entrada?"
+  opcoes={["A área", "A base e a altura", "A fórmula base × altura"]}
+  correta={1}
+  explicacao="A entrada são os dados que chegam (base e altura). A fórmula é o processamento e a área é a saída."
+/>
+
+## Resumindo
+
+- Algoritmo = passos finitos, claros e em ordem.
+- Entrada → processamento → saída.
+- Pseudocódigo é o rascunho; o teste de mesa é rodar no papel.

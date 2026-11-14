@@ -1,0 +1,250 @@
+Computadores são ótimos em fazer a mesma coisa milhões de vezes sem reclamar. Os **laços de repetição** dizem o que repetir e quando parar.
+
+## enquanto (while)
+
+Repete **enquanto** a condição for verdadeira:
+
+```pseudo
+contador <- 1
+enquanto contador <= 3 faça
+    escreva contador
+    contador <- contador + 1
+fim-enquanto
+escreva "Fim!"
+```
+
+Teste de mesa:
+
+| Volta | `contador` | `contador <= 3`? | Tela |
+| --- | --- | --- | --- |
+| 1 | 1 | sim | 1 |
+| 2 | 2 | sim | 2 |
+| 3 | 3 | sim | 3 |
+| — | 4 | **não** | Fim! |
+
+<Nota tipo="cuidado" titulo="Loop infinito">
+Se nada dentro do laço muda a condição, ele nunca para. Esqueça o `contador <- contador + 1` e o programa fica escrevendo 1 para sempre. (No OnlineGDB, clique em **Stop**.)
+</Nota>
+
+## para (for)
+
+Quando você sabe **quantas vezes** quer repetir, o `para` é mais direto:
+
+```pseudo
+para i de 1 até 5 faça
+    escreva i
+fim-para
+```
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d\n", i);
+    }
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+for i in range(1, 6):  # de 1 até 5 (o 6 não entra!)
+    print(i)
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(i);
+        }
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+<Nota tipo="dica" titulo="O range do Python">
+`range(1, 6)` gera 1, 2, 3, 4, 5: o segundo número **não entra**. `range(5)` gera 0, 1, 2, 3, 4. E `range(0, 10, 2)` vai de 2 em 2: 0, 2, 4, 6, 8.
+</Nota>
+
+## Os dois padrões mais usados
+
+**Contador:** conta quantas vezes algo acontece. **Acumulador:** vai somando (ou multiplicando) valores.
+
+```pseudo
+soma <- 0          // acumulador começa em 0
+pares <- 0         // contador começa em 0
+para i de 1 até 10 faça
+    soma <- soma + i
+    se i % 2 = 0 então
+        pares <- pares + 1
+    fim-se
+fim-para
+escreva soma, pares    // 55 e 5
+```
+
+Esses dois padrões resolvem uma quantidade enorme de problemas: média, total de vendas, quantos aprovados, maior valor...
+
+## Lendo vários números com um laço
+
+```python
+n = int(input("Quantos números? "))
+soma = 0
+for i in range(n):
+    numero = int(input())
+    soma += numero
+print("Média:", soma / n)
+```
+
+## faça... enquanto (do-while)
+
+Testa a condição **no final**, então o corpo roda pelo menos uma vez. Perfeito para menus e validações:
+
+```pseudo
+faça
+    escreva "Digite uma nota de 0 a 10:"
+    leia nota
+enquanto nota < 0 ou nota > 10
+```
+
+C e Java têm `do { } while ();`. Python não tem, mas dá para imitar com `while True:` e `break`.
+
+## break e continue
+
+- `break`: sai do laço **na hora**.
+- `continue`: pula o resto desta volta e vai para a próxima.
+
+```python
+for i in range(1, 11):
+    if i % 3 == 0:
+        continue       # pula os múltiplos de 3
+    if i > 8:
+        break          # para tudo depois do 8
+    print(i)           # 1 2 4 5 7 8
+```
+
+## Laços dentro de laços
+
+Um laço dentro do outro: para cada volta do de fora, o de dentro roda **inteiro**. É assim que se faz uma tabuada completa:
+
+```python
+for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i} x {j} = {i * j}")
+```
+
+<Tarefa titulo="Soma até N">
+
+Leia um número N e mostre a soma de todos os inteiros de 1 até N.
+
+```saida
+100
+5050
+```
+
+<Dica>
+
+Acumulador começando em 0 e um laço de 1 até N somando o `i`.
+
+</Dica>
+
+<Resposta>
+
+<Abas>
+<Aba rotulo="Pseudocódigo">
+
+```pseudo
+leia n
+soma <- 0
+para i de 1 até n faça
+    soma <- soma + i
+fim-para
+escreva soma
+```
+
+</Aba>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n, soma = 0;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++) {
+        soma += i;
+    }
+    printf("%d\n", soma);
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+n = int(input())
+soma = 0
+for i in range(1, n + 1):
+    soma += i
+print(soma)
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        int n = new Scanner(System.in).nextInt();
+        int soma = 0;
+        for (int i = 1; i <= n; i++) {
+            soma += i;
+        }
+        System.out.println(soma);
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+Curiosidade: dá para fazer sem laço, com a fórmula de Gauss: `n * (n + 1) / 2`. 🤓
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Quantas vezes o corpo de for i in range(2, 7) executa?"
+  opcoes={["5", "6", "7"]}
+  correta={0}
+  explicacao="O range vai de 2 até 6 (o 7 não entra): 2, 3, 4, 5, 6. Cinco voltas."
+/>
+
+<Quiz
+  pergunta="Qual laço garante que o corpo rode pelo menos uma vez?"
+  opcoes={["enquanto (while)", "para (for)", "faça... enquanto (do-while)"]}
+  correta={2}
+  explicacao="O do-while executa o corpo e só depois testa a condição."
+/>
+
+## Resumindo
+
+- `enquanto`: repete enquanto for verdade. `para`: repete N vezes.
+- Contador e acumulador começam em 0 (ou 1, se for multiplicação).
+- `break` sai; `continue` pula para a próxima volta.
+- Teste de mesa salva vidas em laços.

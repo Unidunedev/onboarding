@@ -1,6 +1,7 @@
 # Dependências e build
 node_modules
 dist
+dist-estudos
 .tanstack
 
 # Variáveis de ambiente (use .env.example como modelo)

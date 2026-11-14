@@ -1,0 +1,148 @@
+Java tem tipagem **estática**: toda variável declara o seu tipo, e ele nunca muda. Parece burocrático, mas o compilador pega muitos erros antes mesmo de rodar.
+
+## Tipos primitivos
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int idade = 19;
+        double altura = 1.68;
+        boolean estuda = true;
+        char inicial = 'A';
+        String nome = "Ana";   // String não é primitivo, mas é usado o tempo todo
+
+        System.out.println(nome + " tem " + idade + " anos");
+    }
+}
+```
+
+| Tipo | Guarda | Exemplo |
+| --- | --- | --- |
+| `int` | inteiro | `19` |
+| `long` | inteiro grande | `8000000000L` |
+| `double` | número com vírgula (o padrão) | `1.68` |
+| `float` | número com vírgula, menos preciso | `1.68f` |
+| `boolean` | verdadeiro ou falso | `true`, `false` |
+| `char` | um caractere (aspas simples) | `'A'` |
+| `String` | texto (aspas duplas, S maiúsculo) | `"Ana"` |
+
+<Memoria
+  legenda="Cada variável tem um tipo fixo. Tentar guardar texto num int nem compila."
+  celulas={[
+    { tipo: "int", valor: "19", nome: "idade" },
+    { tipo: "double", valor: "1.68", nome: "altura" },
+    { tipo: "boolean", valor: "true", nome: "estuda" },
+    { tipo: "String", valor: '"Ana"', nome: "nome" },
+  ]}
+/>
+
+## var: deixando o Java descobrir
+
+Desde o Java 10, dá para usar `var` quando o tipo é óbvio pelo valor:
+
+```java
+var cidade = "Maringá";   // o Java entende que é String
+var ano = 2026;           // int
+```
+
+O tipo continua fixo: `var` é só um atalho para escrever menos.
+
+## Contas e conversões
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(7 / 2);          // 3: int / int descarta a parte decimal
+        System.out.println(7.0 / 2);        // 3.5
+        System.out.println(7 % 2);          // 1: resto
+        System.out.println((double) 7 / 2); // 3.5: cast
+
+        int convertido = Integer.parseInt("42");   // texto → número
+        String texto = String.valueOf(42);         // número → texto
+        System.out.println(convertido + 1);        // 43
+    }
+}
+```
+
+## Scanner: lendo do teclado
+
+Para ler o que a pessoa digita, usamos a classe `Scanner`, que precisa ser **importada**:
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+
+        System.out.print("Idade: ");
+        int idade = sc.nextInt();
+
+        System.out.println("Olá, " + nome + "! Ano que vem você terá " + (idade + 1));
+    }
+}
+```
+
+| Método | Lê |
+| --- | --- |
+| `nextInt()` | um inteiro |
+| `nextDouble()` | um número com vírgula |
+| `next()` | uma palavra (até o espaço) |
+| `nextLine()` | a linha inteira |
+
+<Nota tipo="cuidado" titulo="A vírgula e o ponto">
+Dependendo do idioma do sistema, o `nextDouble()` pode esperar `7,5` (com vírgula) em vez de `7.5` e dar `InputMismatchException`. Para padronizar no ponto, crie o Scanner assim: `new Scanner(System.in).useLocale(java.util.Locale.US)`.
+</Nota>
+
+<Nota tipo="cuidado" titulo="nextInt seguido de nextLine">
+Depois de um `nextInt()`, o Enter que a pessoa apertou fica "sobrando". Se o próximo for um `nextLine()`, ele lê essa linha vazia! A solução é chamar um `sc.nextLine();` extra para descartar o Enter.
+</Nota>
+
+<Tarefa titulo="Média com situação">
+
+Leia duas notas e mostre a média com uma casa decimal.
+
+```saida
+7.5 9
+Média: 8.3
+```
+
+<Resposta>
+
+```java
+import java.util.Locale;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
+        double n1 = sc.nextDouble();
+        double n2 = sc.nextDouble();
+        double media = (n1 + n2) / 2;
+        System.out.printf(Locale.US, "Média: %.1f%n", media);
+    }
+}
+```
+
+O `Locale.US` no `printf` garante que a saída use ponto (`8.3`) e não vírgula (`8,3`). Isso importa nos desafios com correção automática!
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual tipo usar para guardar o texto Maringá?"
+  opcoes={["char", "string", "String"]}
+  correta={2}
+  explicacao="Texto é String, com S maiúsculo. char guarda um único caractere."
+/>
+
+## Resumindo
+
+- Tipos principais: `int`, `double`, `boolean`, `char` e `String`.
+- `int / int` descarta a parte decimal; use `double` ou cast.
+- `Scanner` lê do teclado: `nextInt`, `nextDouble`, `nextLine`.
+- Cuidado com vírgula × ponto: `Locale.US` resolve.

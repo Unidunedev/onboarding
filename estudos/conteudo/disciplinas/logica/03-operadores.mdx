@@ -1,0 +1,201 @@
+Operadores são os símbolos que fazem contas, comparam valores e juntam condições. A boa notícia: eles são praticamente iguais em C, Python e Java.
+
+## Aritméticos: as contas
+
+| Operador | Faz | Exemplo | Resultado |
+| --- | --- | --- | --- |
+| `+` | soma | `7 + 2` | 9 |
+| `-` | subtração | `7 - 2` | 5 |
+| `*` | multiplicação | `7 * 2` | 14 |
+| `/` | divisão | `7 / 2` | 3.5 (ou 3, veja abaixo!) |
+| `%` | resto da divisão | `7 % 2` | 1 |
+
+A ordem é a da matemática: primeiro `*`, `/` e `%`, depois `+` e `-`. Na dúvida, use parênteses: `(a + b) / 2`.
+
+### A pegadinha da divisão
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("%d\n", 7 / 2);      // 3: inteiro / inteiro = inteiro
+    printf("%.1f\n", 7.0 / 2);  // 3.5
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+print(7 / 2)   # 3.5: em Python, / sempre dá real
+print(7 // 2)  # 3: // é a divisão inteira
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(7 / 2);    // 3: igual ao C
+        System.out.println(7.0 / 2);  // 3.5
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+### O resto da divisão é um superpoder
+
+O `%` parece inútil, mas aparece o tempo todo:
+
+- `n % 2 == 0` → `n` é **par**.
+- `n % 10` → o **último dígito** de `n` (`347 % 10` é 7).
+- `n % 5 == 0` → `n` é **múltiplo** de 5.
+
+## Relacionais: as comparações
+
+Comparações sempre dão **verdadeiro** ou **falso**.
+
+| Operador | Pergunta |
+| --- | --- |
+| `==` | é igual? |
+| `!=` | é diferente? |
+| `>` e `<` | é maior? é menor? |
+| `>=` e `<=` | é maior ou igual? é menor ou igual? |
+
+<Nota tipo="cuidado">
+Um `=` guarda um valor. Dois `==` comparam. Confundir os dois é um dos erros mais comuns (e em C ele nem sempre dá erro de compilação!).
+</Nota>
+
+## Lógicos: juntando condições
+
+| Pseudocódigo | C e Java | Python | Verdadeiro quando |
+| --- | --- | --- | --- |
+| `e` | `&&` | `and` | **as duas** são verdadeiras |
+| `ou` | `\|\|` | `or` | **pelo menos uma** é verdadeira |
+| `não` | `!` | `not` | inverte: verdadeiro vira falso |
+
+A **tabela verdade** resume tudo:
+
+| A | B | A e B | A ou B |
+| --- | --- | --- | --- |
+| V | V | V | V |
+| V | F | F | V |
+| F | V | F | V |
+| F | F | F | F |
+
+```pseudo
+// pode entrar no cinema: tem 18 anos ou mais, OU está com um responsável
+pode <- (idade >= 18) ou (comResponsavel = verdadeiro)
+```
+
+## Atalhos que você vai ver muito
+
+| Atalho | Mesmo que |
+| --- | --- |
+| `x += 5` | `x = x + 5` |
+| `x -= 1` | `x = x - 1` |
+| `x *= 2` | `x = x * 2` |
+| `x++` (C e Java) | `x = x + 1` |
+
+<Tarefa titulo="Separando os dígitos">
+
+Escreva um algoritmo que lê um número de dois dígitos (por exemplo 47) e mostra a dezena e a unidade separadas.
+
+```saida
+47
+Dezena: 4
+Unidade: 7
+```
+
+<Dica>
+
+O último dígito é o resto da divisão por 10. A dezena é a divisão **inteira** por 10.
+
+</Dica>
+
+<Resposta>
+
+<Abas>
+<Aba rotulo="Pseudocódigo">
+
+```pseudo
+leia n
+dezena <- n div 10
+unidade <- n % 10
+escreva "Dezena: ", dezena
+escreva "Unidade: ", unidade
+```
+
+</Aba>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    printf("Dezena: %d\n", n / 10);
+    printf("Unidade: %d\n", n % 10);
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+n = int(input())
+print("Dezena:", n // 10)
+print("Unidade:", n % 10)
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        System.out.println("Dezena: " + n / 10);
+        System.out.println("Unidade: " + n % 10);
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Quanto é 17 % 5?"
+  opcoes={["3", "2", "3.4"]}
+  correta={1}
+  explicacao="17 dividido por 5 dá 3 e sobra 2. O % devolve a sobra: 2."
+/>
+
+<Quiz
+  pergunta="Se A é verdadeiro e B é falso, quanto vale A e B?"
+  opcoes={["Verdadeiro", "Falso"]}
+  correta={1}
+  explicacao="O E só é verdadeiro quando as duas partes são verdadeiras."
+/>
+
+## Resumindo
+
+- Aritméticos: `+ - * / %`. Cuidado com a divisão inteira.
+- Relacionais comparam e dão verdadeiro ou falso. Comparar é `==`.
+- Lógicos: E, OU, NÃO. Use a tabela verdade quando ficar confuso.

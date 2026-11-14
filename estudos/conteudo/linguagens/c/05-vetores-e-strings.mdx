@@ -1,0 +1,191 @@
+Imagine guardar as notas de 40 alunos: `nota1`, `nota2`, ..., `nota40`? Nem pensar. Para isso existem os **vetores**.
+
+## Um armário com gavetas numeradas
+
+Um vetor é um conjunto de caixinhas **do mesmo tipo**, uma do lado da outra na memória, com um nome só. Cada caixinha é acessada pelo seu **índice**.
+
+```c
+int notas[5] = {8, 6, 10, 7, 9};
+```
+
+<Memoria
+  legenda="Os índices começam no 0. Um vetor de 5 posições vai de notas[0] até notas[4]."
+  celulas={[
+    { endereco: "[0]", tipo: "int", valor: "8", nome: "notas[0]" },
+    { endereco: "[1]", tipo: "int", valor: "6", nome: "notas[1]" },
+    { endereco: "[2]", tipo: "int", valor: "10", nome: "notas[2]", destaque: true },
+    { endereco: "[3]", tipo: "int", valor: "7", nome: "notas[3]" },
+    { endereco: "[4]", tipo: "int", valor: "9", nome: "notas[4]" },
+  ]}
+/>
+
+```c
+printf("%d\n", notas[2]);  // 10
+notas[1] = 7;              // troca o 6 por 7
+```
+
+<Nota tipo="cuidado" titulo="Começa do zero!">
+O primeiro elemento é o `[0]` e o último de um vetor de tamanho 5 é o `[4]`. Acessar `notas[5]` **não dá erro de compilação**: o C simplesmente lê a memória que vem depois, que pode ser de outra variável. Esse é um dos bugs mais famosos (e perigosos) do C.
+</Nota>
+
+## Percorrendo com for
+
+Vetor e `for` foram feitos um para o outro:
+
+```c
+#include <stdio.h>
+
+int main() {
+    int notas[5];
+    int soma = 0;
+
+    for (int i = 0; i < 5; i++) {
+        scanf("%d", &notas[i]);
+        soma = soma + notas[i];
+    }
+
+    printf("Média: %.1f\n", soma / 5.0);
+    return 0;
+}
+```
+
+Teste no OnlineGDB digitando `8 6 10 7 9` no console. Repare no `5.0`: se fosse `5`, seria divisão inteira!
+
+## Strings: texto é um vetor de char
+
+Em C não existe um tipo "texto" pronto. Uma **string** é um vetor de `char` que termina com um caractere especial, o `'\0'` (zero), que marca o fim do texto.
+
+```c
+char nome[10] = "Ana";
+```
+
+<Memoria
+  legenda="'Ana' ocupa 4 posições: as 3 letras e o \0 no final. O resto do vetor fica sobrando."
+  celulas={[
+    { endereco: "[0]", valor: "'A'" },
+    { endereco: "[1]", valor: "'n'" },
+    { endereco: "[2]", valor: "'a'" },
+    { endereco: "[3]", valor: "'\\0'", destaque: true },
+    { endereco: "[4]", valor: "?" },
+    { endereco: "...", valor: "?" },
+  ]}
+/>
+
+O `printf` com `%s` mostra os caracteres até encontrar o `\0`. Por isso, o vetor precisa ter **uma posição a mais** que o texto.
+
+### Lendo textos
+
+```c
+char nome[30];
+scanf("%29s", nome);      // lê uma palavra (para no espaço)
+printf("Oi, %s!\n", nome);
+```
+
+Duas coisas novas: o `29` impede de ler mais letras do que cabem (sobra 1 para o `\0`), e **não tem `&`**, porque o nome do vetor já é um endereço (você vai entender na aula de ponteiros).
+
+Para ler uma frase com espaços, use `fgets`:
+
+```c
+char frase[100];
+fgets(frase, 100, stdin);  // lê a linha inteira (inclui o Enter no final)
+```
+
+## Funções de string
+
+Com `#include <string.h>` você ganha várias ferramentas prontas:
+
+| Função | O que faz |
+| --- | --- |
+| `strlen(s)` | quantos caracteres tem (sem contar o `\0`) |
+| `strcpy(destino, origem)` | copia um texto para outro vetor |
+| `strcat(destino, origem)` | junta um texto no final de outro |
+| `strcmp(a, b)` | compara: devolve `0` se forem iguais |
+
+<Nota tipo="cuidado" titulo="Não compare strings com ==">
+`if (senha == "1234")` compara **endereços**, não o texto, e quase sempre dá falso. O certo é `if (strcmp(senha, "1234") == 0)`.
+</Nota>
+
+## Percorrendo uma string
+
+Como string é vetor, dá para passar letra por letra até achar o `\0`:
+
+```c
+#include <stdio.h>
+
+int main() {
+    char palavra[50];
+    scanf("%49s", palavra);
+
+    int vogais = 0;
+    for (int i = 0; palavra[i] != '\0'; i++) {
+        char c = palavra[i];
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            vogais++;
+        }
+    }
+    printf("%d vogais\n", vogais);
+    return 0;
+}
+```
+
+<Tarefa titulo="Maior nota da turma">
+
+Leia 5 notas inteiras e mostre a maior delas.
+
+```saida
+8 6 10 7 9
+Maior: 10
+```
+
+<Dica>
+
+Guarde a primeira nota numa variável `maior`. Depois percorra as outras: se alguma for maior que `maior`, ela vira a nova `maior`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int main() {
+    int notas[5];
+    for (int i = 0; i < 5; i++) {
+        scanf("%d", &notas[i]);
+    }
+
+    int maior = notas[0];
+    for (int i = 1; i < 5; i++) {
+        if (notas[i] > maior) {
+            maior = notas[i];
+        }
+    }
+    printf("Maior: %d\n", maior);
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Num vetor int v[10], qual é o índice do último elemento?"
+  opcoes={["10", "9", "11"]}
+  correta={1}
+  explicacao="Os índices vão de 0 a 9: dez posições no total."
+/>
+
+<Quiz
+  pergunta={'Quantas posições precisa ter um vetor de char para guardar "café"?'}
+  opcoes={["4", "5", "Depende do sistema"]}
+  correta={1}
+  explicacao="São 4 letras mais o \0 no final. (Curiosidade: a letra é ocupa 2 bytes em UTF-8, então na prática seriam 6. Acentos em C dão trabalho!)"
+/>
+
+## Resumindo
+
+- Vetor = várias caixinhas do mesmo tipo; índices de `0` a `tamanho - 1`.
+- O C não confere se o índice existe: cuidado com o limite.
+- String = vetor de `char` terminado em `\0`.
+- Use `%s`, `strlen`, `strcpy` e `strcmp`. Nada de `==` com texto.

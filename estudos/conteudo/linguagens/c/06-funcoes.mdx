@@ -1,0 +1,186 @@
+Programas de verdade têm milhares de linhas. Se tudo ficasse dentro do `main`, seria impossível de entender. **Funções** dividem o programa em pedaços com nome, que você escreve uma vez e usa quantas vezes quiser.
+
+## Uma máquina de suco
+
+<Nota tipo="analogia">
+Uma função é como uma máquina de suco: você coloca a fruta (os **parâmetros**), ela faz o trabalho lá dentro e devolve o suco (o **retorno**). Quem usa a máquina não precisa saber como ela funciona por dentro.
+</Nota>
+
+```c
+#include <stdio.h>
+
+int somar(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int resultado = somar(3, 4);
+    printf("%d\n", resultado);        // 7
+    printf("%d\n", somar(10, 20));    // 30
+    return 0;
+}
+```
+
+## Anatomia de uma função
+
+```c
+int somar(int a, int b) {
+    return a + b;
+}
+```
+
+| Parte | Significa |
+| --- | --- |
+| `int` | o **tipo** do valor que a função devolve |
+| `somar` | o **nome** da função |
+| `(int a, int b)` | os **parâmetros**: o que ela recebe |
+| `return a + b;` | devolve o valor e **sai** da função na hora |
+
+Quando a função não devolve nada, o tipo é `void`:
+
+```c
+void saudar(char nome[]) {
+    printf("Bom dia, %s! ☕\n", nome);
+}
+```
+
+## A ordem importa
+
+O C lê o arquivo de cima para baixo. Se o `main` usar uma função que só aparece **depois** dele, o compilador reclama. Duas soluções: escrever a função antes do `main`, ou colocar um **protótipo** (só a "assinatura") lá em cima:
+
+```c
+#include <stdio.h>
+
+int dobro(int x);   // protótipo: "essa função existe, confia"
+
+int main() {
+    printf("%d\n", dobro(21));
+    return 0;
+}
+
+int dobro(int x) {
+    return x * 2;
+}
+```
+
+## A função recebe uma cópia
+
+Esta é a parte mais importante da aula. Veja e tente adivinhar o que aparece:
+
+```c
+#include <stdio.h>
+
+void tentarDobrar(int x) {
+    x = x * 2;
+    printf("Dentro: %d\n", x);
+}
+
+int main() {
+    int n = 5;
+    tentarDobrar(n);
+    printf("Fora: %d\n", n);
+    return 0;
+}
+```
+
+```saida
+Dentro: 10
+Fora: 5
+```
+
+O `n` não mudou! Em C, a função recebe uma **cópia** do valor (passagem **por valor**). O `x` é uma caixinha nova, só da função:
+
+<Memoria
+  legenda="main e tentarDobrar têm caixinhas separadas. Mudar x não mexe em n."
+  celulas={[
+    { endereco: "main", tipo: "int", valor: "5", nome: "n" },
+    { endereco: "tentarDobrar", tipo: "int", valor: "10", nome: "x (cópia)", destaque: true },
+  ]}
+/>
+
+Para a função alterar o valor, ou ela **devolve** o novo valor (`n = dobro(n);`), ou recebe o **endereço** da variável. Isso é assunto da próxima aula: ponteiros!
+
+## Escopo: cada função tem suas caixinhas
+
+Uma variável criada dentro de uma função só existe ali dentro. Duas funções podem ter variáveis com o mesmo nome sem conflito nenhum, porque são caixinhas diferentes.
+
+## Funções prontas de bibliotecas
+
+Você já usa funções que outras pessoas escreveram: `printf` e `scanf` (de `stdio.h`), `strlen` (de `string.h`). A `math.h` tem várias de matemática:
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    printf("%.2f\n", sqrt(16));     // raiz quadrada: 4.00
+    printf("%.0f\n", pow(2, 10));   // 2 elevado a 10: 1024
+    return 0;
+}
+```
+
+<Nota tipo="dica">
+No seu PC, se o `gcc` reclamar de `sqrt` ou `pow`, adicione `-lm` no final do comando: `gcc programa.c -o programa -lm`. Isso liga a biblioteca de matemática.
+</Nota>
+
+<Tarefa titulo="Par ou ímpar?">
+
+Crie uma função `int ehPar(int n)` que devolve `1` se o número for par e `0` se for ímpar. No `main`, leia um número e mostre "par" ou "ímpar" usando a função.
+
+```saida
+7
+ímpar
+```
+
+<Dica>
+
+Um número é par quando o resto da divisão por 2 é zero: `n % 2 == 0`. Em C, uma comparação já vale `1` (verdadeiro) ou `0` (falso), então dá para fazer `return n % 2 == 0;`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int ehPar(int n) {
+    return n % 2 == 0;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    if (ehPar(n)) {
+        printf("par\n");
+    } else {
+        printf("ímpar\n");
+    }
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="O que significa void antes do nome de uma função?"
+  opcoes={["Que ela não recebe parâmetros", "Que ela não devolve nenhum valor", "Que ela está vazia"]}
+  correta={1}
+  explicacao="void é o tipo de retorno. A função pode receber parâmetros normalmente, só não devolve nada com return."
+/>
+
+<Quiz
+  pergunta="Uma função muda o valor de um parâmetro int. A variável original, no main, muda também?"
+  opcoes={["Sim, sempre", "Não, a função recebeu uma cópia", "Só se tiver o mesmo nome"]}
+  correta={1}
+  explicacao="Em C a passagem é por valor: a função trabalha com uma cópia. Para alterar a original, é preciso passar o endereço (ponteiro)."
+/>
+
+## Resumindo
+
+- Função = tipo de retorno + nome + parâmetros + corpo.
+- `return` devolve um valor e sai da função. `void` = não devolve nada.
+- Use a função depois de declarada, ou coloque um protótipo.
+- Parâmetros recebem **cópias**. Mudar a cópia não muda o original.

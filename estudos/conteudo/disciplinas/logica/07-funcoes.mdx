@@ -1,0 +1,226 @@
+## O problema
+
+Imagine que seu programa calcula a média em cinco lugares diferentes. Você copia e cola o mesmo trecho cinco vezes. Aí descobre um erro na conta... e precisa corrigir cinco vezes. 😩
+
+**Funções** resolvem isso: você escreve o trecho **uma vez**, dá um nome, e chama sempre que precisar.
+
+## Uma máquina de suco
+
+<Nota tipo="analogia">
+Uma função é como uma máquina de suco: entra fruta (os **parâmetros**), ela faz o trabalho, sai suco (o **retorno**). Você não precisa saber o que acontece lá dentro para usar, só o que colocar e o que sai.
+</Nota>
+
+<Passos itens={[
+  { icone: "🍊", titulo: "Parâmetros", texto: "o que entra: 6 e 9" },
+  { icone: "⚙️", titulo: "Corpo", texto: "(a + b) / 2" },
+  { icone: "🥤", titulo: "Retorno", texto: "o que sai: 7.5" },
+]} />
+
+## Criando uma função
+
+```pseudo
+função media(a, b)
+    retorne (a + b) / 2
+fim-função
+
+escreva media(6, 9)    // 7.5
+escreva media(10, 4)   // 7
+```
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+float media(float a, float b) {
+    return (a + b) / 2;
+}
+
+int main() {
+    printf("%.1f\n", media(6, 9));
+    printf("%.1f\n", media(10, 4));
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+def media(a, b):
+    return (a + b) / 2
+
+print(media(6, 9))
+print(media(10, 4))
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+public class Main {
+    static double media(double a, double b) {
+        return (a + b) / 2;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(media(6, 9));
+        System.out.println(media(10, 4));
+    }
+}
+```
+
+Em Java, funções moram dentro de classes e se chamam **métodos**.
+
+</Aba>
+</Abas>
+
+## Parâmetros e argumentos
+
+- **Parâmetros** são as variáveis na definição: `a` e `b`.
+- **Argumentos** são os valores que você passa na chamada: `6` e `9`.
+
+Na chamada `media(6, 9)`, o `a` recebe 6 e o `b` recebe 9, **na ordem**.
+
+## return × print
+
+Essa confusão é muito comum:
+
+- `print` / `escreva` **mostra** na tela. Acabou ali.
+- `return` / `retorne` **devolve** o valor para quem chamou, que pode guardar, somar, comparar...
+
+```python
+def dobro_errado(x):
+    print(x * 2)     # só mostra
+
+def dobro(x):
+    return x * 2     # devolve
+
+total = dobro(5) + 1    # 11: dá para usar o resultado
+total = dobro_errado(5) + 1   # erro! a função não devolveu nada
+```
+
+Regra prática: funções que **calculam** devem usar `return`. Deixe os `print` para o programa principal.
+
+## Funções que não retornam nada
+
+Algumas funções só **fazem** algo, como mostrar um menu. Em C e Java elas têm o tipo `void`; em Python, simplesmente não têm `return`.
+
+```python
+def mostrar_menu():
+    print("1 - Café coado")
+    print("2 - Espresso")
+    print("0 - Sair")
+```
+
+## Escopo: cada função tem suas caixinhas
+
+Variáveis criadas dentro de uma função só existem ali dentro, enquanto ela roda. Por isso duas funções podem ter uma variável `total` cada uma, sem bagunça: são caixinhas diferentes.
+
+<Tarefa titulo="Maior de três">
+
+Crie uma função `maior(a, b, c)` que **retorna** o maior dos três números. Use-a para mostrar o maior entre 7, 15 e 3.
+
+<Dica>
+
+Guarde `a` numa variável `m`. Se `b > m`, `m` vira `b`. Se `c > m`, `m` vira `c`. Retorne `m`.
+
+</Dica>
+
+<Resposta>
+
+<Abas>
+<Aba rotulo="Pseudocódigo">
+
+```pseudo
+função maior(a, b, c)
+    m <- a
+    se b > m então
+        m <- b
+    fim-se
+    se c > m então
+        m <- c
+    fim-se
+    retorne m
+fim-função
+
+escreva maior(7, 15, 3)
+```
+
+</Aba>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int maior(int a, int b, int c) {
+    int m = a;
+    if (b > m) m = b;
+    if (c > m) m = c;
+    return m;
+}
+
+int main() {
+    printf("%d\n", maior(7, 15, 3));
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+def maior(a, b, c):
+    m = a
+    if b > m:
+        m = b
+    if c > m:
+        m = c
+    return m
+
+print(maior(7, 15, 3))
+```
+
+(Python já tem a função pronta `max(7, 15, 3)`, mas fazer à mão é o treino!)
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+public class Main {
+    static int maior(int a, int b, int c) {
+        int m = a;
+        if (b > m) m = b;
+        if (c > m) m = c;
+        return m;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(maior(7, 15, 3));
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual a diferença entre return e print?"
+  opcoes={["Nenhuma", "return devolve o valor para quem chamou; print só mostra na tela", "print é mais rápido"]}
+  correta={1}
+  explicacao="Com return, o resultado pode ser guardado e usado em outras contas. O print só exibe."
+/>
+
+## Resumindo
+
+- Função = um pedaço de código com nome, que você reutiliza.
+- Parâmetros entram, `return` devolve o resultado.
+- Calcule com `return`; mostre com `print` no programa principal.
+- Cada função tem suas próprias variáveis (escopo).
+
+Fim da trilha de lógica! 🍫 Agora escolha uma linguagem e coloque a mão no código.

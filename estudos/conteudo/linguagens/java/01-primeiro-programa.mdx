@@ -1,0 +1,135 @@
+Bem-vindo ao Java! ☕ (Literalmente: Java é o nome de uma ilha da Indonésia famosa pelo café, e o logo da linguagem é uma xícara.) O Java é mais formal que Python, mas essa organização é exatamente o que faz ele brilhar em sistemas grandes.
+
+## Seu primeiro programa
+
+Clique em **Testar**, cole no OnlineGDB e clique em **Run**:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Olá, mundo!");
+    }
+}
+```
+
+```saida
+Olá, mundo!
+```
+
+Funcionou? Agora vamos entender por que tem tanta coisa para mostrar uma frase. 😅
+
+## Linha por linha
+
+| Trecho | O que significa |
+| --- | --- |
+| `public class Main` | Em Java, **todo** código mora dentro de uma classe. Esta se chama `Main`. |
+| `public static void main(String[] args)` | O ponto de partida do programa. A JVM procura exatamente esta linha. |
+| `System.out.println(...)` | Mostra um texto e pula linha. `System.out` é a saída padrão (a tela). |
+| `;` | Toda instrução termina com ponto e vírgula. |
+| `{ }` | Chaves abrem e fecham blocos (a classe e o método). |
+
+Por enquanto, encare `public static void main(String[] args)` como uma frase mágica que você copia sempre. Cada palavra vai fazer sentido ao longo da trilha:
+
+- `public`: pode ser chamado de fora;
+- `static`: pertence à classe, não precisa criar um objeto;
+- `void`: não devolve nada;
+- `String[] args`: recebe argumentos do terminal (quase nunca usamos no começo).
+
+<Nota tipo="cuidado" titulo="O nome da classe = o nome do arquivo">
+Em Java, uma classe `public` precisa estar num arquivo com o **mesmo nome**: `public class Main` vai no arquivo `Main.java`. O OnlineGDB usa `Main.java`, por isso todos os exemplos daqui usam `class Main`. Mudou o nome? Vai dar erro.
+</Nota>
+
+## print × println
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.print("Café ");
+        System.out.print("com ");
+        System.out.println("código!");
+        System.out.println("Nova linha");
+        System.out.printf("Pi vale %.2f%n", 3.14159);
+    }
+}
+```
+
+```saida
+Café com código!
+Nova linha
+Pi vale 3.14
+```
+
+- `print` não pula linha; `println` pula.
+- `printf` funciona como o do C (`%d`, `%.2f`, `%s`), e `%n` é a quebra de linha.
+
+## Do código à JVM
+
+Java é compilado para **bytecode**, que roda na **JVM** (a máquina virtual do Java):
+
+<Passos itens={[
+  { icone: "📝", titulo: "Main.java", texto: "o seu código" },
+  { icone: "⚙️", titulo: "javac", texto: "compila e confere os erros" },
+  { icone: "📦", titulo: "Main.class", texto: "bytecode" },
+  { icone: "☕", titulo: "JVM", texto: "roda em Windows, Mac, Linux..." },
+]} />
+
+No terminal do seu PC (com o JDK instalado):
+
+```terminal
+javac Main.java   # gera Main.class
+java Main         # roda
+
+java Main.java    # atalho: compila e roda de uma vez
+```
+
+## Comentários
+
+```java
+// comentário de uma linha
+
+/*
+   comentário de
+   várias linhas
+*/
+```
+
+<Tarefa titulo="Cartão de visitas">
+
+Mostre três linhas: seu nome, seu curso e a linguagem que você mais quer dominar.
+
+<Resposta>
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Cleidson");
+        System.out.println("Análise e Desenvolvimento de Sistemas");
+        System.out.println("Quero dominar: Java");
+    }
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Em qual arquivo deve ficar a classe public class Calculadora?"
+  opcoes={["Main.java", "Calculadora.java", "Qualquer um .java"]}
+  correta={1}
+  explicacao="Uma classe public precisa estar num arquivo com o mesmo nome dela."
+/>
+
+<Quiz
+  pergunta="Qual a diferença entre print e println?"
+  opcoes={["println pula linha no final", "print é mais rápido", "println só aceita números"]}
+  correta={0}
+  explicacao="println = print + line (quebra de linha no final)."
+/>
+
+## Resumindo
+
+- Todo código Java vive dentro de uma classe; o programa começa no `main`.
+- `System.out.println` mostra e pula linha.
+- `javac` compila para bytecode; a JVM executa.
+- Classe `public` = nome do arquivo. No OnlineGDB, use `Main`.

@@ -1,0 +1,127 @@
+Texto está em todo lugar: nomes, mensagens, arquivos, dados da internet. Python tem um kit de ferramentas enorme para trabalhar com **strings**.
+
+## Strings são sequências
+
+Uma string funciona como uma lista de caracteres: tem índice, tamanho e fatias.
+
+```python
+palavra = "Unidunedev"
+
+print(palavra[0])      # U
+print(palavra[-3:])    # dev
+print(palavra[:4])     # Unid
+print(len(palavra))    # 10
+print(palavra[::-1])   # vedenudinU
+```
+
+<Nota tipo="cuidado" titulo="Strings não mudam">
+Diferente das listas, strings são **imutáveis**: `palavra[0] = "u"` dá erro. Os métodos de string sempre devolvem uma **nova** string, então guarde o resultado: `palavra = palavra.lower()`.
+</Nota>
+
+## Métodos que você vai usar sempre
+
+```python
+texto = "  Café Com Código  "
+
+print(texto.strip())          # "Café Com Código" (tira espaços das pontas)
+print(texto.lower())          # "  café com código  "
+print(texto.upper())          # "  CAFÉ COM CÓDIGO  "
+print(texto.replace("Café", "Chá"))
+print(texto.strip().split(" "))  # ['Café', 'Com', 'Código']
+print("-".join(["a", "b", "c"]))  # a-b-c
+```
+
+| Método | Faz |
+| --- | --- |
+| `.strip()` | remove espaços (e Enter) das pontas |
+| `.lower()` / `.upper()` | tudo minúsculo / maiúsculo |
+| `.replace(a, b)` | troca `a` por `b` |
+| `.split(sep)` | quebra em uma lista |
+| `sep.join(lista)` | junta uma lista em texto |
+| `.startswith(x)` / `.endswith(x)` | começa / termina com? |
+| `.count(x)` | quantas vezes `x` aparece |
+| `.find(x)` | posição de `x` (ou -1) |
+
+## Perguntas sobre o texto
+
+```python
+email = "ana@unidunedev.dev"
+
+print("@" in email)              # True
+print(email.endswith(".dev"))    # True
+print(email.count("d"))          # 3
+print("2026".isdigit())          # True: só tem dígitos?
+```
+
+## f-strings turbinadas
+
+```python
+produto = "Café"
+preco = 18.5
+qtd = 3
+
+print(f"{produto:<10}|{qtd:>3} un|R$ {preco * qtd:>8.2f}")
+```
+
+```saida
+Café      |  3 un|R$    55.50
+```
+
+`<10` alinha à esquerda em 10 espaços; `>8.2f` alinha à direita com 2 casas. Ótimo para tabelinhas no terminal.
+
+## Percorrendo letra por letra
+
+```python
+frase = "programar é divertido"
+vogais = 0
+for letra in frase.lower():
+    if letra in "aeiouáéíóú":
+        vogais += 1
+print(vogais)   # 8
+```
+
+<Tarefa titulo="É palíndromo?">
+
+Um palíndromo é uma palavra que se lê igual nos dois sentidos, como "arara" ou "Ana". Leia uma palavra e diga se ela é palíndromo (ignorando maiúsculas).
+
+```saida
+Arara
+É palíndromo!
+```
+
+<Dica>
+
+Deixe tudo minúsculo com `.lower()` e compare a palavra com ela mesma invertida: `[::-1]`.
+
+</Dica>
+
+<Resposta>
+
+```python
+palavra = input().strip().lower()
+
+if palavra == palavra[::-1]:
+    print("É palíndromo!")
+else:
+    print("Não é palíndromo.")
+```
+
+Desafio extra: e frases como "Socorram-me subi no ônibus em Marrocos"? Você teria que tirar os espaços, o hífen e os acentos antes de comparar. Esse é um dos desafios do repositório!
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta={'O que "a,b,c".split(",") devolve?'}
+  opcoes={["'abc'", "['a', 'b', 'c']", "('a', 'b', 'c')"]}
+  correta={1}
+  explicacao="split quebra a string no separador e devolve uma lista de pedaços."
+/>
+
+## Resumindo
+
+- Strings são sequências: índice, fatia e `len`.
+- São imutáveis: guarde o resultado dos métodos.
+- `strip`, `lower`, `split`, `join` e `replace` resolvem quase tudo.
+- `in` pergunta se um pedaço está dentro do texto.

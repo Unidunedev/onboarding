@@ -1,0 +1,215 @@
+Para fechar a trilha, duas ferramentas que aparecem em qualquer projeto Java: **herança**, para reaproveitar classes, e **coleções**, para guardar quantos objetos você quiser.
+
+## Herança: extends
+
+Uma classe pode **herdar** de outra: ganha os atributos e métodos dela e pode acrescentar ou mudar o que quiser.
+
+```java
+class Animal {
+    protected String nome;
+
+    Animal(String nome) {
+        this.nome = nome;
+    }
+
+    String som() {
+        return "...";
+    }
+
+    void falar() {
+        System.out.println(nome + " faz " + som());
+    }
+}
+
+class Gato extends Animal {
+    Gato(String nome) {
+        super(nome);   // chama o construtor de Animal
+    }
+
+    @Override
+    String som() {
+        return "miau";
+    }
+}
+
+class Cachorro extends Animal {
+    Cachorro(String nome) {
+        super(nome);
+    }
+
+    @Override
+    String som() {
+        return "au au";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal[] bichos = { new Gato("Mingau"), new Cachorro("Caramelo") };
+        for (Animal a : bichos) {
+            a.falar();
+        }
+    }
+}
+```
+
+```saida
+Mingau faz miau
+Caramelo faz au au
+```
+
+| Palavra | Significa |
+| --- | --- |
+| `extends` | "é um tipo de": um `Gato` **é um** `Animal` |
+| `super(...)` | chama o construtor da classe pai |
+| `@Override` | "estou sobrescrevendo um método do pai" (o compilador confere!) |
+| `protected` | visível na própria classe e nas filhas |
+
+## Polimorfismo
+
+Repare no `for`: a variável é do tipo `Animal`, mas cada objeto responde do **seu** jeito ao `falar()`. Isso é **polimorfismo** ("muitas formas"). Dá para tratar objetos diferentes de forma igual, e cada um faz a sua versão.
+
+## Interfaces: um contrato
+
+Uma **interface** diz **o que** uma classe precisa saber fazer, sem dizer **como**:
+
+```java
+interface Pagavel {
+    double valorAPagar();
+}
+
+class Boleto implements Pagavel {
+    public double valorAPagar() {
+        return 100;
+    }
+}
+
+class Pix implements Pagavel {
+    public double valorAPagar() {
+        return 95;   // 5% de desconto
+    }
+}
+```
+
+Qualquer coisa que `implements Pagavel` garante ter o método `valorAPagar()`. Você vai ver interfaces o tempo todo em projetos grandes.
+
+## ArrayList: uma lista que cresce
+
+Arrays têm tamanho fixo. O `ArrayList` cresce conforme você adiciona:
+
+```java
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<String> tarefas = new ArrayList<>();
+
+        tarefas.add("Estudar Java");
+        tarefas.add("Fazer o PR do mural");
+        tarefas.add("Tomar café");
+
+        System.out.println(tarefas.size());     // 3
+        System.out.println(tarefas.get(1));     // Fazer o PR do mural
+        tarefas.remove("Tomar café");
+
+        for (String t : tarefas) {
+            System.out.println("- " + t);
+        }
+    }
+}
+```
+
+O `<String>` diz o tipo do que vai na lista (isso se chama **generics**). Para números, use as classes "embrulho": `ArrayList<Integer>`, `ArrayList<Double>`.
+
+| Array | ArrayList |
+| --- | --- |
+| `int[] v = new int[5];` | `ArrayList<Integer> v = new ArrayList<>();` |
+| `v[0] = 3;` | `v.add(3);` |
+| `v[0]` | `v.get(0)` |
+| `v.length` | `v.size()` |
+| tamanho fixo | cresce e diminui |
+
+## HashMap: pares chave → valor
+
+```java
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<String, Integer> votos = new HashMap<>();
+        String[] escolhas = {"back", "front", "back", "mobile", "back"};
+
+        for (String e : escolhas) {
+            votos.put(e, votos.getOrDefault(e, 0) + 1);
+        }
+        System.out.println(votos.get("back"));   // 3
+    }
+}
+```
+
+<Tarefa titulo="Turma com ArrayList">
+
+Crie uma classe `Aluno` com `nome` e `nota`. No `main`, coloque três alunos num `ArrayList<Aluno>` e mostre o nome de quem tem nota maior ou igual a 7.
+
+```saida
+Ana
+Carla
+```
+
+<Resposta>
+
+```java
+import java.util.ArrayList;
+
+class Aluno {
+    String nome;
+    double nota;
+
+    Aluno(String nome, double nota) {
+        this.nome = nome;
+        this.nota = nota;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Aluno> turma = new ArrayList<>();
+        turma.add(new Aluno("Ana", 9));
+        turma.add(new Aluno("Bruno", 5.5));
+        turma.add(new Aluno("Carla", 7));
+
+        for (Aluno a : turma) {
+            if (a.nota >= 7) {
+                System.out.println(a.nome);
+            }
+        }
+    }
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual palavra faz uma classe herdar de outra?"
+  opcoes={["implements", "extends", "inherits"]}
+  correta={1}
+  explicacao="extends é para herdar de uma classe. implements é para cumprir o contrato de uma interface."
+/>
+
+<Quiz
+  pergunta="Como saber quantos itens tem um ArrayList chamado lista?"
+  opcoes={["lista.length", "lista.length()", "lista.size()"]}
+  correta={2}
+  explicacao="Coleções usam size(). (length é de array e length() é de String.)"
+/>
+
+## Resumindo
+
+- `extends` herda; `super` chama o pai; `@Override` sobrescreve.
+- Polimorfismo: cada objeto responde do seu jeito ao mesmo método.
+- Interface = contrato (`implements`).
+- `ArrayList` cresce; `HashMap` guarda chave → valor.
+
+Fim da trilha de Java! ☕ Agora é hora de praticar com os desafios do GitHub.

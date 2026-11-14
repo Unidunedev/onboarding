@@ -1,0 +1,236 @@
+Até agora, os programas seguiam sempre o mesmo caminho. Com **condicionais**, eles passam a decidir: "se isso, faça aquilo; senão, faça outra coisa".
+
+## se / senão
+
+```pseudo
+leia nota
+se nota >= 7 então
+    escreva "Aprovado"
+senão
+    escreva "Reprovado"
+fim-se
+```
+
+<Passos itens={[
+  { icone: "⌨️", titulo: "Lê a nota" },
+  { icone: "❓", titulo: "nota >= 7?", texto: "a pergunta" },
+  { icone: "✅", titulo: "Sim: Aprovado", texto: "ou..." },
+  { icone: "📚", titulo: "Não: Reprovado" },
+]} />
+
+<Abas>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    float nota;
+    scanf("%f", &nota);
+    if (nota >= 7) {
+        printf("Aprovado\n");
+    } else {
+        printf("Reprovado\n");
+    }
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+nota = float(input())
+if nota >= 7:
+    print("Aprovado")
+else:
+    print("Reprovado")
+```
+
+Em Python, o que define o bloco é a **indentação** (os 4 espaços), e não chaves.
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double nota = sc.nextDouble();
+        if (nota >= 7) {
+            System.out.println("Aprovado");
+        } else {
+            System.out.println("Reprovado");
+        }
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+## Mais de dois caminhos: senão se
+
+```pseudo
+se nota >= 7 então
+    escreva "Aprovado"
+senão se nota >= 4 então
+    escreva "Exame"
+senão
+    escreva "Reprovado"
+fim-se
+```
+
+As condições são testadas **de cima para baixo**, e só o **primeiro** caminho verdadeiro é executado. Por isso a ordem importa: se você testasse `nota >= 4` primeiro, uma nota 9 cairia em "Exame"!
+
+| Pseudocódigo | C e Java | Python |
+| --- | --- | --- |
+| `senão se` | `else if` | `elif` |
+
+## Condições compostas
+
+```pseudo
+se idade >= 16 e idade < 18 então
+    escreva "Voto opcional"
+fim-se
+```
+
+Em C e Java: `if (idade >= 16 && idade < 18)`. Em Python: `if idade >= 16 and idade < 18:`, ou o atalho `if 16 <= idade < 18:`.
+
+## Condicionais dentro de condicionais
+
+Dá para colocar um `se` dentro do outro:
+
+```pseudo
+se temIngresso então
+    se idade >= 14 então
+        escreva "Pode entrar"
+    senão
+        escreva "Precisa de um responsável"
+    fim-se
+senão
+    escreva "Compre um ingresso"
+fim-se
+```
+
+Se ficar muito aninhado (um dentro do outro, dentro do outro...), costuma ser sinal de que dá para simplificar com `e` / `ou`.
+
+## Erros clássicos
+
+- Usar `=` no lugar de `==` para comparar.
+- Esquecer a ordem no `senão se`.
+- Em Python, esquecer os dois-pontos `:` ou errar a indentação.
+- Esquecer as chaves em C e Java quando o bloco tem mais de uma linha.
+
+## Teste os limites!
+
+O lugar onde os erros se escondem é **na fronteira**. Se a regra é "a partir de 7", teste 6.9, **7** e 7.1. Se é "entre 16 e 18", teste 15, **16**, 17, **18** e 19. A maioria dos bugs de condicional é um `>` que deveria ser `>=`.
+
+<Tarefa titulo="Par ou ímpar, positivo ou negativo">
+
+Leia um número inteiro e mostre se ele é par ou ímpar e se é positivo, negativo ou zero.
+
+```saida
+-4
+par
+negativo
+```
+
+<Dica>
+
+São duas decisões separadas: primeiro `n % 2 == 0` (par ou ímpar), depois um `se / senão se / senão` com `n > 0`, `n < 0` e zero.
+
+</Dica>
+
+<Resposta>
+
+<Abas>
+<Aba rotulo="Pseudocódigo">
+
+```pseudo
+leia n
+se n % 2 = 0 então
+    escreva "par"
+senão
+    escreva "ímpar"
+fim-se
+se n > 0 então
+    escreva "positivo"
+senão se n < 0 então
+    escreva "negativo"
+senão
+    escreva "zero"
+fim-se
+```
+
+</Aba>
+<Aba rotulo="C">
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    if (n % 2 == 0) printf("par\n");
+    else printf("ímpar\n");
+
+    if (n > 0) printf("positivo\n");
+    else if (n < 0) printf("negativo\n");
+    else printf("zero\n");
+    return 0;
+}
+```
+
+</Aba>
+<Aba rotulo="Python">
+
+```python
+n = int(input())
+print("par" if n % 2 == 0 else "ímpar")
+if n > 0:
+    print("positivo")
+elif n < 0:
+    print("negativo")
+else:
+    print("zero")
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        int n = new Scanner(System.in).nextInt();
+        System.out.println(n % 2 == 0 ? "par" : "ímpar");
+        if (n > 0) System.out.println("positivo");
+        else if (n < 0) System.out.println("negativo");
+        else System.out.println("zero");
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Com a nota 9, o que mostra: se nota >= 4 → Exame; senão se nota >= 7 → Aprovado?"
+  opcoes={["Aprovado", "Exame", "Os dois"]}
+  correta={1}
+  explicacao="9 >= 4 é verdadeiro, então entra no primeiro caminho e ignora o resto. A ordem das condições importa!"
+/>
+
+## Resumindo
+
+- `se / senão se / senão`: só o primeiro caminho verdadeiro roda.
+- Condições compostas usam `e` e `ou`.
+- Teste os valores de fronteira.

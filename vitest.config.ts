@@ -8,7 +8,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    include: ["src/**/*.{test,spec}.{ts,tsx}", "estudos/src/**/*.{test,spec}.{ts,tsx}"],
     env: {
       VITE_SUPABASE_URL: "https://exemplo.supabase.co",
       VITE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_teste",

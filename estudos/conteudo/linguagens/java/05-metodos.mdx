@@ -1,0 +1,161 @@
+Em Java, funções se chamam **métodos** e sempre moram dentro de uma classe. Por enquanto, vamos criar métodos `static`, que podem ser chamados direto do `main`.
+
+## Criando um método
+
+```java
+public class Main {
+    static int somar(int a, int b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        int resultado = somar(3, 4);
+        System.out.println(resultado);       // 7
+        System.out.println(somar(10, 20));   // 30
+    }
+}
+```
+
+| Parte | Significa |
+| --- | --- |
+| `static` | pertence à classe; dá para chamar sem criar objeto |
+| `int` | tipo do valor devolvido (`void` se não devolver nada) |
+| `somar` | nome (por convenção, começa com minúscula: `calcularMedia`) |
+| `(int a, int b)` | parâmetros, cada um com seu tipo |
+| `return` | devolve o valor e sai do método |
+
+## void: métodos que só fazem algo
+
+```java
+static void mostrarMenu() {
+    System.out.println("1 - Café coado");
+    System.out.println("2 - Cappuccino");
+    System.out.println("0 - Sair");
+}
+```
+
+## Sobrecarga: mesmo nome, parâmetros diferentes
+
+Java deixa ter vários métodos com o **mesmo nome**, desde que os parâmetros sejam diferentes:
+
+```java
+public class Main {
+    static int area(int lado) {
+        return lado * lado;                 // quadrado
+    }
+
+    static int area(int base, int altura) {
+        return base * altura;               // retângulo
+    }
+
+    public static void main(String[] args) {
+        System.out.println(area(4));        // 16
+        System.out.println(area(3, 5));     // 15
+    }
+}
+```
+
+O Java escolhe qual usar pela quantidade e pelos tipos dos argumentos.
+
+## Passagem de parâmetros
+
+Tipos primitivos (`int`, `double`...) são passados por **cópia**:
+
+```java
+public class Main {
+    static void tentarDobrar(int x) {
+        x = x * 2;
+    }
+
+    public static void main(String[] args) {
+        int n = 5;
+        tentarDobrar(n);
+        System.out.println(n);   // 5: não mudou!
+    }
+}
+```
+
+Já arrays e objetos são passados por **referência**: o método recebe o "endereço" e consegue alterar o conteúdo.
+
+```java
+public class Main {
+    static void zerarPrimeiro(int[] v) {
+        v[0] = 0;
+    }
+
+    public static void main(String[] args) {
+        int[] numeros = {9, 8, 7};
+        zerarPrimeiro(numeros);
+        System.out.println(numeros[0]);   // 0: mudou!
+    }
+}
+```
+
+<Nota tipo="curiosidade">
+Se você fez a trilha de C, isso é exatamente a diferença entre passar um valor e passar um ponteiro. O Java só esconde o `*` e o `&` de você.
+</Nota>
+
+## Métodos prontos: Math
+
+```java
+System.out.println(Math.sqrt(16));      // 4.0
+System.out.println(Math.pow(2, 10));    // 1024.0
+System.out.println(Math.max(3, 9));     // 9
+System.out.println(Math.abs(-5));       // 5
+System.out.println(Math.round(2.6));    // 3
+```
+
+<Tarefa titulo="É primo?">
+
+Crie o método `static boolean ehPrimo(int n)` e use-o para mostrar os números primos de 1 a 30.
+
+```saida
+2 3 5 7 11 13 17 19 23 29
+```
+
+<Dica>
+
+Um número é primo se for maior que 1 e não tiver divisores entre 2 e `n - 1`. Se achar um divisor (`n % i == 0`), já pode `return false`.
+
+</Dica>
+
+<Resposta>
+
+```java
+public class Main {
+    static boolean ehPrimo(int n) {
+        if (n < 2) return false;
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        for (int i = 1; i <= 30; i++) {
+            if (ehPrimo(i)) System.out.print(i + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+O `i * i <= n` é um truque: se `n` tiver um divisor, ele aparece antes da raiz quadrada de `n`. Testar até `n - 1` também funciona, só é mais lento.
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Um método recebe um int e muda o valor dele. A variável original muda?"
+  opcoes={["Sim", "Não, o método recebeu uma cópia", "Só se for static"]}
+  correta={1}
+  explicacao="Tipos primitivos são passados por cópia. Arrays e objetos é que podem ser alterados pelo método."
+/>
+
+## Resumindo
+
+- Métodos = funções dentro de classes. `static` permite chamar do `main`.
+- `void` não devolve nada; os outros precisam de `return`.
+- Sobrecarga: mesmo nome, parâmetros diferentes.
+- Primitivos vão por cópia; arrays e objetos, por referência.

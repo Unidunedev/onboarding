@@ -1,0 +1,176 @@
+Em C, cada tipo tem um **tamanho fixo** na memória. Entender isso explica vários "bugs misteriosos" que assustam quem está começando.
+
+## Bits e bytes
+
+A memória do computador é uma fileira gigante de **bytes**. Cada byte tem 8 **bits**, e cada bit é um 0 ou um 1. Com 8 bits dá para fazer 256 combinações (de `00000000` a `11111111`).
+
+Quanto mais bytes um tipo usa, maiores os números que cabem nele:
+
+| Tipo | Tamanho comum | Faixa aproximada |
+| --- | --- | --- |
+| `char` | 1 byte | -128 a 127 |
+| `int` | 4 bytes | cerca de -2,1 bilhões a 2,1 bilhões |
+| `float` | 4 bytes | ~7 dígitos de precisão |
+| `double` | 8 bytes | ~15 dígitos de precisão |
+
+Você pode perguntar o tamanho ao próprio C com `sizeof`:
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("char:   %zu byte\n", sizeof(char));
+    printf("int:    %zu bytes\n", sizeof(int));
+    printf("float:  %zu bytes\n", sizeof(float));
+    printf("double: %zu bytes\n", sizeof(double));
+    return 0;
+}
+```
+
+<Memoria
+  legenda="Um int ocupa 4 bytes seguidos. O endereço da variável é o endereço do primeiro byte."
+  celulas={[
+    { endereco: "0x1000", valor: "byte 1", nome: "idade", destaque: true },
+    { endereco: "0x1001", valor: "byte 2", destaque: true },
+    { endereco: "0x1002", valor: "byte 3", destaque: true },
+    { endereco: "0x1003", valor: "byte 4", destaque: true },
+    { endereco: "0x1004", valor: "...", nome: "próxima" },
+  ]}
+/>
+
+## Estouro: quando o número não cabe
+
+O que acontece se você passar do limite? O número "dá a volta", como o hodômetro de um carro velho que passa de 99999 para 00000:
+
+```c
+#include <stdio.h>
+#include <limits.h>
+
+int main() {
+    int grande = INT_MAX;   // o maior int possível
+    printf("%d\n", grande);
+    printf("%d\n", grande + 1);
+    return 0;
+}
+```
+
+```saida
+2147483647
+-2147483648
+```
+
+Isso se chama **overflow** (estouro). O C não avisa: é responsabilidade sua escolher um tipo com espaço suficiente. Para números muito grandes, existe o `long long` (8 bytes, marcador `%lld`).
+
+## Divisão inteira: a pegadinha número 1
+
+```c
+int a = 7, b = 2;
+printf("%d\n", a / b);   // mostra 3, e não 3.5!
+printf("%d\n", a % b);   // mostra 1: o resto da divisão
+```
+
+Quando os **dois** lados são `int`, o C faz divisão inteira e joga fora a parte decimal. Para ter `3.5`, pelo menos um dos lados precisa ser `float` ou `double`:
+
+```c
+printf("%.1f\n", (float) a / b);   // 3.5
+printf("%.1f\n", 7.0 / 2);         // 3.5
+```
+
+O `(float)` na frente é um **cast**: converte o valor para outro tipo naquele momento.
+
+<Nota tipo="dica" titulo="O operador %">
+O `%` (resto da divisão) é um dos operadores mais úteis da programação: `n % 2 == 0` diz se um número é par, `n % 10` pega o último dígito, e por aí vai.
+</Nota>
+
+## Números com vírgula não são exatos
+
+```c
+#include <stdio.h>
+
+int main() {
+    float x = 0.1 + 0.2;
+    printf("%.10f\n", x);
+    return 0;
+}
+```
+
+```saida
+0.3000000119
+```
+
+O computador guarda números em binário, e `0.1` não tem representação exata em binário (assim como 1/3 não tem em decimal: 0,333...). Por isso, **nunca compare** `float` com `==`. E para dinheiro, sistemas de verdade costumam guardar centavos em inteiros.
+
+## Variável sem valor guarda lixo
+
+```c
+int contador;            // não colocou valor nenhum!
+printf("%d\n", contador); // pode mostrar 0, 32767, -841... qualquer coisa
+```
+
+Em C, declarar uma variável só **reserva** o espaço. O que estava naquele pedaço de memória antes continua lá. Regra de ouro: **sempre inicialize**, por exemplo `int contador = 0;`.
+
+## char também é número
+
+Para o C, um `char` é só um número pequeno. A letra `'A'` é guardada como 65 (tabela ASCII):
+
+```c
+char letra = 'A';
+printf("%c = %d\n", letra, letra);   // A = 65
+printf("%c\n", letra + 1);           // B
+```
+
+<Tarefa titulo="Conversor de temperatura">
+
+Leia uma temperatura em graus Celsius e mostre em Fahrenheit, com uma casa decimal. A fórmula é `F = C × 9 / 5 + 32`.
+
+```saida
+25
+77.0
+```
+
+<Dica>
+
+Use `float` para a temperatura. Cuidado com a divisão inteira: `9 / 5` com inteiros dá `1`! Escreva `9.0 / 5`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int main() {
+    float c;
+    scanf("%f", &c);
+
+    float f = c * 9.0 / 5 + 32;
+    printf("%.1f\n", f);
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Quanto vale 7 / 2 em C, se os dois são int?"
+  opcoes={["3.5", "3", "4", "Dá erro"]}
+  correta={1}
+  explicacao="Com dois inteiros, o C faz divisão inteira e descarta a parte decimal. Para 3.5, um dos lados precisa ser float ou double."
+/>
+
+<Quiz
+  pergunta="Por que é perigoso usar uma variável que você não inicializou?"
+  opcoes={["Ela sempre vale zero", "Ela pode ter qualquer valor que estava na memória", "O programa não compila"]}
+  correta={1}
+  explicacao="Declarar só reserva o espaço. O conteúdo é o que já estava lá: o famoso lixo de memória."
+/>
+
+## Resumindo
+
+- Cada tipo tem um tamanho em bytes, e por isso uma faixa de valores.
+- Passou do limite? **Overflow**, sem aviso.
+- `int / int` descarta a parte decimal. Use `(float)` ou `9.0`.
+- `float` é aproximado: não compare com `==`.
+- Sempre inicialize suas variáveis.

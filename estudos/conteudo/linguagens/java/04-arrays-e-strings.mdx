@@ -1,0 +1,179 @@
+## Arrays: várias caixinhas com um nome só
+
+Um array guarda vários valores do **mesmo tipo**. Em Java, o tamanho é definido na criação e não muda.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int[] notas = {8, 6, 10, 7, 9};
+
+        System.out.println(notas[0]);       // 8: o índice começa em 0
+        System.out.println(notas.length);   // 5
+        notas[1] = 7;                       // troca o 6 por 7
+
+        double[] precos = new double[3];    // 3 posições, todas valendo 0.0
+        precos[0] = 18.5;
+        System.out.println(precos[0] + " " + precos[1]);
+    }
+}
+```
+
+<Memoria
+  legenda="Um int[] com 5 posições: índices de 0 a 4. notas.length vale 5."
+  celulas={[
+    { endereco: "[0]", tipo: "int", valor: "8" },
+    { endereco: "[1]", tipo: "int", valor: "7" },
+    { endereco: "[2]", tipo: "int", valor: "10" },
+    { endereco: "[3]", tipo: "int", valor: "7" },
+    { endereco: "[4]", tipo: "int", valor: "9", destaque: true },
+  ]}
+/>
+
+<Nota tipo="cuidado" titulo="ArrayIndexOutOfBoundsException">
+Acessar `notas[5]` num array de 5 posições faz o programa parar com `ArrayIndexOutOfBoundsException`. Diferente do C, o Java confere e avisa. Os laços de `0` até `length - 1` evitam isso.
+</Nota>
+
+## Percorrendo arrays
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int[] notas = {8, 6, 10, 7, 9};
+
+        // for tradicional: quando você precisa do índice
+        int soma = 0;
+        for (int i = 0; i < notas.length; i++) {
+            soma += notas[i];
+        }
+        System.out.println("Média: " + (double) soma / notas.length);
+
+        // for-each: quando só precisa dos valores
+        for (int nota : notas) {
+            System.out.print(nota + " ");
+        }
+    }
+}
+```
+
+Lê-se o for-each assim: "para cada `nota` em `notas`".
+
+## A classe Arrays
+
+`java.util.Arrays` tem ferramentas prontas:
+
+```java
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] v = {5, 2, 9, 1};
+        Arrays.sort(v);
+        System.out.println(Arrays.toString(v));   // [1, 2, 5, 9]
+    }
+}
+```
+
+Sem o `Arrays.toString`, o `println(v)` mostraria algo estranho como `[I@1b6d3586` (o endereço do array).
+
+## Strings
+
+`String` é uma classe com vários métodos úteis:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        String s = "Unidunedev";
+
+        System.out.println(s.length());          // 10
+        System.out.println(s.charAt(0));         // U
+        System.out.println(s.toUpperCase());     // UNIDUNEDEV
+        System.out.println(s.substring(0, 4));   // Unid
+        System.out.println(s.contains("dune"));  // true
+        System.out.println(s.indexOf("dev"));    // 7
+        System.out.println(s.replace("dev", "café"));
+
+        String[] partes = "a,b,c".split(",");
+        System.out.println(partes.length);       // 3
+    }
+}
+```
+
+| Método | Faz |
+| --- | --- |
+| `length()` | tamanho (com parênteses, diferente do array!) |
+| `charAt(i)` | o caractere na posição `i` |
+| `substring(ini, fim)` | um pedaço (o `fim` não entra) |
+| `toUpperCase()` / `toLowerCase()` | maiúsculas / minúsculas |
+| `trim()` | tira espaços das pontas |
+| `split(sep)` | quebra num array de Strings |
+| `equals(outra)` | compara o conteúdo |
+
+<Nota tipo="dica" titulo="Strings são imutáveis">
+Assim como no Python, os métodos devolvem uma **nova** String. `s.toUpperCase();` sozinho não muda `s`. Faça `s = s.toUpperCase();`.
+</Nota>
+
+### Juntando muitos textos: StringBuilder
+
+Para montar um texto aos poucos (num laço, por exemplo), use `StringBuilder`, que é bem mais eficiente:
+
+```java
+StringBuilder sb = new StringBuilder();
+for (int i = 1; i <= 3; i++) {
+    sb.append(i).append("! ");
+}
+System.out.println(sb.toString());   // 1! 2! 3!
+```
+
+<Tarefa titulo="Contar vogais">
+
+Leia uma palavra e mostre quantas vogais ela tem.
+
+```saida
+programacao
+5
+```
+
+<Dica>
+
+Percorra com `for` e `charAt(i)`. Para testar se é vogal, uma forma elegante é `"aeiou".indexOf(c) >= 0`.
+
+</Dica>
+
+<Resposta>
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        String palavra = new Scanner(System.in).next().toLowerCase();
+        int vogais = 0;
+
+        for (int i = 0; i < palavra.length(); i++) {
+            char c = palavra.charAt(i);
+            if ("aeiou".indexOf(c) >= 0) {
+                vogais++;
+            }
+        }
+        System.out.println(vogais);
+    }
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Como saber o tamanho de um array v e de uma String s?"
+  opcoes={["v.length e s.length()", "v.length() e s.length", "v.size() e s.size()"]}
+  correta={0}
+  explicacao="Array tem o atributo length (sem parênteses). String tem o método length() (com parênteses). Pegadinha clássica!"
+/>
+
+## Resumindo
+
+- Arrays: `int[] v = {...}` ou `new int[n]`; tamanho fixo; `v.length`.
+- `for` tradicional ou for-each (`for (int x : v)`).
+- `Arrays.sort` e `Arrays.toString` ajudam muito.
+- Strings: `length()`, `charAt`, `substring`, `split`, `equals`. São imutáveis.

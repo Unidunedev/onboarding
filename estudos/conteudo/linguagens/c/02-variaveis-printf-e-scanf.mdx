@@ -1,0 +1,190 @@
+Na aula passada o programa só falava. Agora ele vai **guardar informações** e **ouvir** o que você digita.
+
+## Variável: uma caixinha com etiqueta
+
+Uma variável é um espaço na memória do computador onde você guarda um valor. Ela tem três coisas:
+
+- um **tipo**: o que cabe nela (número inteiro, número com vírgula, letra...);
+- um **nome**: a etiqueta, para você achar a caixinha depois;
+- um **valor**: o que está guardado lá dentro agora.
+
+```c
+int idade = 20;
+float altura = 1.75;
+char inicial = 'C';
+```
+
+Na memória, dá para imaginar assim (os endereços são só um exemplo):
+
+<Memoria
+  legenda="Cada variável ocupa um lugar na memória, com um endereço. O nome é só um apelido para esse endereço."
+  celulas={[
+    { endereco: "0x1000", tipo: "int", valor: "20", nome: "idade" },
+    { endereco: "0x1004", tipo: "float", valor: "1.75", nome: "altura" },
+    { endereco: "0x1008", tipo: "char", valor: "'C'", nome: "inicial" },
+  ]}
+/>
+
+O valor pode mudar quando você quiser (por isso o nome *variável*):
+
+```c
+int pontos = 0;   // declara e já coloca 0
+pontos = 10;      // troca o valor por 10
+pontos = pontos + 5; // pega o valor atual (10), soma 5 e guarda: agora é 15
+```
+
+<Nota tipo="cuidado" titulo="= não é igualdade">
+Em C, `=` significa **guardar** (atribuir). `pontos = pontos + 5` não é uma equação impossível: é "pontos recebe pontos mais 5". Para **comparar** se dois valores são iguais, usamos `==` (vamos ver na aula 4).
+</Nota>
+
+## Os tipos básicos
+
+| Tipo | Guarda | Exemplo |
+| --- | --- | --- |
+| `int` | número inteiro | `int ano = 2026;` |
+| `float` | número com vírgula | `float preco = 9.90;` |
+| `double` | número com vírgula, com mais precisão | `double pi = 3.14159265;` |
+| `char` | **um** caractere, entre aspas simples | `char letra = 'A';` |
+
+Repare: no código, a vírgula decimal é um **ponto**: `9.90`, nunca `9,90`.
+
+## printf: mostrando valores
+
+Para mostrar o valor de uma variável, o `printf` usa **marcadores** dentro do texto. Cada marcador é trocado por um valor, na ordem:
+
+```c
+#include <stdio.h>
+
+int main() {
+    int idade = 20;
+    float altura = 1.75;
+    char inicial = 'C';
+
+    printf("Idade: %d anos\n", idade);
+    printf("Altura: %.2f m\n", altura);
+    printf("Inicial: %c\n", inicial);
+    printf("%c tem %d anos e %.2f m\n", inicial, idade, altura);
+    return 0;
+}
+```
+
+```saida
+Idade: 20 anos
+Altura: 1.75 m
+Inicial: C
+C tem 20 anos e 1.75 m
+```
+
+| Marcador | Usa com | Observação |
+| --- | --- | --- |
+| `%d` | `int` | d de *decimal* |
+| `%f` | `float` e `double` | mostra 6 casas: `1.750000` |
+| `%.2f` | `float` e `double` | só 2 casas: `1.75` |
+| `%c` | `char` | um caractere |
+| `%s` | texto (string) | veremos na aula 5 |
+
+## scanf: lendo do teclado
+
+O `scanf` é o contrário do `printf`: ele **lê** o que a pessoa digitou e guarda numa variável.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a, b;
+
+    printf("Digite dois números: ");
+    scanf("%d %d", &a, &b);
+
+    printf("A soma é %d\n", a + b);
+    return 0;
+}
+```
+
+Teste no OnlineGDB: depois de clicar em **Run**, clique na área de baixo (o console), digite `3 4` e aperte Enter.
+
+```saida
+Digite dois números: 3 4
+A soma é 7
+```
+
+<Nota tipo="cuidado" titulo="O & do scanf">
+Repare no `&` antes de `a` e `b`. Ele significa "**o endereço de**". O `scanf` precisa saber **onde** fica a caixinha para colocar o valor lá dentro. Esquecer o `&` é um erro clássico: o programa compila, mas trava ou guarda lixo. Na aula de ponteiros você vai entender isso a fundo.
+</Nota>
+
+<Nota tipo="dica" titulo="Nos desafios do GitHub">
+Os desafios têm correção automática: o robô compara a sua saída com a esperada, letra por letra. Por isso, nos desafios, **não** escreva "Digite um número:". Mostre só a resposta, exatamente no formato pedido.
+</Nota>
+
+## Contas com variáveis
+
+```c
+#include <stdio.h>
+
+int main() {
+    float nota1, nota2;
+
+    scanf("%f %f", &nota1, &nota2);
+    float media = (nota1 + nota2) / 2;
+
+    printf("Média: %.1f\n", media);
+    return 0;
+}
+```
+
+Os parênteses importam: sem eles, `nota1 + nota2 / 2` dividiria só a `nota2`, igual na matemática.
+
+<Tarefa titulo="Quantos dias você já viveu?">
+
+Leia a idade de uma pessoa (em anos) e mostre quantos dias, aproximadamente, ela já viveu (considere 365 dias por ano).
+
+```saida
+20
+Você já viveu cerca de 7300 dias!
+```
+
+<Dica>
+
+Leia com `scanf("%d", &idade);`, multiplique por 365 (o operador é `*`) e mostre com `%d`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+int main() {
+    int idade;
+    scanf("%d", &idade);
+
+    int dias = idade * 365;
+    printf("Você já viveu cerca de %d dias!\n", dias);
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual marcador mostra um float com duas casas decimais?"
+  opcoes={["%d", "%.2f", "%2d", "%c"]}
+  correta={1}
+  explicacao="%f é para números com vírgula, e o .2 limita a duas casas depois do ponto."
+/>
+
+<Quiz
+  pergunta={'O que está errado em scanf("%d", idade); ?'}
+  opcoes={["Falta o & antes de idade", "Deveria ser %f", "Nada, está certo"]}
+  correta={0}
+  explicacao="O scanf precisa do endereço da variável (&idade) para saber onde guardar o valor lido."
+/>
+
+## Resumindo
+
+- Variável = tipo + nome + valor. `=` guarda um valor.
+- `printf` mostra valores usando marcadores: `%d`, `%f`, `%.2f`, `%c`.
+- `scanf` lê do teclado e precisa do `&` antes da variável.
+- No código, número com vírgula usa **ponto**: `1.75`.

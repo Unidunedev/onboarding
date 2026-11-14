@@ -1020,7 +1020,8 @@ textarea.text-input {
     gap: 16px;
     font-size: 13px;
   }
-  .nav-github {
+  .nav-github,
+  .nav-estudos {
     display: none !important;
   }
   .navigation svg {

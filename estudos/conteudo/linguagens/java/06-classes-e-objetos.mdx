@@ -1,0 +1,180 @@
+Java é uma linguagem **orientada a objetos** de raiz. Até agora usamos a classe `Main` só como um "lugar" para o código. Agora vamos criar classes de verdade.
+
+## Classe é o molde, objeto é o biscoito
+
+<Nota tipo="analogia">
+A **classe** é a planta de uma casa: diz quantos quartos tem e onde fica a porta. Os **objetos** são as casas construídas a partir dela: cada uma tem seu endereço e sua cor, mas todas seguem a mesma planta.
+</Nota>
+
+```java
+class Conta {
+    String titular;
+    double saldo;
+
+    Conta(String titular, double saldo) {   // construtor
+        this.titular = titular;
+        this.saldo = saldo;
+    }
+
+    void depositar(double valor) {
+        saldo += valor;
+    }
+
+    void sacar(double valor) {
+        if (valor > saldo) {
+            System.out.println("Saldo insuficiente!");
+            return;
+        }
+        saldo -= valor;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Conta minha = new Conta("Cleidson", 100);
+        Conta sua = new Conta("Ana", 0);
+
+        minha.depositar(50);
+        sua.sacar(10);
+
+        System.out.println(minha.titular + ": " + minha.saldo);   // Cleidson: 150.0
+        System.out.println(sua.titular + ": " + sua.saldo);       // Ana: 0.0
+    }
+}
+```
+
+## Destrinchando
+
+| Parte | O que é |
+| --- | --- |
+| `class Conta` | o molde |
+| `String titular; double saldo;` | **atributos**: os dados de cada objeto |
+| `Conta(...)` | o **construtor**: mesmo nome da classe, sem tipo de retorno |
+| `this.titular` | o atributo **deste** objeto (diferente do parâmetro `titular`) |
+| `void depositar(...)` | um **método** do objeto (sem `static`!) |
+| `new Conta(...)` | cria um objeto novo |
+
+Repare que os métodos **não** têm `static`: eles trabalham com os dados de um objeto específico. `minha.depositar(50)` mexe no saldo da `minha`, e não no da `sua`.
+
+## Encapsulamento: protegendo os dados
+
+Do jeito acima, qualquer um pode fazer `minha.saldo = 1000000;` 😱. Para proteger, os atributos ficam `private`, e o acesso é por métodos:
+
+```java
+class Conta {
+    private String titular;
+    private double saldo;
+
+    public Conta(String titular) {
+        this.titular = titular;
+    }
+
+    public double getSaldo() {      // "getter": só leitura
+        return saldo;
+    }
+
+    public void depositar(double valor) {
+        if (valor <= 0) {
+            System.out.println("Valor inválido");
+            return;
+        }
+        saldo += valor;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Conta c = new Conta("Ana");
+        c.depositar(80);
+        c.depositar(-5);
+        System.out.println(c.getSaldo());   // 80.0
+        // c.saldo = 1000;  → erro de compilação: saldo é private
+    }
+}
+```
+
+Agora o único jeito de mudar o saldo é pelo `depositar`, que confere se o valor faz sentido. Isso é **encapsulamento**.
+
+| Modificador | Quem pode acessar |
+| --- | --- |
+| `public` | qualquer classe |
+| `private` | só a própria classe |
+| (nenhum) | classes do mesmo pacote |
+
+## toString: como o objeto aparece
+
+```java
+class Produto {
+    String nome;
+    double preco;
+
+    Produto(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    @Override
+    public String toString() {
+        return nome + " (R$ " + preco + ")";
+    }
+}
+```
+
+Com isso, `System.out.println(cafe);` mostra `Café (R$ 18.5)` em vez de `Produto@1b6d3586`.
+
+<Tarefa titulo="Classe Retangulo">
+
+Crie a classe `Retangulo` com `base` e `altura` (privados), um construtor e os métodos `area()` e `perimetro()`. No `main`, crie um retângulo 3 × 4 e mostre os dois valores.
+
+```saida
+Área: 12.0
+Perímetro: 14.0
+```
+
+<Resposta>
+
+```java
+class Retangulo {
+    private double base;
+    private double altura;
+
+    Retangulo(double base, double altura) {
+        this.base = base;
+        this.altura = altura;
+    }
+
+    double area() {
+        return base * altura;
+    }
+
+    double perimetro() {
+        return 2 * (base + altura);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Retangulo r = new Retangulo(3, 4);
+        System.out.println("Área: " + r.area());
+        System.out.println("Perímetro: " + r.perimetro());
+    }
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Para que serve o this em this.saldo = saldo;?"
+  opcoes={["Cria uma variável nova", "Diferencia o atributo do objeto do parâmetro com o mesmo nome", "Torna o atributo público"]}
+  correta={1}
+  explicacao="this.saldo é o atributo do objeto; saldo sozinho é o parâmetro do construtor."
+/>
+
+## Resumindo
+
+- Classe = atributos + construtor + métodos. Objeto = `new Classe(...)`.
+- `this` é o próprio objeto.
+- Encapsulamento: atributos `private`, acesso por métodos `public`.
+- `toString()` define como o objeto aparece no `println`.

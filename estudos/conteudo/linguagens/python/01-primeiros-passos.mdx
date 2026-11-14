@@ -1,0 +1,149 @@
+Bem-vindo ao Python! 🧋 Python é famoso por ser fácil de ler: menos símbolos, mais clareza. Vamos direto ao código.
+
+## Seu primeiro programa
+
+Clique em **Testar**, cole no OnlineGDB e clique em **Run**:
+
+```python
+print("Olá, mundo!")
+```
+
+```saida
+Olá, mundo!
+```
+
+É isso. Uma linha. Sem `main`, sem `;`, sem `#include`. O `print` mostra o que estiver entre os parênteses.
+
+<Nota tipo="curiosidade">
+O nome Python não vem da cobra: vem do grupo de comédia britânico **Monty Python**. O criador, Guido van Rossum, queria uma linguagem divertida de usar.
+</Nota>
+
+## Variáveis sem declarar tipo
+
+Em Python você só dá um nome e um valor. A linguagem descobre o tipo sozinha (tipagem **dinâmica**):
+
+```python
+nome = "Ana"
+idade = 19
+altura = 1.68
+estuda = True
+
+print(nome, idade, altura, estuda)
+print(type(idade))   # <class 'int'>
+```
+
+| Tipo | Exemplo | O que é |
+| --- | --- | --- |
+| `int` | `19` | inteiro |
+| `float` | `1.68` | número com ponto decimal |
+| `str` | `"Ana"` ou `'Ana'` | texto (string) |
+| `bool` | `True`, `False` | lógico (com letra maiúscula!) |
+
+## input: lendo do teclado
+
+O `input` mostra uma mensagem, espera a pessoa digitar e devolve o que ela digitou:
+
+```python
+nome = input("Qual é o seu nome? ")
+print("Olá,", nome)
+```
+
+No OnlineGDB, depois do Run, digite o nome na área de baixo e aperte Enter.
+
+<Nota tipo="cuidado" titulo="input sempre devolve texto">
+Mesmo que a pessoa digite `20`, o `input` devolve o **texto** `"20"`. Para fazer contas, converta: `int(input())` para inteiros ou `float(input())` para números com vírgula. Esquecer isso gera o famoso `TypeError: can only concatenate str (not "int") to str`.
+</Nota>
+
+```python
+idade = int(input("Sua idade: "))
+print("Ano que vem você terá", idade + 1)
+```
+
+## f-strings: juntando texto e valores
+
+O jeito mais moderno (e bonito) de montar textos é a **f-string**: coloque um `f` antes das aspas e as variáveis entre chaves.
+
+```python
+nome = "Ana"
+nota = 8.456
+
+print(f"{nome} tirou {nota}")
+print(f"{nome} tirou {nota:.1f}")     # uma casa decimal: 8.5
+print(f"Dobro da nota: {nota * 2:.2f}")
+```
+
+```saida
+Ana tirou 8.456
+Ana tirou 8.5
+Dobro da nota: 16.91
+```
+
+## Operadores
+
+```python
+print(7 + 2)    # 9
+print(7 / 2)    # 3.5: a divisão em Python sempre dá float
+print(7 // 2)   # 3: divisão inteira
+print(7 % 2)    # 1: resto
+print(2 ** 10)  # 1024: potência
+```
+
+## Comentários
+
+Tudo depois de `#` é ignorado pelo Python. Use para explicar o **porquê** do código:
+
+```python
+# Desconto de 10% para estudantes
+preco = 50
+preco_final = preco * 0.9
+```
+
+<Tarefa titulo="Calculadora de média">
+
+Leia duas notas e mostre a média com uma casa decimal, no formato abaixo.
+
+```saida
+7.5
+9
+Média: 8.2
+```
+
+<Dica>
+
+Use `float(input())` para cada nota e uma f-string com `:.1f`.
+
+</Dica>
+
+<Resposta>
+
+```python
+nota1 = float(input())
+nota2 = float(input())
+media = (nota1 + nota2) / 2
+print(f"Média: {media:.1f}")
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta={'O que print("5" + "3") mostra?'}
+  opcoes={["8", "53", "Dá erro"]}
+  correta={1}
+  explicacao="Os dois são textos (estão entre aspas), então o + junta: 53."
+/>
+
+<Quiz
+  pergunta="Qual o tipo do valor devolvido por input()?"
+  opcoes={["int", "str", "Depende do que a pessoa digitar"]}
+  correta={1}
+  explicacao="Sempre str (texto). Para número, converta com int() ou float()."
+/>
+
+## Resumindo
+
+- `print` mostra, `input` lê (sempre como texto).
+- Variáveis não declaram tipo: `int`, `float`, `str`, `bool`.
+- Converta com `int()` e `float()` antes de fazer contas.
+- f-strings: `f"{nome} tem {idade} anos"`.

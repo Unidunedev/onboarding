@@ -1,0 +1,135 @@
+Um programa precisa **lembrar** das coisas: o nome digitado, a nota, o total da compra. Para isso existem as variáveis.
+
+## Uma caixinha com etiqueta
+
+Uma variável é um espaço na memória com um **nome**. Você guarda um valor nela e, depois, usa o nome para pegar o valor de volta.
+
+<Memoria
+  legenda="Cada caixinha tem uma etiqueta (o nome) e um conteúdo (o valor)."
+  celulas={[
+    { tipo: "texto", valor: '"Ana"', nome: "nome" },
+    { tipo: "inteiro", valor: "19", nome: "idade" },
+    { tipo: "real", valor: "8.5", nome: "nota" },
+    { tipo: "lógico", valor: "verdadeiro", nome: "aprovada" },
+  ]}
+/>
+
+```pseudo
+idade <- 19
+idade <- idade + 1
+escreva idade
+```
+
+Na segunda linha, o computador **pega** o valor atual (19), soma 1 e **guarda** de volta. O valor antigo é substituído: a caixinha guarda uma coisa por vez.
+
+## Tipos de dados
+
+| Tipo | O que guarda | Exemplos |
+| --- | --- | --- |
+| inteiro | números sem vírgula | `19`, `-3`, `2026` |
+| real | números com vírgula | `8.5`, `3.14`, `-0.5` |
+| texto | letras, palavras, frases | `"Ana"`, `"café"` |
+| lógico | verdadeiro ou falso | `verdadeiro`, `falso` |
+
+Nas linguagens, os nomes mudam:
+
+| Pseudocódigo | C | Python | Java |
+| --- | --- | --- | --- |
+| inteiro | `int` | `int` | `int` |
+| real | `float` / `double` | `float` | `double` |
+| texto | vetor de `char` | `str` | `String` |
+| lógico | `int` (0 ou 1) | `bool` | `boolean` |
+
+## Por que o tipo importa?
+
+Porque a mesma operação faz coisas diferentes com tipos diferentes:
+
+<Abas>
+<Aba rotulo="Python">
+
+```python
+print(2 + 3)       # 5 (soma números)
+print("2" + "3")   # 23 (junta textos!)
+```
+
+</Aba>
+<Aba rotulo="Java">
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(2 + 3);     // 5
+        System.out.println("2" + "3"); // 23
+    }
+}
+```
+
+</Aba>
+</Abas>
+
+Por isso, quando você lê algo do teclado em Python ou Java, muitas vezes precisa **converter** o texto para número antes de fazer contas.
+
+## Bons nomes de variáveis
+
+- Use nomes que dizem o que guardam: `media`, `totalCompra`, `nome_aluno`. Evite `x`, `a1`, `coisa`.
+- Sem espaços, sem acentos e sem começar com número: `2nota` não vale, `nota2` vale.
+- Escolha um estilo e mantenha: `camelCase` (comum em Java e C) ou `snake_case` (comum em Python).
+
+## Entrada e saída
+
+```pseudo
+escreva "Qual é o seu nome?"
+leia nome
+escreva "Olá, ", nome
+```
+
+| Pseudocódigo | C | Python | Java |
+| --- | --- | --- | --- |
+| `escreva` | `printf` | `print` | `System.out.println` |
+| `leia` | `scanf` | `input` | `Scanner` |
+
+## Trocando valores: o problema dos dois copos
+
+Você tem suco no copo A e leite no copo B, e quer trocar. Não dá para despejar um no outro direto: você precisa de um **terceiro copo**. Com variáveis é igual:
+
+```pseudo
+a <- 5
+b <- 8
+aux <- a     // guarda o 5 no copo extra
+a <- b       // a vira 8
+b <- aux     // b vira 5
+```
+
+<Tarefa titulo="Teste de mesa da troca">
+
+Faça o teste de mesa do algoritmo acima: anote os valores de `a`, `b` e `aux` depois de cada linha. O que aconteceria se você tirasse a variável `aux` e fizesse só `a <- b` e `b <- a`?
+
+<Resposta>
+
+| Linha | `a` | `b` | `aux` |
+| --- | --- | --- | --- |
+| `a <- 5` | 5 | | |
+| `b <- 8` | 5 | 8 | |
+| `aux <- a` | 5 | 8 | 5 |
+| `a <- b` | 8 | 8 | 5 |
+| `b <- aux` | 8 | 5 | 5 |
+
+Sem o `aux`: depois de `a <- b`, os dois valem 8, e o 5 se perdeu para sempre. `b <- a` deixaria os dois com 8.
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Qual tipo combina melhor com o preço de um produto, como 9.90?"
+  opcoes={["inteiro", "real", "lógico"]}
+  correta={1}
+  explicacao="Preço tem casas decimais, então é real (float/double)."
+/>
+
+## Resumindo
+
+- Variável = nome + valor. Guardar um valor novo apaga o antigo.
+- Tipos: inteiro, real, texto e lógico.
+- O tipo muda o comportamento das operações.
+- Para trocar dois valores, use uma variável auxiliar.

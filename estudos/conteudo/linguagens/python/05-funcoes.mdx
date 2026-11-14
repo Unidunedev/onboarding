@@ -1,0 +1,124 @@
+Funções organizam o programa em pedaços com nome. Em Python, elas são criadas com `def`.
+
+## def e return
+
+```python
+def area_retangulo(base, altura):
+    return base * altura
+
+print(area_retangulo(3, 4))   # 12
+a = area_retangulo(5, 2)
+print(a + 1)                  # 11
+```
+
+A estrutura é: `def`, o nome, os parâmetros entre parênteses, **dois-pontos**, e o corpo indentado. O `return` devolve o resultado e encerra a função.
+
+<Nota tipo="cuidado" titulo="return × print">
+Uma função que só faz `print` mostra o resultado, mas devolve `None` (nada). Se você precisa **usar** o resultado depois (somar, comparar, guardar), a função tem que ter `return`.
+</Nota>
+
+## Parâmetros com valor padrão
+
+```python
+def saudar(nome, saudacao="Olá"):
+    return f"{saudacao}, {nome}!"
+
+print(saudar("Ana"))                 # Olá, Ana!
+print(saudar("Bruno", "Bom dia"))    # Bom dia, Bruno!
+print(saudar(saudacao="E aí", nome="Carla"))   # pelo nome, a ordem não importa
+```
+
+## Devolvendo mais de um valor
+
+Python deixa devolver vários valores de uma vez (na verdade, uma tupla):
+
+```python
+def min_max(numeros):
+    return min(numeros), max(numeros)
+
+menor, maior = min_max([4, 9, 1, 7])
+print(menor, maior)   # 1 9
+```
+
+## Escopo
+
+Variáveis criadas dentro da função só existem lá dentro:
+
+```python
+def calcular():
+    total = 10
+    return total
+
+calcular()
+print(total)   # NameError: total não existe aqui fora
+```
+
+## Listas são passadas por referência
+
+Aqui tem uma pegadinha que vale entender:
+
+```python
+def adicionar_bonus(notas):
+    notas.append(10)
+
+minhas_notas = [7, 8]
+adicionar_bonus(minhas_notas)
+print(minhas_notas)   # [7, 8, 10]: a lista de fora mudou!
+```
+
+A função recebeu **a mesma lista**, não uma cópia. Com números e textos isso não acontece, porque eles são imutáveis. (Se você fez a trilha de C, isso é o ponteiro trabalhando escondido! 😉)
+
+## Docstrings: documente suas funções
+
+```python
+def imc(peso, altura):
+    """Calcula o índice de massa corporal (peso em kg, altura em metros)."""
+    return peso / altura ** 2
+```
+
+O texto entre três aspas logo depois do `def` é a **docstring**. O VS Code mostra ela quando você passa o mouse sobre a função.
+
+<Tarefa titulo="Conversor de tempo">
+
+Crie a função `formatar(segundos)` que recebe um total de segundos e **retorna** um texto no formato `"Hh Mmin Ss"`.
+
+```saida
+3725
+1h 2min 5s
+```
+
+<Dica>
+
+Uma hora tem 3600 segundos. Use `//` para a divisão inteira e `%` para o resto: `horas = segundos // 3600`, `resto = segundos % 3600`...
+
+</Dica>
+
+<Resposta>
+
+```python
+def formatar(segundos):
+    horas = segundos // 3600
+    minutos = segundos % 3600 // 60
+    seg = segundos % 60
+    return f"{horas}h {minutos}min {seg}s"
+
+print(formatar(int(input())))
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="O que uma função sem return devolve em Python?"
+  opcoes={["0", "None", "Uma string vazia"]}
+  correta={1}
+  explicacao="None é o 'nada' do Python. É o que você recebe se tentar usar o resultado de uma função que só faz print."
+/>
+
+## Resumindo
+
+- `def nome(parametros):` + corpo indentado + `return`.
+- Parâmetros podem ter valor padrão e ser passados pelo nome.
+- Dá para devolver vários valores: `return a, b`.
+- Listas e dicionários passados para funções podem ser alterados por elas.

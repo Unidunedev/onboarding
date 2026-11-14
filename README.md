@@ -89,6 +89,10 @@ Você preenche o formulário
 
 O mural **não lê o banco**: ele lê os arquivos da pasta `membros/` no momento do build. Assim só aparece o que foi revisado e aprovado num PR.
 
+## 📚 Site de estudos
+
+A pasta `estudos/` tem um segundo site, publicado em [estudos.unidunedev.workers.dev](https://estudos.unidunedev.workers.dev): aulas de fundamentos, lógica, C, Python e Java, com código para copiar e testar. Quer escrever ou corrigir uma aula? Veja o [README do estudos](estudos/README.md).
+
 ## 💻 Rodando na sua máquina
 
 Pré-requisitos: [Node.js 22+](https://nodejs.org) e [Git](https://git-scm.com).

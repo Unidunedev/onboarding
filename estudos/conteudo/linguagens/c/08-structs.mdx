@@ -1,0 +1,204 @@
+Até aqui, cada variável guardava uma coisa só. Mas um aluno tem nome, idade **e** nota. Uma **struct** junta vários dados relacionados num pacote só.
+
+## O problema
+
+```c
+char nome1[30];  int idade1;  float nota1;
+char nome2[30];  int idade2;  float nota2;
+// ... e assim por diante para cada aluno 😩
+```
+
+Os dados de um mesmo aluno estão espalhados. Fica fácil misturar a nota de um com a idade de outro.
+
+## Criando uma struct
+
+```c
+struct Aluno {
+    char nome[30];
+    int idade;
+    float nota;
+};
+```
+
+Isso cria um **tipo novo**, como se fosse um formulário em branco com três campos. Agora dá para criar variáveis desse tipo e acessar cada campo com o **ponto**:
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+struct Aluno {
+    char nome[30];
+    int idade;
+    float nota;
+};
+
+int main() {
+    struct Aluno a;
+    strcpy(a.nome, "Ana");
+    a.idade = 19;
+    a.nota = 9.5;
+
+    printf("%s, %d anos, nota %.1f\n", a.nome, a.idade, a.nota);
+    return 0;
+}
+```
+
+```saida
+Ana, 19 anos, nota 9.5
+```
+
+<Memoria
+  legenda="Na memória, os campos de uma struct ficam juntinhos, um depois do outro."
+  celulas={[
+    { endereco: "a.nome", tipo: "char[30]", valor: '"Ana"', nome: "nome" },
+    { endereco: "a.idade", tipo: "int", valor: "19", nome: "idade" },
+    { endereco: "a.nota", tipo: "float", valor: "9.5", nome: "nota" },
+  ]}
+/>
+
+Também dá para preencher tudo de uma vez: `struct Aluno b = {"Bruno", 20, 8.0};`
+
+## typedef: um nome mais curto
+
+Escrever `struct Aluno` toda hora cansa. O `typedef` cria um apelido:
+
+```c
+typedef struct {
+    char nome[30];
+    int idade;
+    float nota;
+} Aluno;
+
+Aluno a;   // bem melhor!
+```
+
+## Vetor de structs
+
+Agora sim: uma turma inteira num vetor só, cada posição com um aluno completo.
+
+```c
+#include <stdio.h>
+
+typedef struct {
+    char nome[30];
+    float nota;
+} Aluno;
+
+int main() {
+    Aluno turma[3] = {
+        {"Ana", 9.5},
+        {"Bruno", 6.0},
+        {"Carla", 8.0},
+    };
+
+    for (int i = 0; i < 3; i++) {
+        printf("%-6s %.1f %s\n", turma[i].nome, turma[i].nota,
+               turma[i].nota >= 7 ? "✅" : "📚");
+    }
+    return 0;
+}
+```
+
+O `%-6s` alinha o texto em 6 espaços, e o `condição ? a : b` é um "if de uma linha" (operador ternário).
+
+## Structs e funções
+
+Structs podem ir e voltar de funções. Para a função **alterar** a struct, passe um ponteiro e use a seta `->` para acessar os campos:
+
+```c
+#include <stdio.h>
+
+typedef struct {
+    char titular[30];
+    float saldo;
+} Conta;
+
+void depositar(Conta *c, float valor) {
+    c->saldo = c->saldo + valor;   // c->saldo é o mesmo que (*c).saldo
+}
+
+int main() {
+    Conta minha = {"Cleidson", 100};
+    depositar(&minha, 50);
+    printf("%s tem R$ %.2f\n", minha.titular, minha.saldo);
+    return 0;
+}
+```
+
+```saida
+Cleidson tem R$ 150.00
+```
+
+## Struct × classe
+
+Repare no que fizemos: um **tipo** (`Conta`) com **dados** (titular, saldo) e **funções** que trabalham com ele (`depositar`). Isso é praticamente uma **classe**! A diferença é que em Java e Python as funções ficam **dentro** da classe (e se chamam métodos):
+
+| C | Java / Python |
+| --- | --- |
+| `struct` com campos | classe com atributos |
+| `depositar(&minha, 50)` | `minha.depositar(50)` |
+| tudo é público | dá para esconder campos (`private`) |
+
+Quando você chegar em classes nas outras trilhas, lembre: é uma struct que ganhou superpoderes. 🦸
+
+<Tarefa titulo="Carrinho de compras">
+
+Crie uma struct `Produto` com `nome`, `preco` e `quantidade`. Leia os dados de 3 produtos (uma palavra de nome, preço e quantidade) e mostre o total da compra.
+
+```saida
+cafe 18.50 2
+pao 0.75 10
+leite 5.20 1
+Total: R$ 49.70
+```
+
+<Dica>
+
+Um vetor `Produto itens[3]`, um `for` lendo com `scanf("%29s %f %d", ...)` e um acumulador somando `preco * quantidade`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+typedef struct {
+    char nome[30];
+    float preco;
+    int quantidade;
+} Produto;
+
+int main() {
+    Produto itens[3];
+    float total = 0;
+
+    for (int i = 0; i < 3; i++) {
+        scanf("%29s %f %d", itens[i].nome, &itens[i].preco, &itens[i].quantidade);
+        total = total + itens[i].preco * itens[i].quantidade;
+    }
+    printf("Total: R$ %.2f\n", total);
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Se p é um ponteiro para uma struct, como acessar o campo saldo?"
+  opcoes={["p.saldo", "p->saldo", "*p.saldo"]}
+  correta={1}
+  explicacao="Com ponteiro, use a seta: p->saldo, que é um atalho para (*p).saldo. Sem os parênteses, *p.saldo seria interpretado errado."
+/>
+
+## Resumindo
+
+- `struct` agrupa dados relacionados num tipo novo. Acesse com ponto: `a.nota`.
+- `typedef` cria um nome curto para o tipo.
+- Vetor de structs = uma lista de "fichas" completas.
+- Ponteiro para struct usa `->`.
+- Struct + funções que trabalham com ela = a ideia por trás das classes.
+
+Fim da trilha de C! ☕ Agora é hora de praticar com os desafios do GitHub.

@@ -1,0 +1,183 @@
+Ponteiro tem fama de bicho-papão, mas a ideia é simples. Se você entendeu que cada variável mora num **endereço** da memória, você já entendeu metade.
+
+## Todo mundo tem um endereço
+
+Cada variável fica num lugar da memória, e esse lugar tem um endereço (um número, geralmente mostrado em hexadecimal). O operador `&` pergunta: "qual é o endereço disso?"
+
+```c
+#include <stdio.h>
+
+int main() {
+    int idade = 20;
+    printf("Valor: %d\n", idade);
+    printf("Endereço: %p\n", (void *) &idade);
+    return 0;
+}
+```
+
+```saida
+Valor: 20
+Endereço: 0x7ffd5e8a3b4c
+```
+
+O endereço muda a cada execução, e tudo bem: quem escolhe é o sistema.
+
+## O que é um ponteiro?
+
+Um **ponteiro** é uma variável que guarda um **endereço** em vez de um valor comum.
+
+<Nota tipo="analogia">
+Pense num papelzinho onde está escrito o endereço da casa de um amigo. O papel não é a casa, mas com ele você consegue **chegar** até a casa e, por exemplo, deixar um presente lá dentro. O ponteiro é o papelzinho.
+</Nota>
+
+```c
+int idade = 20;
+int *p = &idade;   // p guarda o endereço de idade
+```
+
+<Memoria
+  legenda="p é uma caixinha que guarda um endereço: o endereço de idade. Dizemos que p aponta para idade."
+  celulas={[
+    { endereco: "0x1000", tipo: "int", valor: "20", nome: "idade", destaque: true },
+    { endereco: "0x2000", tipo: "int *", valor: "0x1000", nome: "p", aponta: "idade" },
+  ]}
+/>
+
+## Os dois símbolos
+
+| Símbolo | Onde aparece | Lê-se |
+| --- | --- | --- |
+| `&x` | antes de uma variável | "o endereço de x" |
+| `int *p` | na declaração | "p é um ponteiro para int" |
+| `*p` | no uso | "o valor que está no endereço guardado em p" |
+
+Com o `*` você **segue o endereço** e mexe na variável original:
+
+```c
+#include <stdio.h>
+
+int main() {
+    int idade = 20;
+    int *p = &idade;
+
+    printf("%d\n", *p);   // 20: lê o valor lá no endereço
+    *p = 21;              // muda o valor lá no endereço
+    printf("%d\n", idade); // 21!
+    return 0;
+}
+```
+
+Mudamos `idade` **sem escrever** `idade =`. Foi pelo ponteiro.
+
+## Para que serve? Funções que alteram variáveis
+
+Lembra que funções recebem cópias? Com ponteiros, a função recebe o **endereço** e consegue mexer na variável de quem chamou. O exemplo clássico é trocar dois valores:
+
+```c
+#include <stdio.h>
+
+void trocar(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int x = 1, y = 2;
+    trocar(&x, &y);
+    printf("x = %d, y = %d\n", x, y);
+    return 0;
+}
+```
+
+```saida
+x = 2, y = 1
+```
+
+E agora o mistério do `scanf` está resolvido: `scanf("%d", &n)` passa o **endereço** de `n` para que o `scanf` consiga colocar o valor lido lá dentro. É exatamente o que a função `trocar` faz!
+
+## Vetores e ponteiros são parentes
+
+O nome de um vetor, sozinho, já é o endereço do primeiro elemento. Por isso o `scanf("%s", nome)` não leva `&`:
+
+```c
+int v[3] = {10, 20, 30};
+int *p = v;              // mesmo que &v[0]
+
+printf("%d\n", *p);       // 10
+printf("%d\n", *(p + 1)); // 20: anda uma "caixinha" para frente
+printf("%d\n", p[2]);     // 30: dá para usar colchetes com ponteiro!
+```
+
+Quando você passa um vetor para uma função, ela recebe o endereço, e não uma cópia do vetor inteiro. Por isso uma função **consegue** alterar os elementos de um vetor.
+
+## Cuidados
+
+<Nota tipo="cuidado" titulo="Ponteiro sem destino">
+Um ponteiro declarado sem valor (`int *p;`) aponta para um lugar aleatório. Usar `*p = 5;` assim pode travar o programa (o famoso *segmentation fault*). Se ainda não tem para onde apontar, use `int *p = NULL;` e confira antes de usar: `if (p != NULL)`.
+</Nota>
+
+## Por que outras linguagens não têm isso?
+
+Elas têm, só que escondido! Em Java e Python, objetos e listas são passados por **referência**, que no fundo é um ponteiro que a linguagem administra para você. Aprender ponteiros em C faz você entender por que, em Python, uma função consegue alterar uma lista que recebeu como parâmetro.
+
+<Tarefa titulo="Zerar pelo endereço">
+
+Crie a função `void zerarSeNegativo(int *n)`, que troca o valor por `0` se ele for negativo. No `main`, leia um número, chame a função e mostre o resultado.
+
+```saida
+-8
+0
+```
+
+<Dica>
+
+Dentro da função, `*n` é o valor original. Compare `*n < 0` e, se for, faça `*n = 0`. Na chamada, passe o endereço: `zerarSeNegativo(&numero);`.
+
+</Dica>
+
+<Resposta>
+
+```c
+#include <stdio.h>
+
+void zerarSeNegativo(int *n) {
+    if (*n < 0) {
+        *n = 0;
+    }
+}
+
+int main() {
+    int numero;
+    scanf("%d", &numero);
+    zerarSeNegativo(&numero);
+    printf("%d\n", numero);
+    return 0;
+}
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Se int *p = &x; então o que *p = 7; faz?"
+  opcoes={["Muda o endereço guardado em p", "Muda o valor de x para 7", "Cria uma nova variável"]}
+  correta={1}
+  explicacao="*p segue o endereço guardado em p, que é o de x. Então o valor de x vira 7."
+/>
+
+<Quiz
+  pergunta="Por que scanf precisa do & antes da variável?"
+  opcoes={["Por costume", "Para receber o endereço e conseguir alterar a variável", "Para converter o tipo"]}
+  correta={1}
+  explicacao="Funções recebem cópias. Com o endereço, o scanf consegue colocar o valor lido direto na variável original."
+/>
+
+## Resumindo
+
+- `&x` é o endereço de `x`. Um ponteiro é uma variável que guarda endereços.
+- `int *p` declara; `*p` acessa o valor no endereço.
+- Passando endereços, funções conseguem alterar variáveis de fora.
+- O nome de um vetor já é um endereço.
+- Ponteiro sem destino? Use `NULL`.

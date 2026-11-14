@@ -1,0 +1,180 @@
+Em Python, os blocos de código não usam chaves: o que manda é a **indentação** (os espaços no começo da linha). Isso deixa o código limpo, mas exige atenção.
+
+## if, elif e else
+
+```python
+nota = float(input())
+
+if nota >= 7:
+    print("Aprovado")
+elif nota >= 4:
+    print("Exame")
+else:
+    print("Reprovado")
+```
+
+Repare em três coisas:
+
+1. Os **dois-pontos** `:` no fim da linha do `if`, `elif` e `else`.
+2. As linhas de dentro têm **4 espaços** a mais.
+3. É `elif`, e não `else if`.
+
+<Nota tipo="cuidado" titulo="IndentationError">
+Misturar espaços e tabs, ou indentar uma linha a mais ou a menos, gera `IndentationError`. O VS Code e o OnlineGDB já colocam 4 espaços quando você aperta Tab, então é só ser consistente.
+</Nota>
+
+### Operadores lógicos em português (quase)
+
+```python
+idade = 17
+tem_autorizacao = True
+
+if idade >= 18 or tem_autorizacao:
+    print("Pode ir à viagem")
+
+if not tem_autorizacao:
+    print("Peça a autorização!")
+
+if 16 <= idade < 18:     # comparação encadeada: só Python tem!
+    print("Voto opcional")
+```
+
+Python usa `and`, `or` e `not` no lugar de `&&`, `||` e `!`.
+
+## while
+
+```python
+senha = ""
+while senha != "cafe123":
+    senha = input("Senha: ")
+print("Bem-vindo!")
+```
+
+## for e range
+
+O `for` do Python percorre uma **sequência**. Para repetir N vezes, use `range`:
+
+```python
+for i in range(5):        # 0, 1, 2, 3, 4
+    print(i)
+
+for i in range(1, 6):     # 1, 2, 3, 4, 5
+    print(i)
+
+for i in range(10, 0, -2):  # 10, 8, 6, 4, 2
+    print(i)
+```
+
+| Forma | Gera |
+| --- | --- |
+| `range(fim)` | de 0 até `fim - 1` |
+| `range(inicio, fim)` | de `inicio` até `fim - 1` |
+| `range(inicio, fim, passo)` | pulando de `passo` em `passo` |
+
+O `for` também percorre textos e listas diretamente:
+
+```python
+for letra in "café":
+    print(letra)
+```
+
+## break, continue e o truque do while True
+
+```python
+while True:
+    opcao = input("Digite 0 para sair: ")
+    if opcao == "0":
+        break
+    print("Você digitou", opcao)
+print("Até mais!")
+```
+
+O `while True` repete para sempre, e o `break` é a saída. É o jeito Python de fazer um menu (o "faça... enquanto" de outras linguagens).
+
+## Contador e acumulador
+
+```python
+soma = 0
+aprovados = 0
+
+for i in range(5):
+    nota = float(input())
+    soma += nota
+    if nota >= 7:
+        aprovados += 1
+
+print(f"Média: {soma / 5:.1f}")
+print(f"Aprovados: {aprovados}")
+```
+
+<Tarefa titulo="Tabuada">
+
+Leia um número e mostre a tabuada dele de 1 a 10.
+
+```saida
+7
+7 x 1 = 7
+7 x 2 = 14
+...
+7 x 10 = 70
+```
+
+<Resposta>
+
+```python
+n = int(input())
+for i in range(1, 11):
+    print(f"{n} x {i} = {n * i}")
+```
+
+</Resposta>
+
+</Tarefa>
+
+<Tarefa titulo="Adivinhe o número">
+
+O programa "pensa" no número 42. A pessoa vai chutando e o programa diz "maior", "menor" ou "acertou!". No final, mostra quantas tentativas foram.
+
+<Dica>
+
+`while True`, um contador de tentativas e um `if / elif / else` comparando o chute com 42. No `else` (acertou), use `break`.
+
+</Dica>
+
+<Resposta>
+
+```python
+secreto = 42
+tentativas = 0
+
+while True:
+    chute = int(input("Chute: "))
+    tentativas += 1
+    if chute < secreto:
+        print("É maior!")
+    elif chute > secreto:
+        print("É menor!")
+    else:
+        print(f"Acertou em {tentativas} tentativas! 🎉")
+        break
+```
+
+Quer deixar mais legal? Troque o `42` por `random.randint(1, 100)` (com `import random` no topo). Você vai ver `import` na última aula.
+
+</Resposta>
+
+</Tarefa>
+
+<Quiz
+  pergunta="Quais números o range(3, 8) gera?"
+  opcoes={["3 a 8", "3 a 7", "4 a 8"]}
+  correta={1}
+  explicacao="O fim nunca entra: 3, 4, 5, 6, 7."
+/>
+
+## Resumindo
+
+- `if / elif / else` com dois-pontos e indentação.
+- `and`, `or`, `not`. Comparação encadeada: `16 <= idade < 18`.
+- `for i in range(...)` para repetir N vezes; `while` para repetir enquanto.
+- `while True` + `break` para menus.

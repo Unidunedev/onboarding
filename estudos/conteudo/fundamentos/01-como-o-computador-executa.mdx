@@ -1,0 +1,83 @@
+Antes de aprender qualquer linguagem, vale entender o que acontece **dentro** do computador quando um programa roda. Não precisa decorar nada: a ideia é ter uma imagem na cabeça.
+
+## O computador só entende números
+
+Lá no fundo, tudo é **0 e 1**: ligado e desligado, tem corrente ou não tem. Cada 0 ou 1 é um **bit**, e 8 bits formam um **byte**.
+
+Texto, imagem, música, o seu código: tudo vira número. A letra `A`, por exemplo, é guardada como `65`, que em binário é `01000001`.
+
+<Nota tipo="curiosidade">
+Uma foto do celular com 12 megapixels tem uns 36 milhões de bytes só de cores. E o computador processa isso em milissegundos, porque ele é absurdamente rápido em fazer contas simples.
+</Nota>
+
+## As peças principais
+
+<Nota tipo="analogia" titulo="Pensa numa cozinha">
+- O **processador (CPU)** é o cozinheiro: segue as instruções, uma por vez, muito rápido.
+- A **memória RAM** é a bancada: rápida e perto da mão, mas some tudo quando a luz apaga (o computador desliga).
+- O **armazenamento** (SSD ou HD) é a despensa: guarda tudo para sempre, mas é mais lento de buscar.
+- O **programa** é a receita.
+</Nota>
+
+Quando você abre um programa, ele sai da despensa (disco), vai para a bancada (RAM), e o cozinheiro (CPU) executa as instruções. É por isso que mais RAM deixa o computador trabalhar com mais coisas abertas ao mesmo tempo.
+
+## O ciclo do processador
+
+O processador faz sempre a mesma coisa, bilhões de vezes por segundo:
+
+<Passos itens={[
+  { icone: "📥", titulo: "Buscar", texto: "pega a próxima instrução na memória" },
+  { icone: "🔍", titulo: "Decodificar", texto: "entende o que ela pede" },
+  { icone: "⚡", titulo: "Executar", texto: "faz a conta, compara ou move dados" },
+  { icone: "🔁", titulo: "Repetir", texto: "vai para a próxima" },
+]} />
+
+E as instruções são bem simples: "some estes dois números", "guarde isto naquele endereço", "se for zero, pule para a instrução tal". Programas complexos são milhões dessas instruções simples.
+
+## Código-fonte: a receita escrita por humanos
+
+Ninguém escreve programas em 0 e 1 (seria uma tortura). Escrevemos **código-fonte** numa linguagem de programação, que é mais parecida com a nossa língua:
+
+```python
+nome = input("Qual é o seu nome? ")
+print("Olá,", nome)
+```
+
+Depois, uma ferramenta (o **compilador** ou o **interpretador**) traduz esse texto para as instruções que o processador entende. Isso é assunto da aula 3.
+
+## Variáveis são caixinhas na memória
+
+A memória é uma fileira enorme de caixinhas numeradas. Cada número é um **endereço**. Quando você cria uma variável, o programa reserva uma (ou mais) dessas caixinhas e dá um nome para ela:
+
+<Memoria
+  legenda="Você usa o nome (idade). O computador usa o endereço (0x1000). A linguagem faz a ponte."
+  celulas={[
+    { endereco: "0x0FFC", valor: "...", nome: "" },
+    { endereco: "0x1000", valor: "20", nome: "idade", destaque: true },
+    { endereco: "0x1004", valor: "'C'", nome: "letra" },
+    { endereco: "0x1005", valor: "...", nome: "" },
+  ]}
+/>
+
+Guardar essa imagem vai te ajudar muito em **todas** as linguagens, principalmente em C.
+
+<Quiz
+  pergunta="O que acontece com os dados da memória RAM quando o computador desliga?"
+  opcoes={["Ficam salvos", "São apagados", "Vão para a nuvem"]}
+  correta={1}
+  explicacao="A RAM é volátil: precisa de energia para manter os dados. Por isso salvamos arquivos no disco."
+/>
+
+<Quiz
+  pergunta="Quem executa as instruções de um programa?"
+  opcoes={["A memória RAM", "O processador (CPU)", "O disco"]}
+  correta={1}
+  explicacao="A CPU busca, decodifica e executa as instruções, uma depois da outra."
+/>
+
+## Resumindo
+
+- Tudo no computador vira número, guardado em bits e bytes.
+- CPU executa, RAM guarda o que está em uso, disco guarda para sempre.
+- Código-fonte é texto para humanos; ele precisa ser traduzido para a máquina.
+- Variáveis são caixinhas com endereço na memória.
