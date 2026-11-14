@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { voltarAoInicio } from "@/lib/draft";
-import { ORG_URL, COMECE_POR_AQUI_URL, ESTUDOS_URL } from "@/config";
+import { ORG_URL, COMECE_POR_AQUI_URL, ESTUDOS_URL, CRIADOR } from "@/config";
 import { type Member, avatarUrl } from "@/lib/community";
 
 export function Header() {
@@ -35,7 +35,13 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="footer">
-      <span>Feito com café, código e vontade de aprender.</span>
+      <span>
+        Criado por{" "}
+        <a className="footer-criador" href={CRIADOR.url} target="_blank" rel="noreferrer">
+          @{CRIADOR.github}
+        </a>{" "}
+        com café, código e vontade de ensinar.
+      </span>
       <span>
         Uma comunidade. Muitos primeiros commits. <Heart size={12} />
       </span>

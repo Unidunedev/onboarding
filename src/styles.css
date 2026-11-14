@@ -2919,3 +2919,12 @@ textarea.text-input {
     gap: 12px;
   }
 }
+
+.footer-criador {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.footer-criador:hover {
+  text-decoration: underline;
+}

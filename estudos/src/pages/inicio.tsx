@@ -3,6 +3,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { Bebida } from "../components/bebida";
 import { CenaLofi } from "../components/lofi";
+import { CRIADOR } from "@/config";
 import { GRUPOS, TRILHAS, duracao, minutosDaTrilha, type Trilha } from "../catalogo";
 import { idDaAula, useConcluidas } from "../progresso";
 
@@ -155,6 +156,27 @@ export function Inicio() {
             </li>
           </ul>
         </div>
+
+        <figure className="criador">
+          <img
+            src={`${CRIADOR.url}.png?size=200`}
+            alt={`Foto de ${CRIADOR.nome}`}
+            width={96}
+            height={96}
+            loading="lazy"
+          />
+          <div>
+            <p className="kicker">QUEM PREPAROU</p>
+            <blockquote>A ideia é pegar na sua mão e te ensinar.</blockquote>
+            <figcaption>
+              <b>{CRIADOR.nome}</b> ·{" "}
+              <a href={CRIADOR.url} target="_blank" rel="noreferrer">
+                @{CRIADOR.github}
+              </a>
+              <span>Dev há 6 anos e um dos líderes da Unidunedev</span>
+            </figcaption>
+          </div>
+        </figure>
       </section>
     </main>
   );

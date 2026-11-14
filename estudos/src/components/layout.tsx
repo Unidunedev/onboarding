@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Github, Heart } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { CRIADOR } from "@/config";
 import { ESTUDOS_REPO_URL, ONBOARDING_URL } from "../catalogo";
 
 export function Cabecalho() {
@@ -28,7 +29,13 @@ export function Cabecalho() {
 export function Rodape() {
   return (
     <footer className="rodape">
-      <span>Feito com café, código e vontade de aprender.</span>
+      <span>
+        Criado por{" "}
+        <a className="rodape-criador" href={CRIADOR.url} target="_blank" rel="noreferrer">
+          @{CRIADOR.github}
+        </a>{" "}
+        com café, código e vontade de ensinar.
+      </span>
       <span>
         Achou um erro ou quer escrever uma aula? Abra um PR no{" "}
         <a href="https://github.com/unidunedev/onboarding" target="_blank" rel="noreferrer">
