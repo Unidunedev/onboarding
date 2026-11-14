@@ -27,6 +27,8 @@ export type Trilha = {
   frase: string;
   sobre: string;
   aprender: string[];
+  /** Links para se aprofundar, mostrados no fim da última aula */
+  documentacao?: { titulo: string; url: string; texto: string }[];
   /** Linguagem usada no botão "Testar" dos códigos */
   linguagem?: "c" | "python" | "java";
   aulas: Aula[];
@@ -194,6 +196,20 @@ export const TRILHAS: Trilha[] = [
     emoji: "☕",
     frase: "Curto, forte e bem pertinho da máquina.",
     linguagem: "c",
+    documentacao: [
+      {
+        titulo: "cppreference: C",
+        url: "https://en.cppreference.com/w/c",
+        texto:
+          "A referência mais usada de C: cada função, tipo e biblioteca, com exemplos. O C não tem um site oficial (a definição oficial é o padrão ISO, que é pago), então é aqui que os devs consultam no dia a dia.",
+      },
+      {
+        titulo: "Manual do GNU C",
+        url: "https://www.gnu.org/software/gnu-c-manual/",
+        texto:
+          "O manual do projeto GNU, o mesmo do compilador gcc, explicando a linguagem do começo ao fim.",
+      },
+    ],
     sobre:
       "C é a linguagem que mostra o que as outras escondem: memória, endereços e tipos com tamanho certo. Ela é a base do Linux, do Python e de muitas linguagens. Quem entende C entende o computador.",
     aprender: [
@@ -271,6 +287,18 @@ export const TRILHAS: Trilha[] = [
     emoji: "🧋",
     frase: "Leve, refrescante e fácil de começar.",
     linguagem: "python",
+    documentacao: [
+      {
+        titulo: "Documentação oficial do Python",
+        url: "https://docs.python.org/pt-br/3/",
+        texto: "Tem versão em português! Referência completa da linguagem e da biblioteca padrão.",
+      },
+      {
+        titulo: "Tutorial oficial do Python",
+        url: "https://docs.python.org/pt-br/3/tutorial/",
+        texto: "O tutorial escrito por quem mantém o Python, também em português.",
+      },
+    ],
     sobre:
       "Python lê quase como português (em inglês 😅). Sem ponto e vírgula, sem chaves: a indentação organiza o código. É usada em automação, dados, IA, back-end e onde mais você imaginar.",
     aprender: [
@@ -340,6 +368,19 @@ export const TRILHAS: Trilha[] = [
     emoji: "☕",
     frase: "Encorpado e organizado. Java é literalmente café.",
     linguagem: "java",
+    documentacao: [
+      {
+        titulo: "Dev.java",
+        url: "https://dev.java/learn/",
+        texto: "O site oficial de aprendizado do Java, com trilhas do básico ao avançado.",
+      },
+      {
+        titulo: "Documentação da API do Java 21",
+        url: "https://docs.oracle.com/en/java/javase/21/docs/api/index.html",
+        texto:
+          "Todas as classes do Java (String, Scanner, ArrayList...) com cada método explicado.",
+      },
+    ],
     sobre:
       "Java organiza tudo em classes e roda em qualquer lugar que tenha a JVM. É muito usada em bancos, empresas grandes e no Android. Começa mais formal, mas ensina a organizar programas grandes.",
     aprender: [

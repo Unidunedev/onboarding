@@ -1,5 +1,13 @@
 import { Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, Github, ListOrdered } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  Github,
+  ListOrdered,
+} from "lucide-react";
 import { Suspense, lazy, useEffect, type ComponentType } from "react";
 import { Bebida } from "../components/bebida";
 import { componentesMdx } from "../components/mdx";
@@ -146,6 +154,29 @@ export function PaginaAula({ trilha, slug }: { trilha: Trilha | undefined; slug:
                 {trilha.grupo === "fundamentos" ? "Abrir no GitHub" : "Ir para os desafios"}
               </a>
             </div>
+          )}
+
+          {ultima && trilha.documentacao && (
+            <section className="aula-docs">
+              <p className="kicker">
+                <BookOpen size={14} /> PARA SE APROFUNDAR
+              </p>
+              <h2>Documentação de {trilha.nome}</h2>
+              <ul>
+                {trilha.documentacao.map((d) => (
+                  <li key={d.url}>
+                    <a href={d.url} target="_blank" rel="noreferrer">
+                      {d.titulo} <ArrowUpRight size={14} />
+                    </a>
+                    <span>{d.texto}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="aula-docs-dica">
+                💡 Documentação costuma ser em inglês. O tradutor do navegador ajuda, e ler
+                documentação é um ótimo treino de inglês técnico (todo dev faz isso o tempo todo).
+              </p>
+            </section>
           )}
 
           <nav className="aula-navegacao">
