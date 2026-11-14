@@ -31,13 +31,13 @@ class Conta {
 
 public class Main {
     public static void main(String[] args) {
-        Conta minha = new Conta("Cleidson", 100);
+        Conta minha = new Conta("Cledilson", 100);
         Conta sua = new Conta("Ana", 0);
 
         minha.depositar(50);
         sua.sacar(10);
 
-        System.out.println(minha.titular + ": " + minha.saldo);   // Cleidson: 150.0
+        System.out.println(minha.titular + ": " + minha.saldo);   // Cledilson: 150.0
         System.out.println(sua.titular + ": " + sua.saldo);       // Ana: 0.0
     }
 }
